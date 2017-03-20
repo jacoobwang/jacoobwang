@@ -4,14 +4,8 @@ function fixSizes() {
     if ($(".fullscreen").css("height", t),
     a > 960) {
         $(".home, .home .background, .home .container").css("height", 770);
-        var e = 650 - $(".home .info").height();
-        $(".home .info").css("bottom", e / 2),
-        $(".home .info").css("right", 0)
     } else
         $(".home .info").css("margin-top", ($(".home .info").parent().height() - $(".home .info").height()) / 2);
-    $(".vertical-center").each(function() {
-        $(this).css("margin-top", ($(this).parent().height() - $(this).height()) / 2)
-    })
 }
 
 jQuery(document).ready(function($$) {
@@ -27,8 +21,7 @@ jQuery(document).ready(function($$) {
 })
 
 $(window).load(function() {
-    //fixSizes();
-
+    fixSizes();
     $(this).scrollTop();
     $(this).scrollTop() > 100 ? $("header").stop().animate({
         backgroundColor: "rgba(0,0,0,1)"
