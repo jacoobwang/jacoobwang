@@ -180,7 +180,7 @@ header {
 }
 .stream-item__sub{
     font-size: 1em;
-    position: absolute;
+    position: relative;
 }
 .stream-item__sub:after {
     width: 30px;
