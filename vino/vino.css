@@ -278,6 +278,19 @@ footer .social-share {
     height: 100%;
     padding: 142px 0 0 70px;
 }
+.loader{
+    background-color: #111;
+    background-image: url(../img/loader.gif);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 9999;
+}
 /**************响应式代码*******************/
 @media screen and (max-width: 1200px){
 	header {
