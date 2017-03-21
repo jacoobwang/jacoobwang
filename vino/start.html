@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>vino-工匠艺术下的php框架</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="vino.css">
+</head>
+<body>
+<section class="hero" style="min-height: 150px;">
+	<section class="navigation fixed">
+		<header style="border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: rgba(255, 255, 255, 0.2);padding: 50px 0px;">
+			<div class="header-content">
+				<div class="logo">
+					<a href="http://www.loadphp.cn/vino/index.html">vino</a>
+				</div>
+				<div class="header-nav">
+					<nav>
+						<ul>
+							<li><a href="/vino/api.html">API</a></li>
+							<li class="hover"><a href="javascript:void(0)">Installation</a></li>
+							<li><a href="https://github.com/jacoobwang/vino">DOWNLOAD</a></li>
+						</ul>
+					</nav>
+				</div>
+				<div class="nav-icon">
+					<a class="nav-toggle" href="#"><span></span></a>	
+				</div>
+			</div>
+		</header>
+	</section>
+</section>
+<section class="main-text">
+	<div class="feature container">
+		<div class="item use">
+			<h2>安装</h2>
+			<div class="text">
+				<p class="big">1.下载</p>
+				<p class="desc">从我的github仓库中克隆代码到本地，地址是 <a target="_blank" href="https://github.com/jacoobwang/vino">https://github.com/jacoobwang/vino</a></p>
+				<p class="big">2.安装依赖库</p>
+				<p class="desc">
+					因为我在框架中使用了monolog和twig两个库，因此必须先安安装它们的composer库。
+					首先你需要在你的本机中安装composer，可以参考 <a target="_blank" href="http://docs.phpcomposer.com/00-intro.html#Installation-*nix">http://docs.phpcomposer.com/00-intro.html#Installation-*nix</a></p>
+				<p class="desc">
+					安装好composer后，执行composer命令可以看到<img style="display:block;padding-left:20px;padding-top:10px;" src="20170103164934.png" />
+				</p>
+				<p class="desc">	
+					我们回到项目目录，执行composer install 或 composer update，它会自动读取compser.json里的配置。等他执行完毕，可以看到它下载了依赖库。
+					<img style="display:block;padding-left:20px;padding-top:10px;" src="20170103165524.png" />&nbsp;&nbsp;&nbsp;&nbsp;截图显示我已经下载过了。
+				</p>
+				<p class="big">3.配置服务器</p>
+				<p class="desc" style="font-size:18px;">Nginx</p>
+				<p class="desc">
+					需要修改配置文件(默认是nginx.conf)，修改好后需要重启nginx。如下：
+					<pre style="margin-left:15px">location /vino/ {<br/>&nbsp;&nbsp;&nbsp;try_files  $uri  $uri/   /vino/index.php?_url=$1&amp;$args;<br/>}</pre>
+				</p>
+				<p class="desc" style="font-size:18px;">Apache</p>
+				<p class="desc">
+					只需要打开rewrite_module模块。打开httpd.conf，找到LoadModule rewrite_module modules/mod_rewrite.so，去掉前面的注释，然后重启apache。
+				</p>	
+				<p class="big">4.运行</p>
+				<p class="desc">打开浏览器，访问http://localhost/vino/，看到欢迎界面则成功。</p>
+			</div>
+			<h2>Tips</h2>
+			<div class="text">
+				<p>1.在linux下可能需要配置目录的权限，确保tpl和logs目录的可写权限</p>
+				<p>2.如果运行项目中注册功能，请确保数据库是可用的，务必使用data.sql建表</p>
+			</div>
+		</div>
+	</div>
+	<div class="contact">
+		<div class="container">
+			<p>vino产生过程中，作者也是一直在学习，毕竟个人能力有限，也有写的不好的地方，希望得到更专业的指导。</p>
+			<p>欢迎加QQ交流：531532957</p>
+		</div>
+	</div>
+</section>
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-7">
+				<div class="footer-links">
+					<ul class="footer-group">
+						<li><a href="http://www.loadphp.cn/">About</a></li>
+					</ul>
+					<p>Copyright © 2017 <a href="https://github.com/jacoobwang/vino">vino</a><br>
+				</p></div>
+			</div>
+			<div class="social-share">
+				<p><a href="https://github.com/jacoobwang/vino">Visit vino on GitHub</a></p>
+			</div>
+		</div>
+	</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vino-工匠艺术下的php框架</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
+	<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="vino.css">
+</head>
+<body>
+	<section class="hero">
+		<div class="bg"></div>
+		<section class="navigation">
+			<header style="border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: rgba(255, 255, 255, 0.2);padding: 50px 0px;">
+				<div class="header-content">
+					<div class="logo">
+						<a href="">vino</a>
+					</div>
+					<div class="header-nav">
+						<nav>
+							<ul>
+								<li><a href="/vino/api.html">API</a></li>
+								<li><a href="/vino/start.html">Installation</a></li>
+								<li><a href="https://github.com/jacoobwang/vino">DOWNLOAD</a></li>
+							</ul>
+						</nav>
+					</div>
+					<div class="nav-icon">
+						<a class="nav-toggle" href="#"><span></span></a>	
+					</div>
+				</div>
+			</header>
+		</section>
+		<div class="container">
+			<div class="row">
+				<div class="text-content">
+					<img src="logo.png" >
+					<p class="intro">vino - 工匠艺术下的用心之作.</p>
+					<a href="https://github.com/jacoobwang/vino" class="btn btn-fill btn-large btn-margin-right">Download</a>
+					<a href="http://www.loadphp.cn/vino/vino-doc/doc/index.html" class="btn btn-accent btn-large">Learn more</a>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="main-text">
+		<div class="feature container">
+			<div class="row">
+				<div class="col-md-4">
+					<h3 class="md4-title"><span>化繁为简</span></h3>
+					<p>时至今日，微型框架变的异常流行，大家都在谈论轻量级，都在追求快速、高效、自由的开发方式。而在vino中，这也是一直秉持的核心，希望尽量做到给大家最少的侵入性与学习成本，目标就是只要你懂基础的PHP语法你就会使用它来完成一个漂亮的web项目。它提供了很多开箱即用的库，write less do more。</p>
+				</div>
+				<div class="col-md-4">
+					<h3 class="md4-title"><span>工匠精神</span></h3>
+					<p>好的作品需要好的材料和好的工匠来完成，工匠的核心就是术业有专攻。而在vino中，我想要的就是清晰的分工－－mvc。model层负责数据增删查改，该层方法必须单元操作；service层负责处理业务逻辑，并将结果返回给crontoller层。crontoller层负责接收数据及给用户输出可读信息。</p>
+				</div>
+				<div class="col-md-4">
+					<h3 class="md4-title"><span>亲近前端</span></h3>
+					<p>前端的童鞋一定知道express，我也是express的用户之一，express有一些优点，比如在路由和中间件上。因此，在开发vino的过程中，我一直在想将它的一些优点融合过来，所以vino实现了两种路由方式，一种是传统的crontoller+action式，另一种是express式。当然，它们有一些细微的差别，但至少会让你感到亲切。</p>
+				</div>
+			</div>
+			<div class="item use">
+				<h2>释义</h2>
+				<div class="text">
+					<p>为什么要叫vino呢？</p>
+					<p>无可厚非或者恬不知耻的说这是因为个人喜好，曾经一度对科比十分痴迷，天天追着科比的球赛看，曾经有一场比赛，赛后加索尔赞科比为vino，寓意为科比就像一杯陈年的葡萄酒，品质很好 。而我也希望这个框架能够是一个好的vino。</p>
+				</div>
+				<h2>特性</h2>
+				<div class="text">
+					<p>vino提供了快速强大的路由器，它能将路由映射到特定的 HTTP 请求方法和 URI 。它支持完全自定义方式和crontoller+action方式。</p>
+					<p>vino提供了简单易用的中间件，可以快速拦截http请求，可提前过滤请求。</p>
+					<p>vino提供了强大的log处理机制，它的核心是monolog，依靠它你可以定义各种各样的log，灵活而自由。</p>
+					<p>vino使用twig作为模版引擎，twig安全快速强大，且在Github上的粉丝和活跃度是最高的。</p>
+					<p>vino使用composer和psr4实现自动加载php文件，去除繁琐的文件引入和依赖问题。</p>
+					<p>vino提供了很多开箱即用的功能，比如redis、memcache、session、cookie、pdo、xml、csv等 。</p>
+				</div>
+			</div>
+		</div>
+		<div class="contact">
+			<div class="container">
+				<p>vino产生过程中，作者也是一直在学习，毕竟个人能力有限，也有写的不好的地方，希望得到更专业的指导。</p>
+				<p>欢迎加QQ交流：531532957</p>
+			</div>
+		</div>
+	</section>
+	<footer>
+		<div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="footer-links">
+                        <ul class="footer-group">
+                            <li><a href="/">About</a></li>
+                        </ul>
+                        <p>Copyright © 2017 <a href="https://github.com/jacoobwang/vino">vino</a><br>
+                    </p></div>
+                </div>
+                <div class="social-share">
+                    <p><a href="https://github.com/jacoobwang/vino">Visit vino on GitHub</a></p>
+                </div>
+            </div>
+        </div>
+	</footer>
+</body>
+<script src="jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+	/***************** Header BG Scroll ******************/
+	$(function() {
+		$(window).scroll(function() {
+			var scroll = $(window).scrollTop();
+
+			if (scroll >= 20) {
+				$('section.navigation').addClass('fixed');
+				$('header').css({
+					"border-bottom": "none",
+					"padding": "35px 0"
+				});
+				$('header .member-actions').css({
+					"top": "26px",
+				});
+				$('header .navicon').css({
+					"top": "34px",
+				});
+			} else {
+				$('section.navigation').removeClass('fixed');
+				$('header').css({
+					"border-bottom": "solid 1px rgba(255, 255, 255, 0.2)",
+					"padding": "50px 0"
+				});
+				$('header .member-actions').css({
+					"top": "41px",
+				});
+				$('header .navicon').css({
+					"top": "48px",
+				});
+			}
+		});
+	});
+
+	/* When user clicks the Icon */
+	$('.nav-toggle').click(function() {
+		$(this).toggleClass('active');
+		$('.header-nav').toggleClass('open');
+		event.preventDefault();
+	});
+	/* When user clicks a link */
+	$('.header-nav li a').click(function() {
+		$('.nav-toggle').toggleClass('active');
+		$('.header-nav').toggleClass('open');
+
+	});
+</script>
+</html>
