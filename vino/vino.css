@@ -301,8 +301,12 @@ footer .social-share {
 @media screen and (max-width: 991px){
 	header {
 	    width: 90%;
-	    padding-left: 25px;
+        padding: 30px 0px;
 	}
+    .nav-toggle {
+        top: 0px;
+        padding-top: 0px;
+    }
 	.header-nav {
 		position: fixed;
 		background-color: #000;
