@@ -147,6 +147,9 @@ header {
     text-decoration: none;
     color: #fff;
 }
+a.stream_item:hover {
+    background: #F0D0D5;
+}
 .page__title{
     font-weight: 400;
     color: #00f;
