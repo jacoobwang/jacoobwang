@@ -79,16 +79,17 @@
 
 
 
-<meta name="description" content="业精于勤荒于嬉">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Jacoob&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="好几年前我有一个用php撸的博客，用了一段时间后，转用wordpress。毕竟当时wordpress太火爆，一度靠wordpress还赚了一点点外快！时钟转到2017年，wordpress貌似不再流行，php也不再流行。在网络上瞎逛，看到很多人用hexo，遂决定用hexo来建一个博客！ 放弃wordpress还有另外一个原因，php站点毕竟是需要服务器资源的，就算是最便宜的搬瓦工一年也">
+<meta property="og:type" content="article">
+<meta property="og:title" content="终于决定还是搞一个hexo静态博客">
+<meta property="og:url" content="http://yoursite.com/2017/12/18/hexo-first-install/index.html">
 <meta property="og:site_name" content="Jacoob&#39;s Blog">
-<meta property="og:description" content="业精于勤荒于嬉">
+<meta property="og:description" content="好几年前我有一个用php撸的博客，用了一段时间后，转用wordpress。毕竟当时wordpress太火爆，一度靠wordpress还赚了一点点外快！时钟转到2017年，wordpress貌似不再流行，php也不再流行。在网络上瞎逛，看到很多人用hexo，遂决定用hexo来建一个博客！ 放弃wordpress还有另外一个原因，php站点毕竟是需要服务器资源的，就算是最便宜的搬瓦工一年也">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-18T14:17:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Jacoob&#39;s Blog">
-<meta name="twitter:description" content="业精于勤荒于嬉">
+<meta name="twitter:title" content="终于决定还是搞一个hexo静态博客">
+<meta name="twitter:description" content="好几年前我有一个用php撸的博客，用了一段时间后，转用wordpress。毕竟当时wordpress太火爆，一度靠wordpress还赚了一点点外快！时钟转到2017年，wordpress貌似不再流行，php也不再流行。在网络上瞎逛，看到很多人用hexo，遂决定用hexo来建一个博客！ 放弃wordpress还有另外一个原因，php站点毕竟是需要服务器资源的，就算是最便宜的搬瓦工一年也">
 
 
 
@@ -118,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/12/18/hexo-first-install/"/>
 
 
 
 
 
-  <title>Jacoob's Blog</title>
+  <title>终于决定还是搞一个hexo静态博客 | Jacoob's Blog</title>
   
 
 
@@ -143,8 +144,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -217,9 +217,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -249,9 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/18/hexo-first-install/" itemprop="url">终于决定还是搞一个hexo静态博客</a></h1>
+          <h1 class="post-title" itemprop="name headline">终于决定还是搞一个hexo静态博客</h1>
         
 
         <div class="post-meta">
@@ -301,17 +299,17 @@
       
 
       
-        
-          <p>好几年前我有一个用php撸的博客，用了一段时间后，转用wordpress。毕竟当时wordpress太火爆，一度靠wordpress还赚了一点点外快！时钟转到2017年，wordpress貌似不再流行，php也不再流行。在网络上瞎逛，看到很多人用hexo，遂决定用hexo来建一个博客！</p>
+        <p>好几年前我有一个用php撸的博客，用了一段时间后，转用wordpress。毕竟当时wordpress太火爆，一度靠wordpress还赚了一点点外快！时钟转到2017年，wordpress貌似不再流行，php也不再流行。在网络上瞎逛，看到很多人用hexo，遂决定用hexo来建一个博客！</p>
 <p>放弃wordpress还有另外一个原因，php站点毕竟是需要服务器资源的，就算是最便宜的搬瓦工一年也要耗费几十块大洋来支付费用，屌丝啊，总是不想付费。而刚好看到github pages不用钱，心中略喜，finally决定就是hexo拉。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/12/18/hexo-first-install/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+<a id="more"></a>
+<h2 id="安装HEXO"><a href="#安装HEXO" class="headerlink" title="安装HEXO"></a>安装HEXO</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir hexo &amp;&amp; <span class="built_in">cd</span> hexo &amp;&amp; npm install -g hexo</span><br><span class="line">$ hexo init</span><br><span class="line">$ hexo g</span><br><span class="line">$ hexo s <span class="comment"># 或者hexo server，可以在http://localhost:4000/ 查看</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://github.com/hexojs/hexo" target="_blank" rel="noopener">Github地址</a></p>
+<h3 id="选择一个合适的主题"><a href="#选择一个合适的主题" class="headerlink" title="选择一个合适的主题"></a>选择一个合适的主题</h3><p>选择一个好看的主题是我对hexo比较期待的，早就听说hexo主题众多。特地google了一番，并到知乎上找了下。最后选了NEXT这个主题！选择原因：就是比较对眼，github上star很多，真的很多，上万的start，厉害！</p>
+<p>More info: <a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">Github地址</a></p>
+<h3 id="配置主题"><a href="#配置主题" class="headerlink" title="配置主题"></a>配置主题</h3><p>配置主题主要是参考了Next的<a href="http://theme-next.iissnan.com/" target="_blank" rel="noopener">官网</a>，上面有不少干货，内容很全，几乎所有想找的都可以找到。</p>
+<h3 id="初体验"><a href="#初体验" class="headerlink" title="初体验"></a>初体验</h3><p>Hexo从安装到主题到配置，再到第一篇博客出炉，花费时间不到2小时。真的很赞，高效！<br>😆 也希望借此机会重新捡起对技术文章撰写的兴趣，能够有很好的积累和更加自律的动力！</p>
+<h3 id="交流"><a href="#交流" class="headerlink" title="交流"></a>交流</h3><p>如果大家有啥希望一起交流的，欢迎发我邮箱^~^<a href="mailTo:531532957@qq.com" target="_blank" rel="noopener">Mail Me</a></p>
+
       
     </div>
     
@@ -328,12 +326,12 @@
       
 
       
+      
+      
 
       
 
       
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -343,10 +341,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -354,6 +353,8 @@
 
 
           
+  
+
 
         </div>
         
@@ -374,8 +375,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -437,6 +447,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装HEXO"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x5B89;&#x88C5;HEXO" class="headerlink" title="&#x5B89;&#x88C5;HEXO"></a>&#x5B89;&#x88C5;HEXO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#选择一个合适的主题"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#&#x9009;&#x62E9;&#x4E00;&#x4E2A;&#x5408;&#x9002;&#x7684;&#x4E3B;&#x9898;" class="headerlink" title="&#x9009;&#x62E9;&#x4E00;&#x4E2A;&#x5408;&#x9002;&#x7684;&#x4E3B;&#x9898;"></a>&#x9009;&#x62E9;&#x4E00;&#x4E2A;&#x5408;&#x9002;&#x7684;&#x4E3B;&#x9898;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置主题"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#&#x914D;&#x7F6E;&#x4E3B;&#x9898;" class="headerlink" title="&#x914D;&#x7F6E;&#x4E3B;&#x9898;"></a>&#x914D;&#x7F6E;&#x4E3B;&#x9898;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初体验"><span class="nav-number">1.3.</span> <span class="nav-text"><a href="#&#x521D;&#x4F53;&#x9A8C;" class="headerlink" title="&#x521D;&#x4F53;&#x9A8C;"></a>&#x521D;&#x4F53;&#x9A8C;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交流"><span class="nav-number">1.4.</span> <span class="nav-text"><a href="#&#x4EA4;&#x6D41;" class="headerlink" title="&#x4EA4;&#x6D41;"></a>&#x4EA4;&#x6D41;</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -589,6 +615,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
