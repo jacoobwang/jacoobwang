@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="勤勤恳恳">
 <meta property="og:description" content="好几年前我有一个用php撸的博客，用了一段时间后，转用wordpress。毕竟当时wordpress太火爆，一度靠wordpress还赚了一点外快！时钟转到2017年，wordpress貌似不再流行，php也不再流行。在网络上瞎逛，看到很多人用hexo，遂决定用hexo来建一个博客！ 放弃wordpress还有另外一个原因，php站点是需要服务器资源的，就算是最便宜的搬瓦工一年也要耗费">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-24T07:24:10.000Z">
+<meta property="og:updated_time" content="2017-12-24T07:28:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="终于决定还是搞一个hexo静态博客">
 <meta name="twitter:description" content="好几年前我有一个用php撸的博客，用了一段时间后，转用wordpress。毕竟当时wordpress太火爆，一度靠wordpress还赚了一点外快！时钟转到2017年，wordpress貌似不再流行，php也不再流行。在网络上瞎逛，看到很多人用hexo，遂决定用hexo来建一个博客！ 放弃wordpress还有另外一个原因，php站点是需要服务器资源的，就算是最便宜的搬瓦工一年也要耗费">
@@ -320,7 +320,7 @@
 
       
         <p>好几年前我有一个用php撸的博客，用了一段时间后，转用wordpress。毕竟当时wordpress太火爆，一度靠wordpress还赚了一点外快！时钟转到2017年，wordpress貌似不再流行，php也不再流行。在网络上瞎逛，看到很多人用hexo，遂决定用hexo来建一个博客！</p>
-<p>放弃wordpress还有另外一个原因，php站点是需要服务器资源的，就算是最便宜的搬瓦工一年也要耗费几十块大洋来支付费用，屌丝啊，总是不想付费。而刚好看到github pages不用钱，而pages正好支持部署静态站点，心中略喜，finally决定就是hexo拉。</p>
+<p>放弃wordpress还有另外一个原因，php站点是需要服务器资源的，就算是最便宜的搬瓦工一年也要耗费几十块大洋来支付费用，屌丝啊，总是不想付费。刚好看到github pages不用钱，而github pages正好支持部署静态站点，心中略喜，finally决定就是hexo拉。</p>
 <a id="more"></a>
 <h2 id="安装HEXO"><a href="#安装HEXO" class="headerlink" title="安装HEXO"></a>安装HEXO</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir hexo &amp;&amp; <span class="built_in">cd</span> hexo &amp;&amp; npm install -g hexo</span><br><span class="line">$ hexo init</span><br><span class="line">$ hexo g</span><br><span class="line">$ hexo s <span class="comment"># 或者hexo server，可以在http://localhost:4000/ 查看</span></span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://github.com/hexojs/hexo" target="_blank" rel="noopener">Github地址</a></p>
@@ -335,7 +335,7 @@
 <p>上面的shell脚本保存为deploy.sh，给他可执行权限后！每次要发布文章或者修改文章等，只需要执行 ./deploy.sh 即可。</p>
 <p>当然大家如果对commit信息觉得不太友好的话，可以简单修改下shell脚本接受一个参数，传入commit信息。</p>
 <h3 id="初体验"><a href="#初体验" class="headerlink" title="初体验"></a>初体验</h3><p>Hexo从安装到主题到配置，再到第一篇博客出炉至最后发布，花费时间不到2小时。真的很赞，高效！<br>😆 也希望借此机会重新捡起对技术文章撰写的兴趣，能够有很好的积累和更加自律的动力！</p>
-<h2 id="可能会是坑"><a href="#可能会是坑" class="headerlink" title="可能会是坑"></a>可能会是坑</h2><p>这个部分是我再部署到github切换主题的过程中发现的！next提供了好几种主题可供选择，主要影响的是页面样式。当我修改了主题时候，部署到github pages无论怎么刷新都不生效！</p>
+<h2 id="可能会是坑"><a href="#可能会是坑" class="headerlink" title="可能会是坑"></a>可能会是坑</h2><p>这个部分是我在部署到github切换主题的过程中发现的！next提供了好几种主题可供选择，主要影响的是页面样式。当我修改了主题时候，部署到github pages无论怎么刷新都不生效！</p>
 <p>后面我看到原因是：如果修改了next目录下的配置文件_config.yml的话，需要执行如下命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g</span><br></pre></td></tr></table></figure></p>
 <p>清掉hexo缓存，然后重新生成静态文件。</p>
 <h3 id="交流"><a href="#交流" class="headerlink" title="交流"></a>交流</h3><p>如果大家有啥希望一起交流的，欢迎发我邮箱^~^<a href="mailTo:531532957@qq.com" target="_blank" rel="noopener">Mail Me</a></p>
@@ -359,6 +359,22 @@
       
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/24/html实体巩固/" rel="prev" title="html实体巩固">
+                html实体巩固 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -434,7 +450,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -442,6 +458,15 @@
 
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
             
 
           </nav>
