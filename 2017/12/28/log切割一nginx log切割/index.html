@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="勤勤恳恳">
 <meta property="og:description" content="nginx是web中使用最广泛的服务器程序之一，但是nginx的日志这块是有些在实际生产环境中不太爽的地方！今天我要说下nginx log切割方法之一，后续可能会讲到log rotate的方式来做。 为什么要切割日志?Nginx安装好后有些人会打开日志记录，有些人会关闭日志记录，打开日志记录后，nginx默认会把所有请求记录存放到一个文件中 access.log，这样日积月累所有网站的访问记录就会">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-28T13:19:16.000Z">
+<meta property="og:updated_time" content="2017-12-28T13:21:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="log切割一nginx log切割">
 <meta name="twitter:description" content="nginx是web中使用最广泛的服务器程序之一，但是nginx的日志这块是有些在实际生产环境中不太爽的地方！今天我要说下nginx log切割方法之一，后续可能会讲到log rotate的方式来做。 为什么要切割日志?Nginx安装好后有些人会打开日志记录，有些人会关闭日志记录，打开日志记录后，nginx默认会把所有请求记录存放到一个文件中 access.log，这样日积月累所有网站的访问记录就会">
@@ -322,6 +322,7 @@
       
         <p>nginx是web中使用最广泛的服务器程序之一，但是nginx的日志这块是有些在实际生产环境中不太爽的地方！今天我要说下nginx log切割方法之一，后续可能会讲到log rotate的方式来做。</p>
 <h2 id="为什么要切割日志"><a href="#为什么要切割日志" class="headerlink" title="为什么要切割日志?"></a>为什么要切割日志?</h2><p>Nginx安装好后有些人会打开日志记录，有些人会关闭日志记录，打开日志记录后，nginx默认会把所有请求记录存放到一个文件中 access.log，这样日积月累所有网站的访问记录就会把日志文件越积越大，当需要查看日志文件的时候一看就是一大串，不方便查找。另外，也会影响到nginx的效率，因为日志写入是非常频繁的操作，打开一个大文件句柄的io成本肯定远远高于打开一个小的文件。</p>
+<a id="more"></a>
 <p>因此切割日志是非常有必要性的。</p>
 <h2 id="如何切割日志"><a href="#如何切割日志" class="headerlink" title="如何切割日志"></a>如何切割日志</h2><p>先看一段shell代码</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#日志分割shell</span></span><br><span class="line"></span><br><span class="line">logs_path=<span class="string">"/jacoob/servers/nginx/logs/"</span></span><br><span class="line"></span><br><span class="line">mv <span class="variable">$&#123;logs_path&#125;</span>access.log <span class="variable">$&#123;logs_path&#125;</span>access_$(date +<span class="string">"%Y%m%d"</span>).<span class="built_in">log</span></span><br><span class="line"></span><br><span class="line">/jacoob/servers/nginx/sbin/nginx -s reopen</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除60天前的access_log</span></span><br><span class="line">find <span class="variable">$&#123;logs_path&#125;</span> -mtime +60 -<span class="built_in">type</span> f -<span class="built_in">exec</span> rm -f &#123;&#125; \;</span><br></pre></td></tr></table></figure>
