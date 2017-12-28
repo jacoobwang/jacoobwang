@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="log切割一nginx log切割," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="业精于勤荒于嬉">
-<meta property="og:type" content="website">
-<meta property="og:title" content="勤勤恳恳">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="nginx是web中使用最广泛的服务器程序之一，但是nginx的日志这块是有些在实际生产环境中不太爽的地方！今天我要说下nginx log切割方法之一，后续可能会讲到log rotate的方式来做。 为什么要切割日志?Nginx安装好后有些人会打开日志记录，有些人会关闭日志记录，打开日志记录后，nginx默认会把所有请求记录存放到一个文件中 access.log，这样日积月累所有网站的访问记录就会">
+<meta name="keywords" content="log切割一nginx log切割">
+<meta property="og:type" content="article">
+<meta property="og:title" content="log切割一nginx log切割">
+<meta property="og:url" content="http://yoursite.com/2017/12/28/log切割一nginx log切割/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="业精于勤荒于嬉">
+<meta property="og:description" content="nginx是web中使用最广泛的服务器程序之一，但是nginx的日志这块是有些在实际生产环境中不太爽的地方！今天我要说下nginx log切割方法之一，后续可能会讲到log rotate的方式来做。 为什么要切割日志?Nginx安装好后有些人会打开日志记录，有些人会关闭日志记录，打开日志记录后，nginx默认会把所有请求记录存放到一个文件中 access.log，这样日积月累所有网站的访问记录就会">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-28T13:19:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="勤勤恳恳">
-<meta name="twitter:description" content="业精于勤荒于嬉">
+<meta name="twitter:title" content="log切割一nginx log切割">
+<meta name="twitter:description" content="nginx是web中使用最广泛的服务器程序之一，但是nginx的日志这块是有些在实际生产环境中不太爽的地方！今天我要说下nginx log切割方法之一，后续可能会讲到log rotate的方式来做。 为什么要切割日志?Nginx安装好后有些人会打开日志记录，有些人会关闭日志记录，打开日志记录后，nginx默认会把所有请求记录存放到一个文件中 access.log，这样日积月累所有网站的访问记录就会">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/12/28/log切割一nginx log切割/"/>
 
 
 
 
 
-  <title>勤勤恳恳</title>
+  <title>log切割一nginx log切割 | 勤勤恳恳</title>
   
 
 
@@ -143,8 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,9 +238,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -269,9 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/28/log切割一nginx log切割/" itemprop="url">log切割一nginx log切割</a></h1>
+          <h1 class="post-title" itemprop="name headline">log切割一nginx log切割</h1>
         
 
         <div class="post-meta">
@@ -321,9 +320,7 @@
       
 
       
-        
-          
-            <p>nginx是web中使用最广泛的服务器程序之一，但是nginx的日志这块是有些在实际生产环境中不太爽的地方！今天我要说下nginx log切割方法之一，后续可能会讲到log rotate的方式来做。</p>
+        <p>nginx是web中使用最广泛的服务器程序之一，但是nginx的日志这块是有些在实际生产环境中不太爽的地方！今天我要说下nginx log切割方法之一，后续可能会讲到log rotate的方式来做。</p>
 <h2 id="为什么要切割日志"><a href="#为什么要切割日志" class="headerlink" title="为什么要切割日志?"></a>为什么要切割日志?</h2><p>Nginx安装好后有些人会打开日志记录，有些人会关闭日志记录，打开日志记录后，nginx默认会把所有请求记录存放到一个文件中 access.log，这样日积月累所有网站的访问记录就会把日志文件越积越大，当需要查看日志文件的时候一看就是一大串，不方便查找。另外，也会影响到nginx的效率，因为日志写入是非常频繁的操作，打开一个大文件句柄的io成本肯定远远高于打开一个小的文件。</p>
 <p>因此切割日志是非常有必要性的。</p>
 <h2 id="如何切割日志"><a href="#如何切割日志" class="headerlink" title="如何切割日志"></a>如何切割日志</h2><p>先看一段shell代码</p>
@@ -335,8 +332,6 @@
 <p>这样完成了日志的切割工作， 同时切割过程中没有日志的丢失。</p>
 <p>ok，这是shell脚本切割的一种方式，后面有空会写下利用logrotate切割日志。</p>
 
-          
-        
       
     </div>
     
@@ -351,265 +346,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/25/高效实用Chrome/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jacoob Wang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="勤勤恳恳">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/25/高效实用Chrome/" itemprop="url">高效使用chrome</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-25T16:12:30+08:00">
-                2017-12-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/log切割一nginx-log切割/" rel="tag"># log切割一nginx log切割</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          <p>chrome一直以来都是我的最爱！相信很多开发人员都是用chrome来开发吧！谷歌一直被视为IT界最牛逼的公司之一！这里记录下我常使用的chrome插件😁</p>
-<h2 id="常用插件"><a href="#常用插件" class="headerlink" title="常用插件"></a>常用插件</h2><p><strong><font color="#fc6423">JSON-handle</font></strong></p>
-<p>对JSON格式的内容进行浏览和编辑，以树形图样式展现JSON文档，并可实时编辑。对于我这种经常需要调试后端 rest 接口的来说简直太爽了。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/12/25/高效实用Chrome/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/25/高效实用Chrome/" rel="next" title="高效使用chrome">
+                <i class="fa fa-chevron-left"></i> 高效使用chrome
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
+          <span class="post-nav-divider"></span>
 
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/24/html实体巩固/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jacoob Wang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="勤勤恳恳">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/24/html实体巩固/" itemprop="url">html实体巩固</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-24T16:12:30+08:00">
-                2017-12-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>关于html实体，web开发人员都或多或少知道一些！但很少有人详细提及过它，w3c对它的介绍也是笔墨不多。</p>
-<p>最近因为接触一些xss的漏洞问题，想更加深入的了解下html实体。这篇文章，也是穷我所及之处，尽量全面的介绍下html实体。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/12/24/html实体巩固/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -619,135 +385,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/18/hexo-first-install/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jacoob Wang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="勤勤恳恳">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/18/hexo-first-install/" itemprop="url">终于决定还是搞一个hexo静态博客</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-18T21:15:47+08:00">
-                2017-12-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>好几年前我有一个用php撸的博客，用了一段时间后，转用wordpress。毕竟当时wordpress太火爆，一度靠wordpress还赚了一点外快！时钟转到2017年，wordpress貌似不再流行，php也不再流行。在网络上瞎逛，看到很多人用hexo，遂决定用hexo来建一个博客！</p>
-<p>放弃wordpress还有另外一个原因，php站点是需要服务器资源的，就算是最便宜的搬瓦工一年也要耗费几十块大洋来支付费用，屌丝啊，总是不想付费。刚好看到github pages不用钱，而github pages正好支持部署静态站点，心中略喜，finally决定就是hexo拉。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/12/18/hexo-first-install/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -755,6 +397,8 @@
 
 
           
+  
+
 
         </div>
         
@@ -775,8 +419,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -847,6 +500,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要切割日志"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4E3A;&#x4EC0;&#x4E48;&#x8981;&#x5207;&#x5272;&#x65E5;&#x5FD7;" class="headerlink" title="&#x4E3A;&#x4EC0;&#x4E48;&#x8981;&#x5207;&#x5272;&#x65E5;&#x5FD7;?"></a>&#x4E3A;&#x4EC0;&#x4E48;&#x8981;&#x5207;&#x5272;&#x65E5;&#x5FD7;?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何切割日志"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x5982;&#x4F55;&#x5207;&#x5272;&#x65E5;&#x5FD7;" class="headerlink" title="&#x5982;&#x4F55;&#x5207;&#x5272;&#x65E5;&#x5FD7;"></a>&#x5982;&#x4F55;&#x5207;&#x5272;&#x65E5;&#x5FD7;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下面逐行解释下"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#&#x4E0B;&#x9762;&#x9010;&#x884C;&#x89E3;&#x91CA;&#x4E0B;" class="headerlink" title="&#x4E0B;&#x9762;&#x9010;&#x884C;&#x89E3;&#x91CA;&#x4E0B;"></a>&#x4E0B;&#x9762;&#x9010;&#x884C;&#x89E3;&#x91CA;&#x4E0B;</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -973,6 +642,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
