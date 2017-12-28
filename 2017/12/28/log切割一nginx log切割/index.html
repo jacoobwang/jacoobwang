@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="勤勤恳恳">
 <meta property="og:description" content="nginx是web中使用最广泛的服务器程序之一，但是nginx的日志这块是有些在实际生产环境中不太爽的地方！今天我要说下nginx log切割方法之一，后续可能会讲到log rotate的方式来做。 为什么要切割日志?Nginx安装好后有些人会打开日志记录，有些人会关闭日志记录，打开日志记录后，nginx默认会把所有请求记录存放到一个文件中 access.log，这样日积月累所有网站的访问记录就会">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-28T13:21:33.000Z">
+<meta property="og:updated_time" content="2017-12-28T13:28:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="log切割一nginx log切割">
 <meta name="twitter:description" content="nginx是web中使用最广泛的服务器程序之一，但是nginx的日志这块是有些在实际生产环境中不太爽的地方！今天我要说下nginx log切割方法之一，后续可能会讲到log rotate的方式来做。 为什么要切割日志?Nginx安装好后有些人会打开日志记录，有些人会关闭日志记录，打开日志记录后，nginx默认会把所有请求记录存放到一个文件中 access.log，这样日积月累所有网站的访问记录就会">
@@ -331,6 +331,8 @@
 <p>第三行 调用nginx -s  reopen 用来打开日志文件，这样nginx会把新日志信息写入这个新的文件中。</p>
 <p>第四行 删除60天前的access.log文件。</p>
 <p>这样完成了日志的切割工作， 同时切割过程中没有日志的丢失。</p>
+<h2 id="shell脚本添加到crontab"><a href="#shell脚本添加到crontab" class="headerlink" title="shell脚本添加到crontab"></a>shell脚本添加到crontab</h2><p>crontab是服务器上的定时任务管理工具，写好上面的切割脚本后，需要定时执行。<br>使用命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">crontab -e </span><br><span class="line"><span class="comment"># 进入到编辑状态，添加如下</span></span><br><span class="line">59 23 * * * /jaccob/log_split.sh &gt; /jacoob/log_split.error.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure></p>
+<p>以上定义了一个每天23：59分执行的一个定时切割任务！</p>
 <p>ok，这是shell脚本切割的一种方式，后面有空会写下利用logrotate切割日志。</p>
 
       
@@ -511,7 +513,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要切割日志"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4E3A;&#x4EC0;&#x4E48;&#x8981;&#x5207;&#x5272;&#x65E5;&#x5FD7;" class="headerlink" title="&#x4E3A;&#x4EC0;&#x4E48;&#x8981;&#x5207;&#x5272;&#x65E5;&#x5FD7;?"></a>&#x4E3A;&#x4EC0;&#x4E48;&#x8981;&#x5207;&#x5272;&#x65E5;&#x5FD7;?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何切割日志"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x5982;&#x4F55;&#x5207;&#x5272;&#x65E5;&#x5FD7;" class="headerlink" title="&#x5982;&#x4F55;&#x5207;&#x5272;&#x65E5;&#x5FD7;"></a>&#x5982;&#x4F55;&#x5207;&#x5272;&#x65E5;&#x5FD7;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下面逐行解释下"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#&#x4E0B;&#x9762;&#x9010;&#x884C;&#x89E3;&#x91CA;&#x4E0B;" class="headerlink" title="&#x4E0B;&#x9762;&#x9010;&#x884C;&#x89E3;&#x91CA;&#x4E0B;"></a>&#x4E0B;&#x9762;&#x9010;&#x884C;&#x89E3;&#x91CA;&#x4E0B;</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要切割日志"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4E3A;&#x4EC0;&#x4E48;&#x8981;&#x5207;&#x5272;&#x65E5;&#x5FD7;" class="headerlink" title="&#x4E3A;&#x4EC0;&#x4E48;&#x8981;&#x5207;&#x5272;&#x65E5;&#x5FD7;?"></a>&#x4E3A;&#x4EC0;&#x4E48;&#x8981;&#x5207;&#x5272;&#x65E5;&#x5FD7;?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何切割日志"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x5982;&#x4F55;&#x5207;&#x5272;&#x65E5;&#x5FD7;" class="headerlink" title="&#x5982;&#x4F55;&#x5207;&#x5272;&#x65E5;&#x5FD7;"></a>&#x5982;&#x4F55;&#x5207;&#x5272;&#x65E5;&#x5FD7;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下面逐行解释下"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#&#x4E0B;&#x9762;&#x9010;&#x884C;&#x89E3;&#x91CA;&#x4E0B;" class="headerlink" title="&#x4E0B;&#x9762;&#x9010;&#x884C;&#x89E3;&#x91CA;&#x4E0B;"></a>&#x4E0B;&#x9762;&#x9010;&#x884C;&#x89E3;&#x91CA;&#x4E0B;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shell脚本添加到crontab"><span class="nav-number">3.</span> <span class="nav-text"><a href="#shell&#x811A;&#x672C;&#x6DFB;&#x52A0;&#x5230;crontab" class="headerlink" title="shell&#x811A;&#x672C;&#x6DFB;&#x52A0;&#x5230;crontab"></a>shell&#x811A;&#x672C;&#x6DFB;&#x52A0;&#x5230;crontab</span></a></li></ol></div>
             
 
           </div>
