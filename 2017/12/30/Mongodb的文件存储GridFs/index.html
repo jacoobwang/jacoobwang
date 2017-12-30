@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Mongodb," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="MongoDB是一种文档导向的数据库管理系统，由C++撰写而成，以此来解决应用程序开发社区中的大量现实问题。2007年10月，MongoDB由10gen团队所发展。2009年2月首度推出。">
+<meta name="keywords" content="Mongodb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mongodb的文件存储GridFs">
+<meta property="og:url" content="http://yoursite.com/2017/12/30/Mongodb的文件存储GridFs/index.html">
+<meta property="og:site_name" content="勤勤恳恳">
+<meta property="og:description" content="MongoDB是一种文档导向的数据库管理系统，由C++撰写而成，以此来解决应用程序开发社区中的大量现实问题。2007年10月，MongoDB由10gen团队所发展。2009年2月首度推出。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/img/f_f6ec082c3c63db450720de4a189ddfba.png">
+<meta property="og:updated_time" content="2017-12-30T10:54:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mongodb的文件存储GridFs">
+<meta name="twitter:description" content="MongoDB是一种文档导向的数据库管理系统，由C++撰写而成，以此来解决应用程序开发社区中的大量现实问题。2007年10月，MongoDB由10gen团队所发展。2009年2月首度推出。">
+<meta name="twitter:image" content="http://yoursite.com/img/f_f6ec082c3c63db450720de4a189ddfba.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/30/Mongodb的文件存储GridFs/"/>
+
+
+
+
+
+  <title>Mongodb的文件存储GridFs | 勤勤恳恳</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">勤勤恳恳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客|撸码|生活|态度</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-自研php框架">
+          <a href="https://jacoobwang.github.io/vino/vino.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            自研php框架
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://jacoobwang.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/30/Mongodb的文件存储GridFs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mongodb的文件存储GridFs</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-30T18:12:30+08:00">
+                2017-12-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>MongoDB是一种文档导向的数据库管理系统，由C++撰写而成，以此来解决应用程序开发社区中的大量现实问题。2007年10月，MongoDB由10gen团队所发展。2009年2月首度推出。</p>
+<a id="more"></a>
+<p>MongoDB是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。它支持的数据结构非常松散，是类似json的bson格式，因此可以存储比较复杂的数据类型。Mongo最大的特点是它支持的查询语言非常强大，其语法有点类似于面向对象的查询语言，几乎可以实现类似关系数据库单表查询的绝大部分功能，而且还支持对数据建立索引。</p>
+<p>Mongodb中有一个重要功能–GridFS，但并不为人所熟悉。本文主要讲解如何更好地使用GridFS功能，结合实践中的案例分享经验。</p>
+<h2 id="Mongobd的重要模块–GridFS"><a href="#Mongobd的重要模块–GridFS" class="headerlink" title="Mongobd的重要模块–GridFS"></a>Mongobd的重要模块–GridFS</h2><p>GridFS是Mongo的一个子模块,使用GridFS可以基于MongoDB来持久存储文件。并且支持分布式应用(文件分布存储和读取)。作为MongoDB中二进制数据存储在数据库中的解决方案，通常用来处理大文件，对于MongoDB的BSON格式的数据(文档)存储有尺寸限制，最大为16M。但是在实际系统开发中，上传的图片或者文件可能尺寸会很大，此时我们可以借用GridFS来辅助管理这些文件。</p>
+<p>GridFS不是MongoDB自身特性，只是一种将大型文件存储在MongoDB的文件规范，所有官方支持的驱动均实现了GridFS规范。GridFS制定大文件在数据库中如何处理，通过开发语言驱动来完成、通过API接口来存储检索大文件。</p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>如果您的文件系统在一个目录中存储的文件的数量有限，你可以使用GridFS存储尽可能多的文件。</li>
+<li>当你想访问大型文件的部分信息，却不想加载整个文件到内存时，您可以使用GridFS存储文件，并读取文件部分信息，而不需要加载整个文件到内存。</li>
+<li>当你想让你的文件和元数据自动同步并部署在多个系统和设施，你可以使用GridFS实现分布式文件存储。</li>
+</ul>
+<h2 id="GridFS存储原理"><a href="#GridFS存储原理" class="headerlink" title="GridFS存储原理"></a>GridFS存储原理</h2><p>GridFS使用两个集合（collection）存储文件。一个集合是chunks, 用于存储文件内容的二进制数据；一个集合是files，用于存储文件的元数据。</p>
+<p>GridFS会将两个集合放在一个普通的buket中，并且这两个集合使用buket的名字作为前缀。MongoDB的GridFs默认使用fs命名的buket存放两个文件集合。因此存储文件的两个集合分别会命名为集合fs.files ,集合fs.chunks。</p>
+<p>当然也可以定义不同的buket名字，甚至在一个数据库中定义多个bukets，但所有的集合的名字都不得超过mongoDB命名空间的限制。</p>
+<p>MongoDB集合的命名包括了数据库名字与集合名字，会将数据库名与集合名通过“.”分隔(eg:<database>.<collection>)。而且命名的最大长度不得超过120bytes。</collection></database></p>
+<p>当把一个文件存储到GridFS时，如果文件大于chunksize （每个chunk块大小为256KB），会先将文件按照chunk的大小分割成多个chunk块，最终将chunk块的信息存储在fs.chunks集合的多个文档中。然后将文件信息存储在fs.files集合的唯一一份文档中。其中fs.chunks集合中多个文档中的file_id字段对应fs.files集中文档”_id”字段。</p>
+<p>读文件时，先根据查询条件在files集合中找到对应的文档，同时得到“_id”字段，再根据“_id”在chunks集合中查询所有“files_id”等于“_id”的文档。最后根据“n”字段顺序读取chunk的“data”字段数据，还原文件。</p>
+<p>存储过程如图下所示：</p>
+<p><img src="/img/f_f6ec082c3c63db450720de4a189ddfba.png" alt=""></p>
+<p>fs.files 集合存储文件的元数据，以类json格式文档形式存储。每在GridFS存储一个文件，则会在fs.files集合中对应生成一个文档。</p>
+<p>fs.files集合中文档的存储内容如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"_id"</span>: &lt;ObjectId&gt;,    // 文档ID，唯一标识</span><br><span class="line">  <span class="string">"chunkSize"</span>: &lt;num&gt;,   // chunk大小 256kb</span><br><span class="line">  <span class="string">"uploadDate"</span>: &lt;timetamp&gt;, //文件上传时间 </span><br><span class="line">  <span class="string">"length"</span>: &lt;num&gt;,      // 文件长度</span><br><span class="line">  <span class="string">"md5"</span>: &lt;string&gt;,      // 文件md5值</span><br><span class="line">  <span class="string">"filename"</span>: &lt;string&gt;, // 文件名</span><br><span class="line">  <span class="string">"contentType"</span>: &lt;string&gt;,// 文件的MIME类型</span><br><span class="line">  <span class="string">"metadata"</span>: &lt;dataObject&gt;// 文件自定义信息</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>fs.chunks 集合存储文件文件内容的二进制数据，以类json格式文档形式存储。每在GridFS存储一个文件，GridFS就会将文件内容按照chunksize大小（chunk容量为256k）分成多个文件块，然后将文件块按照类json格式存在.chunks集合中，每个文件块对应fs.chunk集合中一个文档。一个存储文件会对应一到多个chunk文档。</p>
+<p>fs.chunks集合中文档的存储内容如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"_id"</span>: &lt;ObjectId&gt;,    // 文档ID，唯一标识</span><br><span class="line">  <span class="string">"files_id"</span>: &lt;ObjectId&gt;,    // 对应fs.files文档的ID</span><br><span class="line">  <span class="string">"n"</span>: &lt;num&gt;,           // 序号，标识文件的第几个 chunk</span><br><span class="line">  <span class="string">"data"</span>: &lt;binary&gt;      // 文件二级制数据</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为了提高检索速度 MongoDB为GridFS的两个集合建立了索引。fs.files集合使用是“filename”与“uploadDate” 字段作为唯一、复合索引。fs.chunk集合使用的是“files_id”与“n”字段作为唯一、复合索引。</p>
+<h2 id="如何使用GridFS？"><a href="#如何使用GridFS？" class="headerlink" title="如何使用GridFS？"></a>如何使用GridFS？</h2><h3 id="shell-命令之-mongofiles"><a href="#shell-命令之-mongofiles" class="headerlink" title="shell 命令之 mongofiles"></a>shell 命令之 mongofiles</h3><p>mongoDB提供mingofiles工具，可以使用命令行来操作GridFS。其实有四个主要命令，分别为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Put</span><br><span class="line"><span class="comment">#mongofiles -h  -u  -p  --db files put /conn.log</span></span><br><span class="line">connected to: 127.0.0.1</span><br><span class="line">added file: &#123; _id: ObjectId(<span class="string">'530cf1009710ca8fd47d7d5d'</span>), filename: <span class="string">"./conn.log"</span>, chunkSize: 262144, uploadDate: new Date(1393357057021), md5: <span class="string">"6515e95f8bb161f6435b130a0e587ccd"</span>, length: 1644981 &#125;</span><br><span class="line"><span class="keyword">done</span>!</span><br><span class="line"></span><br><span class="line">Get</span><br><span class="line"><span class="comment">#mongofiles -h  -u  -p  --db files get /conn.log</span></span><br><span class="line">connected to: 127.0.0.1</span><br><span class="line"><span class="keyword">done</span> write to: ./conn.log</span><br><span class="line"></span><br><span class="line">List</span><br><span class="line"><span class="comment"># mongofiles -h  -u  -p  list</span></span><br><span class="line">connected to: 127.0.0.1</span><br><span class="line">/conn.log 1644981</span><br><span class="line"></span><br><span class="line">Delete</span><br><span class="line">[root@ip-10-198-25-43 tmp]<span class="comment"># mongofiles -h  -u  -p  --db files delete /conn.log</span></span><br><span class="line">connected to: 127.0.0.1</span><br><span class="line"><span class="keyword">done</span>!</span><br></pre></td></tr></table></figure></p>
+<p>这些命令都是按照filename操作GridFS中存储的文件的。</p>
+<h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><p>MongoDB支持多种编程语言驱动。比如c、java、C#、nodeJs等。因此可以使用这些语言MongoDB驱动API操作，扩展GridFS。</p>
+<p>以下是一个nodejs版本的代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mongoose = <span class="built_in">require</span>(<span class="string">'mongoose'</span>)</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="keyword">const</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">'bluebird'</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; isString &#125; = <span class="built_in">require</span>(<span class="string">'lodash'</span>)</span><br><span class="line"><span class="keyword">const</span> ObjectId = mongoose.Types.ObjectId</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> bucket</span><br><span class="line"><span class="keyword">let</span> db</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">init</span> (<span class="params">_db</span>) </span>&#123;</span><br><span class="line">  db = _db</span><br><span class="line">  bucket = <span class="keyword">new</span> mongoose.mongo.GridFSBucket(db)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">uploadFiles</span> (<span class="params">files, options</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.map(files, file =&gt;  <span class="comment">// eslint-disable-line</span></span><br><span class="line">    uploadFile(file.path, file.key, options), &#123; <span class="attr">concurrency</span>: <span class="number">3</span> &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">uploadFile</span> (<span class="params">filePath, fileName, options</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> openUploadStream = bucket.openUploadStream(fileName)</span><br><span class="line">    fs.createReadStream(filePath)</span><br><span class="line">      .pipe(openUploadStream)</span><br><span class="line">      .on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (options &amp;&amp; options.deleteIfError) &#123;</span><br><span class="line">          deleteFileById(openUploadStream.id)</span><br><span class="line">          fs.unlink(filePath)</span><br><span class="line">        &#125;</span><br><span class="line">        reject(error)</span><br><span class="line">      &#125;)</span><br><span class="line">      .on(<span class="string">'finish'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">result</span>) </span>&#123;</span><br><span class="line">        resolve(result)</span><br><span class="line">      &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">findFileById</span> (<span class="params">id</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (isString(id)) &#123;</span><br><span class="line">      id = ObjectId(id)</span><br><span class="line">    &#125;</span><br><span class="line">    db.collection(<span class="string">'fs.files'</span>).findOne(&#123; <span class="attr">_id</span>: id &#125;, <span class="function"><span class="keyword">function</span> (<span class="params">err, result</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (err) <span class="keyword">return</span> reject(err)</span><br><span class="line">      resolve(result)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deleteFileById</span> (<span class="params">id</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (isString(id)) &#123;</span><br><span class="line">      id = ObjectId(id)</span><br><span class="line">    &#125;</span><br><span class="line">    bucket.delete(id, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">      resolve(!err)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getStreamById</span> (<span class="params">id</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (isString(id)) &#123;</span><br><span class="line">    id = ObjectId(id)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> bucket.openDownloadStream(id)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  init,</span><br><span class="line">  uploadFiles,</span><br><span class="line">  uploadFile,</span><br><span class="line">  findFileById,</span><br><span class="line">  deleteFileById,</span><br><span class="line">  getStreamById,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="经验分享"><a href="#经验分享" class="headerlink" title="经验分享"></a>经验分享</h2><p>GridFs不会自动处理md5值相同的文件，也就是说，同一个文件进行两次put命令，将会在GridFS中对应两个不同的存储，对于存储来说，这是一种浪费。对于md5相同的文件，如果想要在GridFS中只有一个存储，需要通过API进行扩展处理。</p>
+<p>MongoDB 不会释放已经占用的硬盘空间。即使删除db中的集合 MongoDB也不会释放磁盘空间。同样，如果使用GridFS存储文件，从GridFS存储中删除无用的垃圾文件，MongoDB依然不会释放磁盘空间的。这会造成磁盘一直在消耗，而无法回收利用的问题。</p>
+<h3 id="那么怎样才能释放磁盘空间呢？"><a href="#那么怎样才能释放磁盘空间呢？" class="headerlink" title="那么怎样才能释放磁盘空间呢？"></a>那么怎样才能释放磁盘空间呢？</h3><ol>
+<li><p>可以通过修复数据库来回收磁盘空间，即在mongo shell中运行db.repairDatabase()命令或者db.runCommand({ repairDatabase: 1 })命令。（此命令执行比较慢）。<br>使用通过修复数据库方法回收磁盘时需要注意，待修复磁盘的剩余空间必须大于等于存储数据集占用空间加上2G，否则无法完成修复。因此使用GridFS大量存储文件必须提前考虑设计磁盘回收方案，以解决mongoDB磁盘回收问题。</p>
+</li>
+<li><p>使用dump &amp; restore方式，即先删除mongoDB数据库中需要清除的数据，然后使用mongodump备份数据库。备份完成后，删除MongoDB的数据库，使用Mongorestore工具恢复备份数据到数据库。</p>
+</li>
+</ol>
+<p>当使用db.repairDatabase()命令没有足够的磁盘剩余空间时，可以采用dump &amp; restore方式回收磁盘资源。如果MongoDB是副本集模式，dump &amp; restore方式可以做到对外持续服务，在不影响MongoDB正常使用下回收磁盘资源。</p>
+<p>MogonDB使用副本集， 实践使用dump &amp; restore方式，回收磁盘资源。70G的数据在2小时之内完成数据清理及磁盘回收，并且整个过程不影响MongoDB对外服务，同时可以保证处理过程中数据库增量数据的完整。</p>
+<hr>
+<p>本文参考链接：1.<a href="http://rdc.hundsun.com/portal/article/703.html" target="_blank" rel="noopener">http://rdc.hundsun.com/portal/article/703.html</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mongodb/" rel="tag"># Mongodb</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/28/logrotate切割pm2日志/" rel="next" title="logrotate切割pm2日志">
+                <i class="fa fa-chevron-left"></i> logrotate切割pm2日志
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/11434315"
+                alt="Jacoob Wang" />
+            
+              <p class="site-author-name" itemprop="name">Jacoob Wang</p>
+              <p class="site-description motion-element" itemprop="description">业精于勤荒于嬉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/jacoobwang" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:531532957@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mongobd的重要模块–GridFS"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Mongobd&#x7684;&#x91CD;&#x8981;&#x6A21;&#x5757;&#x2013;GridFS" class="headerlink" title="Mongobd&#x7684;&#x91CD;&#x8981;&#x6A21;&#x5757;&#x2013;GridFS"></a>Mongobd&#x7684;&#x91CD;&#x8981;&#x6A21;&#x5757;&#x2013;GridFS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#&#x4F7F;&#x7528;&#x573A;&#x666F;" class="headerlink" title="&#x4F7F;&#x7528;&#x573A;&#x666F;"></a>&#x4F7F;&#x7528;&#x573A;&#x666F;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GridFS存储原理"><span class="nav-number">2.</span> <span class="nav-text"><a href="#GridFS&#x5B58;&#x50A8;&#x539F;&#x7406;" class="headerlink" title="GridFS&#x5B58;&#x50A8;&#x539F;&#x7406;"></a>GridFS&#x5B58;&#x50A8;&#x539F;&#x7406;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用GridFS？"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x5982;&#x4F55;&#x4F7F;&#x7528;GridFS&#xFF1F;" class="headerlink" title="&#x5982;&#x4F55;&#x4F7F;&#x7528;GridFS&#xFF1F;"></a>&#x5982;&#x4F55;&#x4F7F;&#x7528;GridFS&#xFF1F;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shell-命令之-mongofiles"><span class="nav-number">3.1.</span> <span class="nav-text"><a href="#shell-&#x547D;&#x4EE4;&#x4E4B;-mongofiles" class="headerlink" title="shell &#x547D;&#x4EE4;&#x4E4B; mongofiles"></a>shell &#x547D;&#x4EE4;&#x4E4B; mongofiles</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-number">3.2.</span> <span class="nav-text"><a href="#API" class="headerlink" title="API"></a>API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#经验分享"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x7ECF;&#x9A8C;&#x5206;&#x4EAB;" class="headerlink" title="&#x7ECF;&#x9A8C;&#x5206;&#x4EAB;"></a>&#x7ECF;&#x9A8C;&#x5206;&#x4EAB;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#那么怎样才能释放磁盘空间呢？"><span class="nav-number">4.1.</span> <span class="nav-text"><a href="#&#x90A3;&#x4E48;&#x600E;&#x6837;&#x624D;&#x80FD;&#x91CA;&#x653E;&#x78C1;&#x76D8;&#x7A7A;&#x95F4;&#x5462;&#xFF1F;" class="headerlink" title="&#x90A3;&#x4E48;&#x600E;&#x6837;&#x624D;&#x80FD;&#x91CA;&#x653E;&#x78C1;&#x76D8;&#x7A7A;&#x95F4;&#x5462;&#xFF1F;"></a>&#x90A3;&#x4E48;&#x600E;&#x6837;&#x624D;&#x80FD;&#x91CA;&#x653E;&#x78C1;&#x76D8;&#x7A7A;&#x95F4;&#x5462;&#xFF1F;</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jacoob Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
