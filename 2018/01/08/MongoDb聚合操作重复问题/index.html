@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Mongodb," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最近在一个项目中使用Mongodb的聚合函数 aggregate 查询数据的时候，在分页情况下会出现一些重复的结果！刚开始以为数据库里有重复数据，mongo shell下使用find执行查询并无重复数据！这是什么情况呢？按照mysql的思路觉得万万不可能啊，查询不是应该按照查询的条件过滤出相应结果然后分页吗？">
+<meta name="keywords" content="Mongodb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDb聚合操作重复问题">
+<meta property="og:url" content="http://yoursite.com/2018/01/08/MongoDb聚合操作重复问题/index.html">
+<meta property="og:site_name" content="勤勤恳恳">
+<meta property="og:description" content="最近在一个项目中使用Mongodb的聚合函数 aggregate 查询数据的时候，在分页情况下会出现一些重复的结果！刚开始以为数据库里有重复数据，mongo shell下使用find执行查询并无重复数据！这是什么情况呢？按照mysql的思路觉得万万不可能啊，查询不是应该按照查询的条件过滤出相应结果然后分页吗？">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/img/WX20180108-163842.png">
+<meta property="og:updated_time" content="2018-01-08T09:40:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MongoDb聚合操作重复问题">
+<meta name="twitter:description" content="最近在一个项目中使用Mongodb的聚合函数 aggregate 查询数据的时候，在分页情况下会出现一些重复的结果！刚开始以为数据库里有重复数据，mongo shell下使用find执行查询并无重复数据！这是什么情况呢？按照mysql的思路觉得万万不可能啊，查询不是应该按照查询的条件过滤出相应结果然后分页吗？">
+<meta name="twitter:image" content="http://yoursite.com/img/WX20180108-163842.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/08/MongoDb聚合操作重复问题/"/>
+
+
+
+
+
+  <title>MongoDb聚合操作重复问题 | 勤勤恳恳</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">勤勤恳恳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客|撸码|生活|态度</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-自研php框架">
+          <a href="https://jacoobwang.github.io/vino/vino.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            自研php框架
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://jacoobwang.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/08/MongoDb聚合操作重复问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MongoDb聚合操作重复问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-08T15:12:30+08:00">
+                2018-01-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近在一个项目中使用Mongodb的聚合函数 aggregate 查询数据的时候，在分页情况下会出现一些重复的结果！刚开始以为数据库里有重复数据，mongo shell下使用find执行查询并无重复数据！这是什么情况呢？按照mysql的思路觉得万万不可能啊，查询不是应该按照查询的条件过滤出相应结果然后分页吗？<br><a id="more"></a><br>下面看看到底是什么在作祟？</p>
+<h2 id="场景还原"><a href="#场景还原" class="headerlink" title="场景还原"></a>场景还原</h2><p>会产生重复的代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> templates = <span class="keyword">await</span> Template.aggregate([</span><br><span class="line">  &#123; $match &#125;,</span><br><span class="line">  &#123; <span class="attr">$group</span>: &#123;</span><br><span class="line">    _id: <span class="string">'$group_id'</span>,</span><br><span class="line">    count: &#123; <span class="attr">$sum</span>: <span class="number">1</span> &#125;,</span><br><span class="line">    item_id: &#123; <span class="attr">$last</span>: <span class="string">'$_id'</span> &#125;,</span><br><span class="line">    name: &#123; <span class="attr">$last</span>: <span class="string">'$name'</span> &#125;,</span><br><span class="line">    updatedAt: &#123; <span class="attr">$last</span>: <span class="string">'$updatedAt'</span> &#125;,</span><br><span class="line">  &#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">$sort</span>: &#123; <span class="attr">updatedAt</span>: <span class="number">-1</span> &#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">$skip</span>: ctx.state.skip &#125;,</span><br><span class="line">  &#123; <span class="attr">$limit</span>: ctx.state.per_page &#125;,</span><br><span class="line">])</span><br></pre></td></tr></table></figure></p>
+<h2 id="MongoDb-聚合操作"><a href="#MongoDb-聚合操作" class="headerlink" title="MongoDb 聚合操作"></a>MongoDb 聚合操作</h2><p>上面我使用的是mongoose提供的Aggregate方法，而该方法实际上使用的MongoDb的Aggregation Pipeline聚合管道方法。</p>
+<h3 id="什么是聚合管道？"><a href="#什么是聚合管道？" class="headerlink" title="什么是聚合管道？"></a>什么是聚合管道？</h3><p>聚合管道是一个基于数据处理管道模型的数据聚合框架，文档通过多级管道输出聚合结果。</p>
+<p>每个文档通过一个由多个节点组成的管道，每个节点有自己特殊的功能（分组、过滤等），文档经过管道处理后，最后输出相应的结果。</p>
+<p>管道基本的功能有两个：</p>
+<ul>
+<li>一是对文档进行“过滤”，也就是筛选出符合条件的文档;</li>
+<li>二是对文档进行“变换”，也就是改变文档的输出形式。</li>
+</ul>
+<p>其他的一些功能还包括按照某个指定的字段分组和排序等。而且在每个阶段还可以使用表达式操作符计算平均值和拼接字符串等相关操作。</p>
+<p>MongoDb聚合操作还提供了一个MapReduce 的替代方案，MapReduce使用相对来说比较复杂，而管道拥有固定的接口(操作符表达),使用比较简单，对于大多数的聚合任务管道一般来说是首选方法。</p>
+<h3 id="管道操作"><a href="#管道操作" class="headerlink" title="管道操作"></a>管道操作</h3><p>如果知道linux的管道操作就能更好理解这里说的管道聚合，linux命令中从最左边开始，将获取到的数据依次传递给管道符右边的命令让其处理直到最后一个命令。</p>
+<p>看一个实例，下图中先进行了$match操作，然后将结果丢给$group。<br><img src="/img/WX20180108-163842.png" alt=""></p>
+<h2 id="为什么会出现重复数据？"><a href="#为什么会出现重复数据？" class="headerlink" title="为什么会出现重复数据？"></a>为什么会出现重复数据？</h2><p>基于我们上面的认识，再来分析我的代码：首先通过$match过滤到符合的结果，然后将结果进行分组操作形成一列新的文档。在对文档按照updatedAt进行排序，最后根据skip和limit返回结果。</p>
+<p>想象一种情况：当$group后结果有几个文档updatedAt是相同的时候进行排序，不管谁放在前面谁放在后面其实都可以，因为要求只是updatedAt降序而已。从数据库角度来讲，既然没有额外的要求，那当然是以最高效的方式给你结果，也就是不管updatedAt以外的顺序，因为这样最省资源。</p>
+<p>也就是说假如有A B C三个文档，第一次查询的时候，是 A B C ，第二次查询的时候就变成 B A C。假如第一页的分页刚好A是最后一个，到第二页请求的时候，A又变成了第一个！这也就是分页会出现重复的原因所在。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ul>
+<li>指定一个可以完全确定顺序的排序条件，即指定一个唯一性字段。<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> templates = <span class="keyword">await</span> Template.aggregate([</span><br><span class="line">  &#123; $match &#125;,</span><br><span class="line">  &#123; <span class="attr">$group</span>: &#123;</span><br><span class="line">    _id: <span class="string">'$group_id'</span>,</span><br><span class="line">    count: &#123; <span class="attr">$sum</span>: <span class="number">1</span> &#125;,</span><br><span class="line">    item_id: &#123; <span class="attr">$last</span>: <span class="string">'$_id'</span> &#125;,</span><br><span class="line">    name: &#123; <span class="attr">$last</span>: <span class="string">'$name'</span> &#125;,</span><br><span class="line">    updatedAt: &#123; <span class="attr">$last</span>: <span class="string">'$updatedAt'</span> &#125;,</span><br><span class="line">    createdAt: &#123; <span class="attr">$last</span>: <span class="string">'$createdAt'</span> &#125;,</span><br><span class="line">  &#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">$sort</span>: &#123; <span class="attr">updatedAt</span>: <span class="number">-1</span>, <span class="attr">createdAt</span>: <span class="number">-1</span> &#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">$skip</span>: ctx.state.skip &#125;,</span><br><span class="line">  &#123; <span class="attr">$limit</span>: ctx.state.per_page &#125;,</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mongodb/" rel="tag"># Mongodb</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/05/Mongodb auth验证/" rel="next" title="Mongodb auth验证">
+                <i class="fa fa-chevron-left"></i> Mongodb auth验证
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/11434315"
+                alt="Jacoob Wang" />
+            
+              <p class="site-author-name" itemprop="name">Jacoob Wang</p>
+              <p class="site-description motion-element" itemprop="description">业精于勤荒于嬉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/jacoobwang" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:531532957@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#场景还原"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x573A;&#x666F;&#x8FD8;&#x539F;" class="headerlink" title="&#x573A;&#x666F;&#x8FD8;&#x539F;"></a>&#x573A;&#x666F;&#x8FD8;&#x539F;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MongoDb-聚合操作"><span class="nav-number">2.</span> <span class="nav-text"><a href="#MongoDb-&#x805A;&#x5408;&#x64CD;&#x4F5C;" class="headerlink" title="MongoDb &#x805A;&#x5408;&#x64CD;&#x4F5C;"></a>MongoDb &#x805A;&#x5408;&#x64CD;&#x4F5C;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是聚合管道？"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;&#x805A;&#x5408;&#x7BA1;&#x9053;&#xFF1F;" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;&#x805A;&#x5408;&#x7BA1;&#x9053;&#xFF1F;"></a>&#x4EC0;&#x4E48;&#x662F;&#x805A;&#x5408;&#x7BA1;&#x9053;&#xFF1F;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管道操作"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#&#x7BA1;&#x9053;&#x64CD;&#x4F5C;" class="headerlink" title="&#x7BA1;&#x9053;&#x64CD;&#x4F5C;"></a>&#x7BA1;&#x9053;&#x64CD;&#x4F5C;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么会出现重复数据？"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x4E3A;&#x4EC0;&#x4E48;&#x4F1A;&#x51FA;&#x73B0;&#x91CD;&#x590D;&#x6570;&#x636E;&#xFF1F;" class="headerlink" title="&#x4E3A;&#x4EC0;&#x4E48;&#x4F1A;&#x51FA;&#x73B0;&#x91CD;&#x590D;&#x6570;&#x636E;&#xFF1F;"></a>&#x4E3A;&#x4EC0;&#x4E48;&#x4F1A;&#x51FA;&#x73B0;&#x91CD;&#x590D;&#x6570;&#x636E;&#xFF1F;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方法"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x89E3;&#x51B3;&#x65B9;&#x6CD5;" class="headerlink" title="&#x89E3;&#x51B3;&#x65B9;&#x6CD5;"></a>&#x89E3;&#x51B3;&#x65B9;&#x6CD5;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jacoob Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
