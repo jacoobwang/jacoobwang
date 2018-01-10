@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="最近在一个项目中使用Mongodb的聚合函数 aggregate 查询数据的时候，在分页情况下会出现一些重复的结果！刚开始以为数据库里有重复数据，mongo shell下使用find执行查询并无重复数据！这是什么情况呢？">
+<meta name="description" content="MongoDB 可以通过 writeConcern 来定制写策略，3.2版本后又引入了 readConcern 来灵活的定制读策略。 readConcern vs readPreferenceMongoDB 控制读策略，还有一个 readPreference 的设置，为了避免混淆，先简单说明下二者的区别。">
 <meta name="keywords" content="Mongodb">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MongoDb聚合操作重复问题">
-<meta property="og:url" content="http://yoursite.com/2018/01/08/MongoDb聚合操作重复问题/index.html">
+<meta property="og:title" content="MongoDb读策略read concern">
+<meta property="og:url" content="http://yoursite.com/2018/01/10/MongoDb读策略read concern/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="最近在一个项目中使用Mongodb的聚合函数 aggregate 查询数据的时候，在分页情况下会出现一些重复的结果！刚开始以为数据库里有重复数据，mongo shell下使用find执行查询并无重复数据！这是什么情况呢？">
+<meta property="og:description" content="MongoDB 可以通过 writeConcern 来定制写策略，3.2版本后又引入了 readConcern 来灵活的定制读策略。 readConcern vs readPreferenceMongoDB 控制读策略，还有一个 readPreference 的设置，为了避免混淆，先简单说明下二者的区别。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/img/WX20180108-163842.png">
-<meta property="og:updated_time" content="2018-01-08T09:49:43.000Z">
+<meta property="og:image" content="http://yoursite.com/img/WX20180110-125412.png">
+<meta property="og:updated_time" content="2018-01-10T05:00:55.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MongoDb聚合操作重复问题">
-<meta name="twitter:description" content="最近在一个项目中使用Mongodb的聚合函数 aggregate 查询数据的时候，在分页情况下会出现一些重复的结果！刚开始以为数据库里有重复数据，mongo shell下使用find执行查询并无重复数据！这是什么情况呢？">
-<meta name="twitter:image" content="http://yoursite.com/img/WX20180108-163842.png">
+<meta name="twitter:title" content="MongoDb读策略read concern">
+<meta name="twitter:description" content="MongoDB 可以通过 writeConcern 来定制写策略，3.2版本后又引入了 readConcern 来灵活的定制读策略。 readConcern vs readPreferenceMongoDB 控制读策略，还有一个 readPreference 的设置，为了避免混淆，先简单说明下二者的区别。">
+<meta name="twitter:image" content="http://yoursite.com/img/WX20180110-125412.png">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/08/MongoDb聚合操作重复问题/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/10/MongoDb读策略read concern/"/>
 
 
 
 
 
-  <title>MongoDb聚合操作重复问题 | 勤勤恳恳</title>
+  <title>MongoDb读策略read concern | 勤勤恳恳</title>
   
 
 
@@ -255,7 +255,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/08/MongoDb聚合操作重复问题/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/10/MongoDb读策略read concern/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jacoob Wang">
@@ -272,7 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MongoDb聚合操作重复问题</h1>
+          <h1 class="post-title" itemprop="name headline">MongoDb读策略read concern</h1>
         
 
         <div class="post-meta">
@@ -284,8 +284,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-08T15:12:30+08:00">
-                2018-01-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-10T12:12:30+08:00">
+                2018-01-10
               </time>
             
 
@@ -322,27 +322,50 @@
       
 
       
-        <p>最近在一个项目中使用Mongodb的聚合函数 aggregate 查询数据的时候，在分页情况下会出现一些重复的结果！刚开始以为数据库里有重复数据，mongo shell下使用find执行查询并无重复数据！这是什么情况呢？<br><a id="more"></a><br>下面看看到底是什么在作祟？</p>
-<h2 id="场景还原"><a href="#场景还原" class="headerlink" title="场景还原"></a>场景还原</h2><p>会产生重复的代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> templates = <span class="keyword">await</span> Template.aggregate([</span><br><span class="line">  &#123; $match &#125;,</span><br><span class="line">  &#123; <span class="attr">$group</span>: &#123;</span><br><span class="line">    _id: <span class="string">'$group_id'</span>,</span><br><span class="line">    count: &#123; <span class="attr">$sum</span>: <span class="number">1</span> &#125;,</span><br><span class="line">    item_id: &#123; <span class="attr">$last</span>: <span class="string">'$_id'</span> &#125;,</span><br><span class="line">    name: &#123; <span class="attr">$last</span>: <span class="string">'$name'</span> &#125;,</span><br><span class="line">    updatedAt: &#123; <span class="attr">$last</span>: <span class="string">'$updatedAt'</span> &#125;,</span><br><span class="line">  &#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">$sort</span>: &#123; <span class="attr">updatedAt</span>: <span class="number">-1</span> &#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">$skip</span>: ctx.state.skip &#125;,</span><br><span class="line">  &#123; <span class="attr">$limit</span>: ctx.state.per_page &#125;,</span><br><span class="line">])</span><br></pre></td></tr></table></figure></p>
-<h2 id="MongoDb-聚合操作"><a href="#MongoDb-聚合操作" class="headerlink" title="MongoDb 聚合操作"></a>MongoDb 聚合操作</h2><p>上面我使用的是mongoose提供的Aggregate方法，而该方法实际上使用的MongoDb的Aggregation Pipeline聚合管道方法。</p>
-<h3 id="什么是聚合管道？"><a href="#什么是聚合管道？" class="headerlink" title="什么是聚合管道？"></a>什么是聚合管道？</h3><p>聚合管道是一个基于数据处理管道模型的数据聚合框架，文档通过多级管道输出聚合结果。</p>
-<p>每个文档通过一个由多个节点组成的管道，每个节点有自己特殊的功能（分组、过滤等），文档经过管道处理后，最后输出相应的结果。</p>
-<p>管道基本的功能有两个：</p>
+        <p>MongoDB 可以通过 writeConcern 来定制写策略，3.2版本后又引入了 readConcern 来灵活的定制读策略。</p>
+<h2 id="readConcern-vs-readPreference"><a href="#readConcern-vs-readPreference" class="headerlink" title="readConcern vs readPreference"></a>readConcern vs readPreference</h2><p>MongoDB 控制读策略，还有一个 readPreference 的设置，为了避免混淆，先简单说明下二者的区别。<br><a id="more"></a></p>
+<ol>
+<li><p><a href="https://docs.mongodb.com/manual/core/read-preference/" target="_blank" rel="noopener">readPreference</a> 主要控制客户端 Driver 从复制集的哪个节点读取数据，这个特性可方便的实现读写分离、就近读取等策略。</p>
 <ul>
-<li>一是对文档进行“过滤”，也就是筛选出符合条件的文档;</li>
-<li>二是对文档进行“变换”，也就是改变文档的输出形式。</li>
+<li><font color="#fc6423">primary</font> 只从 primary 节点读数据，这个是默认设置</li>
+<li><font color="#fc6423">primaryPreferred</font> 优先从 primary 读取，primary 不可服务，从 secondary 读</li>
+<li><font color="#fc6423">secondary</font> 只从 scondary 节点读数据</li>
+<li><font color="#fc6423">secondaryPreferred</font> 优先从 secondary 读取，没有 secondary 成员时，从 primary 读取</li>
+<li><font color="#fc6423">nearest</font> 根据网络距离就近读取</li>
 </ul>
-<p>其他的一些功能还包括按照某个指定的字段分组和排序等。而且在每个阶段还可以使用表达式操作符计算平均值和拼接字符串等相关操作。</p>
-<p>MongoDb聚合操作还提供了一个MapReduce 的替代方案，MapReduce使用相对来说比较复杂，而管道拥有固定的接口(操作符表达),使用比较简单，对于大多数的聚合任务管道一般来说是首选方法。</p>
-<h3 id="管道操作"><a href="#管道操作" class="headerlink" title="管道操作"></a>管道操作</h3><p>如果知道linux的管道操作就能更好理解这里说的管道聚合，linux命令中从最左边开始，将获取到的数据依次传递给管道符右边的命令让其处理直到最后一个命令。</p>
-<p>看一个实例，下图中先进行了$match操作，然后将结果丢给$group。<br><img src="/img/WX20180108-163842.png" alt=""></p>
-<h2 id="为什么会出现重复数据？"><a href="#为什么会出现重复数据？" class="headerlink" title="为什么会出现重复数据？"></a>为什么会出现重复数据？</h2><p>基于我们上面的认识：首先通过$match过滤到符合的结果，然后将结果进行分组操作形成一列新的文档。在对文档按照updatedAt进行排序，最后根据skip和limit返回结果。</p>
-<p>想象一种情况：当$group后结果有几个文档updatedAt是相同的时候进行排序，不管谁放在前面谁放在后面其实都可以，因为要求只是updatedAt降序而已。从数据库角度来讲，既然没有额外的要求，那当然是以最高效的方式给你结果，也就是不管updatedAt以外的顺序，因为这样最省资源。</p>
-<p>也就是说假如有A B C三个文档，第一次查询的时候，是 A B C ，第二次查询的时候就变成 B A C。假如第一页的分页刚好A是最后一个，到第二页请求的时候，A又变成了第一个！这也就是分页会出现重复的原因所在。</p>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ul>
-<li>指定一个可以完全确定顺序的排序条件，即指定一个唯一性字段。<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> templates = <span class="keyword">await</span> Template.aggregate([</span><br><span class="line">  &#123; $match &#125;,</span><br><span class="line">  &#123; <span class="attr">$group</span>: &#123;</span><br><span class="line">    _id: <span class="string">'$group_id'</span>,</span><br><span class="line">    count: &#123; <span class="attr">$sum</span>: <span class="number">1</span> &#125;,</span><br><span class="line">    item_id: &#123; <span class="attr">$last</span>: <span class="string">'$_id'</span> &#125;,</span><br><span class="line">    name: &#123; <span class="attr">$last</span>: <span class="string">'$name'</span> &#125;,</span><br><span class="line">    updatedAt: &#123; <span class="attr">$last</span>: <span class="string">'$updatedAt'</span> &#125;,</span><br><span class="line">    createdAt: &#123; <span class="attr">$last</span>: <span class="string">'$createdAt'</span> &#125;,</span><br><span class="line">  &#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">$sort</span>: &#123; <span class="attr">updatedAt</span>: <span class="number">-1</span>, <span class="attr">createdAt</span>: <span class="number">-1</span> &#125; &#125;,</span><br><span class="line">  &#123; <span class="attr">$skip</span>: ctx.state.skip &#125;,</span><br><span class="line">  &#123; <span class="attr">$limit</span>: ctx.state.per_page &#125;,</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
 </li>
+<li><p><a href="https://docs.mongodb.com/manual/reference/read-concern/" target="_blank" rel="noopener">readConcern</a> 决定到某个读取数据时，能读到什么样的数据。</p>
+<ul>
+<li><font color="#fc6423">local</font> 能读取任意数据，这个是默认设置。</li>
+<li><font color="#fc6423">available</font> 对于没有做shard的数据库，它跟local一样！但如果是shared情况下，在chunk迁移的过程中，mongod实例异常宕机，导致迁移过程失败或者部分完成，会产生孤儿文件，而available可能会返回孤儿文件查询，而local根本不会去请求primary，哪怕是config server更新后。</li>
+<li><font color="#fc6423">majority</font> 只能读取到成功写入到大多数节点的数据；使用 majority 的方式会有诸多的限制，必须使用 WiredTiger 存储引擎，而且必须将选举协议设置为 1。</li>
+<li><font color="#fc6423">linearizable</font> 和 majority 类似，读取成功写入到大多数节点的数据；但是它修复了majority的一些bug,当然也要比majority在性能上损耗更多。关于它与majority的区别，可以参考这里：<a href="https://stackoverflow.com/questions/42615319/the-difference-between-majority-and-linearizable" target="_blank" rel="noopener">https://stackoverflow.com/questions/42615319/the-difference-between-majority-and-linearizable</a></li>
 </ul>
+</li>
+</ol>
+<p>readPreference 和 readConcern 可以配合使用。</p>
+<h2 id="readConcern-解决什么问题？"><a href="#readConcern-解决什么问题？" class="headerlink" title="readConcern 解决什么问题？"></a>readConcern 解决什么问题？</h2><p>readConcern 的初衷在于解决『脏读』的问题，比如用户从 MongoDB 的 primary 上读取了某一条数据，但这条数据并没有同步到大多数节点，然后 primary 就故障了，重新恢复后 这个primary 节点会将未同步到大多数节点的数据回滚掉，导致用户读到了『脏数据』。</p>
+<p>当指定 readConcern 级别为 majority 时，能保证用户读到的数据『已经写入到大多数节点』，而这样的数据肯定不会发生回滚，避免了脏读的问题。</p>
+<p>需要注意的是，readConcern 能保证读到的数据『不会发生回滚』，但并不能保证读到的数据是最新的，这个官网上也有说明。</p>
+<blockquote>
+<p>Regardless of the read concern level, the most recent data on a node may not reflect the most recent version of the data in the system.</p>
+</blockquote>
+<p>有用户误以为，readConcern 指定为 majority 时，客户端会从大多数的节点读取数据，然后返回最新的数据。</p>
+<p>实际上并不是这样，无论何种级别的 readConcern，客户端都只会从『某一个确定的节点』（具体是哪个节点由 readPreference 决定）读取数据，该节点根据自己看到的同步状态视图，只会返回已经同步到大多数节点的数据。</p>
+<h2 id="readConcern-实现原理"><a href="#readConcern-实现原理" class="headerlink" title="readConcern 实现原理"></a>readConcern 实现原理</h2><p>MongoDB 要支持 majority 的 readConcern 级别，必须设置replication.enableMajorityReadConcern参数，加上这个参数后，MongoDB 会起一个单独的snapshot 线程，会周期性的对当前的数据集进行 snapshot，并记录 snapshot 时最新 oplog的时间戳，得到一个映射表。</p>
+<p><img src="/img/WX20180110-125412.png" alt=""></p>
+<p>只有确保 oplog 已经同步到大多数节点时，对应的 snapshot 才会标记为 commmited，用户读取时，从最新的 commited 状态的 snapshot 读取数据，就能保证读到的数据一定已经同步到的大多数节点。</p>
+<p>关键的问题就是如何确定『oplog 已经同步到大多数节点』？</p>
+<p><strong>primary 节点</strong></p>
+<p>secondary 节点在 自身oplog发生变化时，会通过 replSetUpdatePosition 命令来将 oplog 进度立即通知给 primary，另外心跳的消息里也会包含最新 oplog 的信息；通过上述方式，primary 节点能很快知道 oplog 同步情况，知道『最新一条已经同步到大多数节点的 oplog』，并更新 snapshot 的状态。比如当t2已经写入到大多数据节点时，snapshot1、snapshot2都可以更新为 commited 状态。（不必要的 snapshot也会定期被清理掉）</p>
+<p><strong>secondary 节点</strong></p>
+<p>secondary 节点拉取 oplog 时，primary 节点会将『最新一条已经同步到大多数节点的 oplog』的信息返回给 secondary 节点，secondary 节点通过这个oplog时间戳来更新自身的 snapshot 状态。</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>目前 readConcern 主要用于跟 mongos 与 config server 的交互上，参考MongoDB Sharded Cluster 路由策略</li>
+<li>使用 readConcern 需要配置replication.enableMajorityReadConcern选项</li>
+<li>只有支持 readCommited 隔离级别的存储引擎才能支持 readConcern，比如 wiredtiger 引擎，而 mmapv1引擎则不能支持。</li>
+</ul>
+<h2 id="设置readConcern级别"><a href="#设置readConcern级别" class="headerlink" title="设置readConcern级别"></a>设置readConcern级别</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">db.runCommand(&#123;</span><br><span class="line">  readConcern: &#123;</span><br><span class="line">    level: <span class="string">'majority'</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -373,8 +396,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/05/Mongodb auth验证/" rel="next" title="Mongodb auth验证">
-                <i class="fa fa-chevron-left"></i> Mongodb auth验证
+              <a href="/2018/01/09/MongoDb的固定集合capped collection/" rel="next" title="MongoDb的固定集合capped collection">
+                <i class="fa fa-chevron-left"></i> MongoDb的固定集合capped collection
               </a>
             
           </div>
@@ -382,10 +405,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/08/MongoDb向复制集导入数据/" rel="prev" title="MongoDb向复制集导入数据">
-                MongoDb向复制集导入数据 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -526,7 +545,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#场景还原"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x573A;&#x666F;&#x8FD8;&#x539F;" class="headerlink" title="&#x573A;&#x666F;&#x8FD8;&#x539F;"></a>&#x573A;&#x666F;&#x8FD8;&#x539F;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MongoDb-聚合操作"><span class="nav-number">2.</span> <span class="nav-text"><a href="#MongoDb-&#x805A;&#x5408;&#x64CD;&#x4F5C;" class="headerlink" title="MongoDb &#x805A;&#x5408;&#x64CD;&#x4F5C;"></a>MongoDb &#x805A;&#x5408;&#x64CD;&#x4F5C;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是聚合管道？"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;&#x805A;&#x5408;&#x7BA1;&#x9053;&#xFF1F;" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;&#x805A;&#x5408;&#x7BA1;&#x9053;&#xFF1F;"></a>&#x4EC0;&#x4E48;&#x662F;&#x805A;&#x5408;&#x7BA1;&#x9053;&#xFF1F;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管道操作"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#&#x7BA1;&#x9053;&#x64CD;&#x4F5C;" class="headerlink" title="&#x7BA1;&#x9053;&#x64CD;&#x4F5C;"></a>&#x7BA1;&#x9053;&#x64CD;&#x4F5C;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么会出现重复数据？"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x4E3A;&#x4EC0;&#x4E48;&#x4F1A;&#x51FA;&#x73B0;&#x91CD;&#x590D;&#x6570;&#x636E;&#xFF1F;" class="headerlink" title="&#x4E3A;&#x4EC0;&#x4E48;&#x4F1A;&#x51FA;&#x73B0;&#x91CD;&#x590D;&#x6570;&#x636E;&#xFF1F;"></a>&#x4E3A;&#x4EC0;&#x4E48;&#x4F1A;&#x51FA;&#x73B0;&#x91CD;&#x590D;&#x6570;&#x636E;&#xFF1F;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方法"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x89E3;&#x51B3;&#x65B9;&#x6CD5;" class="headerlink" title="&#x89E3;&#x51B3;&#x65B9;&#x6CD5;"></a>&#x89E3;&#x51B3;&#x65B9;&#x6CD5;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#readConcern-vs-readPreference"><span class="nav-number">1.</span> <span class="nav-text"><a href="#readConcern-vs-readPreference" class="headerlink" title="readConcern vs readPreference"></a>readConcern vs readPreference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#readConcern-解决什么问题？"><span class="nav-number">2.</span> <span class="nav-text"><a href="#readConcern-&#x89E3;&#x51B3;&#x4EC0;&#x4E48;&#x95EE;&#x9898;&#xFF1F;" class="headerlink" title="readConcern &#x89E3;&#x51B3;&#x4EC0;&#x4E48;&#x95EE;&#x9898;&#xFF1F;"></a>readConcern &#x89E3;&#x51B3;&#x4EC0;&#x4E48;&#x95EE;&#x9898;&#xFF1F;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#readConcern-实现原理"><span class="nav-number">3.</span> <span class="nav-text"><a href="#readConcern-&#x5B9E;&#x73B0;&#x539F;&#x7406;" class="headerlink" title="readConcern &#x5B9E;&#x73B0;&#x539F;&#x7406;"></a>readConcern &#x5B9E;&#x73B0;&#x539F;&#x7406;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意事项"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x6CE8;&#x610F;&#x4E8B;&#x9879;" class="headerlink" title="&#x6CE8;&#x610F;&#x4E8B;&#x9879;"></a>&#x6CE8;&#x610F;&#x4E8B;&#x9879;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置readConcern级别"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x8BBE;&#x7F6E;readConcern&#x7EA7;&#x522B;" class="headerlink" title="&#x8BBE;&#x7F6E;readConcern&#x7EA7;&#x522B;"></a>&#x8BBE;&#x7F6E;readConcern&#x7EA7;&#x522B;</span></a></li></ol></div>
             
 
           </div>
