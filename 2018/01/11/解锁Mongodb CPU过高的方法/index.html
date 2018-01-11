@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Mongodb," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="服务器告警，cpu爆了，MongoDB占用了全部的cpu，碰到这种问题的时候第一想法是业务NB了，需要扩容了！但我们作为一个思考缜密的开发人员还是想要去如何调优？">
+<meta name="keywords" content="Mongodb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解锁Mongodb CPU过高的方法">
+<meta property="og:url" content="http://yoursite.com/2018/01/11/解锁Mongodb CPU过高的方法/index.html">
+<meta property="og:site_name" content="勤勤恳恳">
+<meta property="og:description" content="服务器告警，cpu爆了，MongoDB占用了全部的cpu，碰到这种问题的时候第一想法是业务NB了，需要扩容了！但我们作为一个思考缜密的开发人员还是想要去如何调优？">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-11T05:02:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="解锁Mongodb CPU过高的方法">
+<meta name="twitter:description" content="服务器告警，cpu爆了，MongoDB占用了全部的cpu，碰到这种问题的时候第一想法是业务NB了，需要扩容了！但我们作为一个思考缜密的开发人员还是想要去如何调优？">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/11/解锁Mongodb CPU过高的方法/"/>
+
+
+
+
+
+  <title>解锁Mongodb CPU过高的方法 | 勤勤恳恳</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">勤勤恳恳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客|撸码|生活|态度</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-自研php框架">
+          <a href="https://jacoobwang.github.io/vino/vino.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            自研php框架
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://jacoobwang.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/11/解锁Mongodb CPU过高的方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">解锁Mongodb CPU过高的方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-11T12:12:30+08:00">
+                2018-01-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>服务器告警，cpu爆了，MongoDB占用了全部的cpu，碰到这种问题的时候第一想法是业务NB了，需要扩容了！但我们作为一个思考缜密的开发人员还是想要去如何调优？<br><a id="more"></a></p>
+<h2 id="Step1-分析数据库正在执行的请求"><a href="#Step1-分析数据库正在执行的请求" class="headerlink" title="Step1.分析数据库正在执行的请求"></a>Step1.分析数据库正在执行的请求</h2><p>用户可以通过 Mongo Shell 连接，并执行 db.currentOp() 命令，能看到数据库当前正在执行的操作，如下是该命令的一个输出示例，标识一个正在执行的操作。重点关注几个字段：</p>
+<ul>
+<li>client：请求是由哪个客户端发起的？</li>
+<li>opid：操作的opid，有需要的话，可以通过 db.killOp(opid) 直接干掉的操作</li>
+<li>secs_running/microsecs_running： 这个值重点关注，代表请求运行的时间，如果这个值特别大，就得注意了，看看请求是否合理</li>
+<li>query/ns: 这个能看出是对哪个集合正在执行什么操作</li>
+<li>lock*：还有一些跟锁相关的参数，需要了解可以看官网文档，本文不做详细介绍</li>
+</ul>
+<p><a href="https://docs.mongodb.com/manual/reference/method/db.currentOp/" target="_blank" rel="noopener">db.currentOp 文档在这里，多看官网文档</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">db.currentOp(&#123; <span class="string">"active"</span> : <span class="literal">true</span> &#125;)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="string">"inprog"</span> : [</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="string">"desc"</span> : <span class="string">"conn2095"</span>,</span><br><span class="line">			<span class="string">"threadId"</span> : <span class="string">"140723004909312"</span>,</span><br><span class="line">			<span class="string">"connectionId"</span> : 2095,</span><br><span class="line">			<span class="string">"client"</span> : <span class="string">"127.0.0.1:44726"</span>,</span><br><span class="line">			<span class="string">"appName"</span> : <span class="string">"MongoDB Shell"</span>,</span><br><span class="line">			<span class="string">"clientMetadata"</span> : &#123;</span><br><span class="line">				<span class="string">"application"</span> : &#123;</span><br><span class="line">					<span class="string">"name"</span> : <span class="string">"MongoDB Shell"</span></span><br><span class="line">				&#125;,</span><br><span class="line">				<span class="string">"driver"</span> : &#123;</span><br><span class="line">					<span class="string">"name"</span> : <span class="string">"MongoDB Internal Client"</span>,</span><br><span class="line">					<span class="string">"version"</span> : <span class="string">"3.4.6"</span></span><br><span class="line">				&#125;,</span><br><span class="line">				<span class="string">"os"</span> : &#123;</span><br><span class="line">					<span class="string">"type"</span> : <span class="string">"Linux"</span>,</span><br><span class="line">					<span class="string">"name"</span> : <span class="string">"CentOS release 6.5 (Final)"</span>,</span><br><span class="line">					<span class="string">"architecture"</span> : <span class="string">"x86_64"</span>,</span><br><span class="line">					<span class="string">"version"</span> : <span class="string">"Kernel 2.6.32-504.16.2.el6.x86_64"</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;,</span><br><span class="line">			<span class="string">"active"</span> : <span class="literal">true</span>,</span><br><span class="line">			<span class="string">"opid"</span> : 20599457,</span><br><span class="line">			<span class="string">"secs_running"</span> : 0,</span><br><span class="line">			<span class="string">"microsecs_running"</span> : NumberLong(103),</span><br><span class="line">			<span class="string">"op"</span> : <span class="string">"command"</span>,</span><br><span class="line">			<span class="string">"ns"</span> : <span class="string">"admin.<span class="variable">$cmd</span>"</span>,</span><br><span class="line">			<span class="string">"query"</span> : &#123;</span><br><span class="line">				<span class="string">"currentOp"</span> : 1,</span><br><span class="line">				<span class="string">"active"</span> : <span class="literal">true</span></span><br><span class="line">			&#125;,</span><br><span class="line">			<span class="string">"numYields"</span> : 0,</span><br><span class="line">			<span class="string">"locks"</span> : &#123;</span><br><span class="line"></span><br><span class="line">			&#125;,</span><br><span class="line">			<span class="string">"waitingForLock"</span> : <span class="literal">false</span>,</span><br><span class="line">			<span class="string">"lockStats"</span> : &#123;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	],</span><br><span class="line">	<span class="string">"ok"</span> : 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里先要明确一下，通过 db.currentOp() 查看正在执行的操作，目的到底是什么？</p>
+<p>并不是说我们要将正在执行的操作都列出来，然后通过 killOp 逐个干掉；这一步的目的是要看一下，是否有「意料之外」的耗时请求正在执行。</p>
+<p>比如你的业务平时 CPU 利用率不高，运维管理人员连到数据库执行了一些需要全表扫描的操作，然后突然 CPU 利用率飙高，导致你的业务响应很慢，那么就要重点关注下那些执行时间很长的操作。</p>
+<p>一旦找到罪魁祸首，拿到对应请求的 opid，执行 db.killOp(opid) 将对应的请求干掉。</p>
+<p>如果你的应用一上线，cpu利用率就很高，而且一直持续，通过 db.currentOp 的结果也没发现什么异常请求，可以进入到 Step2 进行更深入的分析。</p>
+<h2 id="Step2：分析数据库慢请求"><a href="#Step2：分析数据库慢请求" class="headerlink" title="Step2：分析数据库慢请求"></a>Step2：分析数据库慢请求</h2><p>MongoDB 支持 profiling 功能，将请求的执行情况记录到同DB下的 system.profile 集合里，profiling 有3种模式</p>
+<p>profiling 设置文档在这里，多看官网文档 <a href="https://docs.mongodb.com/manual/tutorial/manage-the-database-profiler/" target="_blank" rel="noopener">https://docs.mongodb.com/manual/tutorial/manage-the-database-profiler/</a></p>
+<p>针对慢请求 profiling，将超过一定阈值的请求，记录到system.profile 集合<br>默认请求下，MongoDB 的 profiling 功能是关闭，生产环境建议开启，慢请求阈值可根据需要定制，如不确定，直接使用默认值100ms。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">operationProfiling：</span><br><span class="line">  mode: slowOp</span><br><span class="line">  slowOpThresholdMs： 100</span><br></pre></td></tr></table></figure></p>
+<p>基于上述配置，MongoDB 会将超过 100ms 的请求记录到对应DB 的 system.profile 集合里，system.profile 默认是一个最多占用 1MB 空间的 capped collection。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">查看最近3条 慢请求，&#123;<span class="variable">$natrual</span>: -1&#125; 代表按插入数序逆序</span><br><span class="line">db.system.profile.find().sort(&#123;<span class="variable">$natrual</span>: -1&#125;).<span class="built_in">limit</span>(3)</span><br></pre></td></tr></table></figure></p>
+<p>在开启了慢请求 profiling 的情况下，我们对慢请求的内容进行分析，来找出可优化的点，常见的包括。</p>
+<p>profiling的结果输出含义在这里，多看官网文档 <a href="https://docs.mongodb.com/manual/reference/database-profiler/" target="_blank" rel="noopener">https://docs.mongodb.com/manual/reference/database-profiler/</a></p>
+<h3 id="CPU杀手1：全表扫描"><a href="#CPU杀手1：全表扫描" class="headerlink" title="CPU杀手1：全表扫描"></a>CPU杀手1：全表扫描</h3><p>全集合（表）扫描 COLLSCAN，当一个查询（或更新、删除）请求需要全表扫描时，是非常耗CPU资源的，所以当你在 system.profile 集合 或者 日志文件发现 COLLSCAN 关键字时，就得注意了，很可能就是这些查询吃掉了你的 CPU 资源；确认一下，如果这种请求比较频繁，最好是针对查询的字段建立索引来优化。</p>
+<p>一个查询扫描了多少文档，可查看 system.profile 里的 docsExamined 的值，该值越大，请求CPU开销越大。</p>
+<blockquote>
+<p>关键字：COLLSCAN、 docsExamined</p>
+</blockquote>
+<h3 id="CPU杀手2：不合理的索引"><a href="#CPU杀手2：不合理的索引" class="headerlink" title="CPU杀手2：不合理的索引"></a>CPU杀手2：不合理的索引</h3><p>有的时候，请求即使查询走了索引，执行也很慢，通常是因为合理建立不太合理（或者是匹配的结果本身就很多，这样即使走索引，请求开销也不会优化很多）。</p>
+<p>如下所示，假设某个集合的数据，x字段的取值很少（假设只有1、2），而y字段的取值很丰富。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123; x: 1, y: 1 &#125;</span><br><span class="line">&#123; x: 1, y: 2 &#125;</span><br><span class="line">&#123; x: 1, y: 3 &#125;</span><br><span class="line">......</span><br><span class="line">&#123; x: 1, y: 100000&#125; </span><br><span class="line">&#123; x: 2, y: 1 &#125;</span><br><span class="line">&#123; x: 2, y: 2 &#125;</span><br><span class="line">&#123; x: 2, y: 3 &#125;</span><br><span class="line">......</span><br><span class="line">&#123; x: 1, y: 100000&#125;</span><br></pre></td></tr></table></figure>
+<p>要服务 {x: 1: y: 2} 这样的查询</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">db.createIndex( &#123;x: 1&#125; )         效果不好，因为x相同取值太多</span><br><span class="line">db.createIndex( &#123;x: 1, y: 1&#125; )   效果不好，因为x相同取值太多</span><br><span class="line">db.createIndex( &#123;y: 1 &#125; )        效果好，因为y相同取值很少</span><br><span class="line">db.createIndex( &#123;y: 1, x: 1 &#125; )  效果好，因为y相同取值少</span><br></pre></td></tr></table></figure>
+<p>至于{y: 1} 与 {y: 1, x: 1} 的区别，可参考MongoDB索引原理(<a href="https://yq.aliyun.com/articles/33726" target="_blank" rel="noopener">https://yq.aliyun.com/articles/33726</a>) 及 复合索引官方文档<a href="https://docs.mongodb.com/manual/core/index-compound/" target="_blank" rel="noopener">https://docs.mongodb.com/manual/core/index-compound/</a> 自行理解。</p>
+<p>一个走索引的查询，扫描了多少条索引，可查看 system.profile 里的 keysExamined 字段，该值越大，CPU 开销越大。</p>
+<blockquote>
+<p>关键字：IXSCAN、keysExamined</p>
+</blockquote>
+<h3 id="CPU杀手3：大量数据排序"><a href="#CPU杀手3：大量数据排序" class="headerlink" title="CPU杀手3：大量数据排序"></a>CPU杀手3：大量数据排序</h3><p>当查询请求里包含排序的时候，如果排序无法通过索引满足，MongoDB 会在内存李结果进行排序，而排序这个动作本身是非常耗 CPU 资源的，优化的方法仍然是建立索引，对经常需要排序的字段，建立索引。</p>
+<p>当你在 system.profile 集合 或者 日志文件发现 SORT 关键字时，就可以考虑通过索引来优化排序。当请求包含排序阶段时， system.profile 里的 hasSortStage 字段会为 true。</p>
+<blockquote>
+<p>关键字：SORT、hasSortStage</p>
+</blockquote>
+<p>其他还有诸如建索引，aggregation等操作也可能非常耗 CPU 资源，但本质上也是上述几种场景；建索引需要全表扫描，而aggeregation 也是遍历、查询、更新、排序等动作的组合。</p>
+<h2 id="Step3-服务能力评估"><a href="#Step3-服务能力评估" class="headerlink" title="Step3: 服务能力评估"></a>Step3: 服务能力评估</h2><p>经过上述2步，你发现整个数据库的查询非常合理，所有的请求都是高效的走了索引，基本没有优化的空间了，那么很可能是你机器的服务能力已经达到上限了，应该升级配置了（或者通过 sharding 扩展）。</p>
+<p>当然最好的情况时，提前对 MongoDB 进行测试，了解在你的场景下，对应的服务能力上限，以便及时扩容、升级，而不是到 CPU 资源用满，业务已经完全撑不住的时候才去做评估。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mongodb/" rel="tag"># Mongodb</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/10/MongoDb读策略read concern/" rel="next" title="MongoDb读策略read concern">
+                <i class="fa fa-chevron-left"></i> MongoDb读策略read concern
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/11434315"
+                alt="Jacoob Wang" />
+            
+              <p class="site-author-name" itemprop="name">Jacoob Wang</p>
+              <p class="site-description motion-element" itemprop="description">业精于勤荒于嬉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/jacoobwang" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:531532957@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Step1-分析数据库正在执行的请求"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Step1-&#x5206;&#x6790;&#x6570;&#x636E;&#x5E93;&#x6B63;&#x5728;&#x6267;&#x884C;&#x7684;&#x8BF7;&#x6C42;" class="headerlink" title="Step1.&#x5206;&#x6790;&#x6570;&#x636E;&#x5E93;&#x6B63;&#x5728;&#x6267;&#x884C;&#x7684;&#x8BF7;&#x6C42;"></a>Step1.&#x5206;&#x6790;&#x6570;&#x636E;&#x5E93;&#x6B63;&#x5728;&#x6267;&#x884C;&#x7684;&#x8BF7;&#x6C42;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step2：分析数据库慢请求"><span class="nav-number">2.</span> <span class="nav-text"><a href="#Step2&#xFF1A;&#x5206;&#x6790;&#x6570;&#x636E;&#x5E93;&#x6162;&#x8BF7;&#x6C42;" class="headerlink" title="Step2&#xFF1A;&#x5206;&#x6790;&#x6570;&#x636E;&#x5E93;&#x6162;&#x8BF7;&#x6C42;"></a>Step2&#xFF1A;&#x5206;&#x6790;&#x6570;&#x636E;&#x5E93;&#x6162;&#x8BF7;&#x6C42;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU杀手1：全表扫描"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#CPU&#x6740;&#x624B;1&#xFF1A;&#x5168;&#x8868;&#x626B;&#x63CF;" class="headerlink" title="CPU&#x6740;&#x624B;1&#xFF1A;&#x5168;&#x8868;&#x626B;&#x63CF;"></a>CPU&#x6740;&#x624B;1&#xFF1A;&#x5168;&#x8868;&#x626B;&#x63CF;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU杀手2：不合理的索引"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#CPU&#x6740;&#x624B;2&#xFF1A;&#x4E0D;&#x5408;&#x7406;&#x7684;&#x7D22;&#x5F15;" class="headerlink" title="CPU&#x6740;&#x624B;2&#xFF1A;&#x4E0D;&#x5408;&#x7406;&#x7684;&#x7D22;&#x5F15;"></a>CPU&#x6740;&#x624B;2&#xFF1A;&#x4E0D;&#x5408;&#x7406;&#x7684;&#x7D22;&#x5F15;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU杀手3：大量数据排序"><span class="nav-number">2.3.</span> <span class="nav-text"><a href="#CPU&#x6740;&#x624B;3&#xFF1A;&#x5927;&#x91CF;&#x6570;&#x636E;&#x6392;&#x5E8F;" class="headerlink" title="CPU&#x6740;&#x624B;3&#xFF1A;&#x5927;&#x91CF;&#x6570;&#x636E;&#x6392;&#x5E8F;"></a>CPU&#x6740;&#x624B;3&#xFF1A;&#x5927;&#x91CF;&#x6570;&#x636E;&#x6392;&#x5E8F;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step3-服务能力评估"><span class="nav-number">3.</span> <span class="nav-text"><a href="#Step3-&#x670D;&#x52A1;&#x80FD;&#x529B;&#x8BC4;&#x4F30;" class="headerlink" title="Step3: &#x670D;&#x52A1;&#x80FD;&#x529B;&#x8BC4;&#x4F30;"></a>Step3: &#x670D;&#x52A1;&#x80FD;&#x529B;&#x8BC4;&#x4F30;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jacoob Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
