@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="网络," />
 
 
 
@@ -79,16 +79,20 @@
 
 
 
-<meta name="description" content="业精于勤荒于嬉">
-<meta property="og:type" content="website">
-<meta property="og:title" content="勤勤恳恳">
-<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta name="description" content="对于网络故障导致的服务不可用，对开发童鞋来说基本上毫无办法，只能期待网络快点恢复！如何快速定位网络故障，协助网络或运维迅速解决问题呢？">
+<meta name="keywords" content="网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何排查网络丢包及延时高故障">
+<meta property="og:url" content="http://yoursite.com/2018/01/11/如何排查网络丢包及延时高故障/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="业精于勤荒于嬉">
+<meta property="og:description" content="对于网络故障导致的服务不可用，对开发童鞋来说基本上毫无办法，只能期待网络快点恢复！如何快速定位网络故障，协助网络或运维迅速解决问题呢？">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/img/image2016-8-19%2015_44_59.png">
+<meta property="og:updated_time" content="2018-01-11T07:32:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="勤勤恳恳">
-<meta name="twitter:description" content="业精于勤荒于嬉">
+<meta name="twitter:title" content="如何排查网络丢包及延时高故障">
+<meta name="twitter:description" content="对于网络故障导致的服务不可用，对开发童鞋来说基本上毫无办法，只能期待网络快点恢复！如何快速定位网络故障，协助网络或运维迅速解决问题呢？">
+<meta name="twitter:image" content="http://yoursite.com/img/image2016-8-19%2015_44_59.png">
 
 
 
@@ -118,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/page/2/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/11/如何排查网络丢包及延时高故障/"/>
 
 
 
 
 
-  <title>勤勤恳恳</title>
+  <title>如何排查网络丢包及延时高故障 | 勤勤恳恳</title>
   
 
 
@@ -143,8 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,9 +240,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -252,7 +255,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/25/高效实用Chrome/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/11/如何排查网络丢包及延时高故障/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jacoob Wang">
@@ -269,9 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/25/高效实用Chrome/" itemprop="url">高效使用chrome</a></h1>
+          <h1 class="post-title" itemprop="name headline">如何排查网络丢包及延时高故障</h1>
         
 
         <div class="post-meta">
@@ -283,8 +284,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-25T16:12:30+08:00">
-                2017-12-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-11T16:12:30+08:00">
+                2018-01-11
               </time>
             
 
@@ -321,18 +322,24 @@
       
 
       
-        
-          <p>chrome一直以来都是我的最爱！相信很多开发人员都是用chrome来开发吧！谷歌一直被视为IT界最牛逼的公司之一！这里记录下我常使用的chrome插件😁</p>
-<h2 id="常用插件"><a href="#常用插件" class="headerlink" title="常用插件"></a>常用插件</h2><p><strong><font color="#fc6423">JSON-handle</font></strong></p>
-<p>对JSON格式的内容进行浏览和编辑，以树形图样式展现JSON文档，并可实时编辑。对于我这种经常需要调试后端 rest 接口的来说简直太爽了。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/12/25/高效实用Chrome/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+        <p>对于网络故障导致的服务不可用，对开发童鞋来说基本上毫无办法，只能期待网络快点恢复！如何快速定位网络故障，协助网络或运维迅速解决问题呢？<br><a id="more"></a></p>
+<h2 id="定位方法"><a href="#定位方法" class="headerlink" title="定位方法"></a>定位方法</h2><ol>
+<li><p>ping测试<br>ping测试可以同时测试丢包和延时,可以长时间测试，查看丢包率。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@Linux~]$ ping  8.8.8.8（8.8.8.8更换成自己要测试的IP地址或者域名）</span><br><span class="line"></span><br><span class="line">PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.</span><br><span class="line"></span><br><span class="line">64 bytes from 8.8.8.8: icmp_seq=1 ttl=51 time=400 ms</span><br><span class="line"></span><br><span class="line">64 bytes from 8.8.8.8: icmp_seq=2 ttl=51 time=390 ms</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">--- 8.8.8.8 ping statistics ---</span><br><span class="line"></span><br><span class="line">10 packets transmitted, 7 received, 30% packet loss, time 9999ms</span><br><span class="line"></span><br><span class="line">rtt min/avg/max/mdev = 379.037/399.317/453.232/24.967 ms</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>traceroute测试<br>traceroute可以测试路径和每一跳的延时。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 跟踪到目标主机8.8.8.8的路径（可以查看从源去往目的需要经过的路径）</span></span><br><span class="line">[root@Linux~]$ traceroute 8.8.8.8 （8.8.8.8更换成自己要测试的IP地址或者域名）</span><br><span class="line">traceroute to 172.27.63.9 (172.27.63.9), 30 hops max, 60 byte packets</span><br><span class="line">1  172.27.63.9 (172.27.63.9)  75.464 ms  75.668 ms  75.797 ms</span><br><span class="line">2  100.127.253.45 (100.127.253.45)  0.400 ms  0.634 ms  0.863 ms</span><br><span class="line">3  * * *</span><br><span class="line">4  ......</span><br><span class="line">n  8.8.8.8 (8.8.8.8)  72.434 ms  71.223 ms  71.123 ms</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>mtr测试<br>MTR测试可以同时测试路径、每一跳的丢包和每一跳的延时，并且可以动态刷新数据。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Linux~]$ mtr 8.8.8.8（8.8.8.8更换成自己要测试的IP地址或者域名）</span><br></pre></td></tr></table></figure>
+<p>执行命令以后会有如下显示：<br><img src="/img/image2016-8-19 15_44_59.png" alt=""></p>
+</li>
+</ol>
+<p>找到丢包或者延时较高的那一跳的地址以后，查询一下该地址的归属人：</p>
+<p>如果地址为公网地址：可以到<a href="http://www.ip138.com/查询该地址属于哪一个运营商" target="_blank" rel="noopener">http://www.ip138.com/查询该地址属于哪一个运营商</a></p>
+<p>如果地址是私网地址：可以把地址通告给网络组</p>
+<p>说明：如果最后一跳不丢包，即使中间丢包也说明没有问题。</p>
+
       
     </div>
     
@@ -347,263 +354,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/24/html实体巩固/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jacoob Wang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="勤勤恳恳">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/24/html实体巩固/" itemprop="url">html实体巩固</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-24T16:12:30+08:00">
-                2017-12-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/网络/" rel="tag"># 网络</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          <p>关于html实体，web开发人员都或多或少知道一些！但很少有人详细提及过它，w3c对它的介绍也是笔墨不多。</p>
-<p>最近因为接触一些xss的漏洞问题，想更加深入的了解下html实体。这篇文章，也是穷我所及之处，尽量全面的介绍下html实体。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/12/24/html实体巩固/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/11/解锁Mongodb CPU过高的方法/" rel="next" title="解锁Mongodb CPU过高的方法">
+                <i class="fa fa-chevron-left"></i> 解锁Mongodb CPU过高的方法
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
+          <span class="post-nav-divider"></span>
 
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/19/nodejs断言assert/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jacoob Wang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="勤勤恳恳">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/19/nodejs断言assert/" itemprop="url">nodejs断言assert</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-19T18:12:30+08:00">
-                2017-12-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>assert模块是Node的内置模块，主要用于断言。如果表达式不符合预期，就抛出一个错误。该模块提供11个方法，但只有少数几个是常用的。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/12/19/nodejs断言assert/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -613,139 +393,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/18/hexo-first-install/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jacoob Wang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="勤勤恳恳">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/18/hexo-first-install/" itemprop="url">终于决定还是搞一个hexo静态博客</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-18T21:15:47+08:00">
-                2017-12-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>好几年前我有一个用php撸的博客，用了一段时间后，转用wordpress。毕竟当时wordpress太火爆，一度靠wordpress还赚了一点外快！时钟转到2017年，wordpress貌似不再流行，php也不再流行。在网络上瞎逛，看到很多人用hexo，遂决定用hexo来建一个博客！</p>
-<p>放弃wordpress还有另外一个原因，php站点是需要服务器资源的，就算是最便宜的搬瓦工一年也要耗费几十块大洋来支付费用，屌丝啊，总是不想付费。刚好看到github pages不用钱，而github pages正好支持部署静态站点，心中略喜，finally决定就是hexo拉。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/12/18/hexo-first-install/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-  </nav>
-
 
 
           </div>
@@ -753,6 +405,8 @@
 
 
           
+  
+
 
         </div>
         
@@ -773,8 +427,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -845,6 +508,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#定位方法"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x5B9A;&#x4F4D;&#x65B9;&#x6CD5;" class="headerlink" title="&#x5B9A;&#x4F4D;&#x65B9;&#x6CD5;"></a>&#x5B9A;&#x4F4D;&#x65B9;&#x6CD5;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -971,6 +650,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
