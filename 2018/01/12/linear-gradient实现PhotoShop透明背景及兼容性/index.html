@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="css3," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="今天我们的一个设计平台被人反馈生成图片无背景图，因为在本地没法复现，于是远程过去看了下！发现是火狐的问题，这个背景图功能不是我实现的，就交给另外一个同事就去跟进了！本来这个平台设计之初也是只要求chrome，但公司内部的运营很多实用火狐的！ 想让他们强制更换浏览器似乎不大可能。那只能去支持火狐了，我开始走查一些火狐的功能！又发现了另外一个不兼容的bug，就是本文要说的透明背景图兼容问题。">
+<meta name="keywords" content="css3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linear-gradient实现PhotoShop透明背景及兼容火狐">
+<meta property="og:url" content="http://yoursite.com/2018/01/12/linear-gradient实现PhotoShop透明背景及兼容性/index.html">
+<meta property="og:site_name" content="勤勤恳恳">
+<meta property="og:description" content="今天我们的一个设计平台被人反馈生成图片无背景图，因为在本地没法复现，于是远程过去看了下！发现是火狐的问题，这个背景图功能不是我实现的，就交给另外一个同事就去跟进了！本来这个平台设计之初也是只要求chrome，但公司内部的运营很多实用火狐的！ 想让他们强制更换浏览器似乎不大可能。那只能去支持火狐了，我开始走查一些火狐的功能！又发现了另外一个不兼容的bug，就是本文要说的透明背景图兼容问题。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/img/WX20180112-181716.png">
+<meta property="og:image" content="http://yoursite.com/img/gradient-1.png">
+<meta property="og:image" content="http://yoursite.com/img/gradient-7.gif">
+<meta property="og:updated_time" content="2018-01-12T12:08:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linear-gradient实现PhotoShop透明背景及兼容火狐">
+<meta name="twitter:description" content="今天我们的一个设计平台被人反馈生成图片无背景图，因为在本地没法复现，于是远程过去看了下！发现是火狐的问题，这个背景图功能不是我实现的，就交给另外一个同事就去跟进了！本来这个平台设计之初也是只要求chrome，但公司内部的运营很多实用火狐的！ 想让他们强制更换浏览器似乎不大可能。那只能去支持火狐了，我开始走查一些火狐的功能！又发现了另外一个不兼容的bug，就是本文要说的透明背景图兼容问题。">
+<meta name="twitter:image" content="http://yoursite.com/img/WX20180112-181716.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/12/linear-gradient实现PhotoShop透明背景及兼容性/"/>
+
+
+
+
+
+  <title>linear-gradient实现PhotoShop透明背景及兼容火狐 | 勤勤恳恳</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">勤勤恳恳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客|撸码|生活|态度</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-自研php框架">
+          <a href="https://jacoobwang.github.io/vino/vino.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            自研php框架
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://jacoobwang.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/12/linear-gradient实现PhotoShop透明背景及兼容性/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">linear-gradient实现PhotoShop透明背景及兼容火狐</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-12T16:12:30+08:00">
+                2018-01-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>今天我们的一个设计平台被人反馈生成图片无背景图，因为在本地没法复现，于是远程过去看了下！发现是火狐的问题，这个背景图功能不是我实现的，就交给另外一个同事就去跟进了！本来这个平台设计之初也是只要求chrome，但公司内部的运营很多实用火狐的！</p>
+<p>想让他们强制更换浏览器似乎不大可能。那只能去支持火狐了，我开始走查一些火狐的功能！又发现了另外一个不兼容的bug，就是本文要说的透明背景图兼容问题。<br><a id="more"></a><br>首先看下对比图就知道问题在哪呢？<br><img src="/img/WX20180112-181716.png" alt=""><br>上图中红框部分的背景图多了一个莫名其妙的斜线，而且巨难看！</p>
+<p>上面那个背景使用的是css3的liner-gradient实现的<br>看下实现代码：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.png-transparent-background</span> &#123;</span><br><span class="line">  <span class="attribute">user-select</span>: none;</span><br><span class="line">  <span class="attribute">background-position</span>: <span class="number">0px</span> <span class="number">0px</span>, <span class="number">10px</span> <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">background-size</span>: <span class="number">20px</span> <span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">background-image</span>: <span class="built_in">linear-gradient</span>(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%),<span class="built_in">linear-gradient</span>(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>解决方法：针对火狐hack处理下<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.png-transparent-background</span> &#123;</span><br><span class="line">  <span class="attribute">user-select</span>: none;</span><br><span class="line">  <span class="attribute">background-position</span>: <span class="number">0px</span> <span class="number">0px</span>, <span class="number">10px</span> <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">background-size</span>: <span class="number">20px</span> <span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">background-image</span>: <span class="built_in">linear-gradient</span>(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%),<span class="built_in">linear-gradient</span>(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);</span><br><span class="line">  <span class="attribute">background-image</span>: <span class="built_in">-moz-linear-gradient</span>(45deg, #eee 25%, transparent 27%, transparent 75%, #eee 75%),<span class="built_in">-moz-linear-gradient</span>(45deg,#eee 25%,white 26%,white 75%,#eee 75%,#eee 100%); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://codepen.io/jacoob/pen/KZRYBb" target="_blank" rel="noopener">https://codepen.io/jacoob/pen/KZRYBb</a></p>
+<h2 id="线性渐变-Linear-Gradients"><a href="#线性渐变-Linear-Gradients" class="headerlink" title="线性渐变(Linear Gradients)"></a>线性渐变(Linear Gradients)</h2><p>CSS linear-gradient() 函数用于创建一个表示两种或多种颜色线性渐变的图片。其结果属于gradient数据类型，是一种特别的image数据类型。</p>
+<p>要创建一个线性渐变，您需要设置一个起点和一个渐变的方向（或角度），并定义起止颜色。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">linear-gradient</span>( </span><br><span class="line">  <span class="selector-attr">[ &lt;angle&gt; | to &lt;side-or-corner&gt; ,]</span>? &lt;<span class="selector-tag">color-stop</span>&gt; <span class="selector-attr">[, &lt;color-stop&gt;]</span>+ )</span><br><span class="line">  \---------------------------------/ \----------------------------/</span><br><span class="line">    <span class="selector-tag">Definition</span> <span class="selector-tag">of</span> <span class="selector-tag">the</span> <span class="selector-tag">gradient</span> <span class="selector-tag">line</span>        <span class="selector-tag">List</span> <span class="selector-tag">of</span> <span class="selector-tag">color</span> <span class="selector-tag">stops</span>  </span><br><span class="line"></span><br><span class="line">where &lt;side-or-corner&gt; = [left | right] || [top | bottom]</span><br><span class="line">  and &lt;color-stop&gt;     = &lt;color&gt; [ &lt;percentage&gt; | &lt;length&gt; ]?</span><br></pre></td></tr></table></figure>
+<h4 id="side-or-corner"><a href="#side-or-corner" class="headerlink" title="side-or-corner"></a>side-or-corner</h4><p>描述渐变线的起始点位置。它包含两个关键词：第一个指出垂直位置left or right，第二个指出水平位置top or bottom。关键词的先后顺序无影响，且都是可选的。</p>
+<p>to top, to bottom, to left 和 to right这些值会被转换成角度0度、180度、270度和90度。其余值会被转换为一个以向顶部中央方向为起点顺时针旋转的角度。渐变线的结束点与其起点中心对称。</p>
+<h4 id="angle"><a href="#angle" class="headerlink" title="angle"></a>angle</h4><p>角度值指定渐变的方向（或角度）。角度顺时针增加。 </p>
+<h4 id="color-stop"><a href="#color-stop" class="headerlink" title="color-stop"></a>color-stop</h4><p>由一个color值组成，并且跟随着一个可选的终点位置（可以是一个百分比值或者是沿着渐变轴的length）。CSS渐变的颜色渲染采取了与SVG相同的规则。</p>
+<h4 id="渐变线"><a href="#渐变线" class="headerlink" title="渐变线"></a>渐变线</h4><p>在渐变容器中，穿过容器中心点和颜色停止点连接在一起的线称为渐变线。</p>
+<h4 id="渐变角度"><a href="#渐变角度" class="headerlink" title="渐变角度"></a>渐变角度</h4><p>linear-gradient是通过渐变角度来控制渐变方向。<br><img src="/img/gradient-1.png" alt=""><br>C点渐变容器中心点，A是通过C点垂直线与通过C点渐变线的夹角，这个角称为渐变角度。</p>
+<p>可以通过下面两种方法来定义这个角度：</p>
+<blockquote>
+<p>使用关键词：to top、to bottom、to left、to right、to top right、to top left、to bottom right和to bottom left</p>
+<p>使用带单位数字定义角度，比如45deg、1turn等</p>
+</blockquote>
+<p>让我们看看渐变角度动态变化时，渐变线是怎么移动的:<br><img src="/img/gradient-7.gif" alt=""></p>
+<p>更多关于线性渐变参考：</p>
+<ol>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/linear-gradient" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/CSS/linear-gradient</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Using_CSS_gradients" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Using_CSS_gradients</a></li>
+<li><a href="https://www.w3cplus.com/css3/do-you-really-understand-css-linear-gradients.html" target="_blank" rel="noopener">https://www.w3cplus.com/css3/do-you-really-understand-css-linear-gradients.html</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/css3/" rel="tag"># css3</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/12/CORS跨域理解/" rel="next" title="CORS跨域理解">
+                <i class="fa fa-chevron-left"></i> CORS跨域理解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/11434315"
+                alt="Jacoob Wang" />
+            
+              <p class="site-author-name" itemprop="name">Jacoob Wang</p>
+              <p class="site-description motion-element" itemprop="description">业精于勤荒于嬉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/jacoobwang" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:531532957@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#线性渐变-Linear-Gradients"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x7EBF;&#x6027;&#x6E10;&#x53D8;-Linear-Gradients" class="headerlink" title="&#x7EBF;&#x6027;&#x6E10;&#x53D8;(Linear Gradients)"></a>&#x7EBF;&#x6027;&#x6E10;&#x53D8;(Linear Gradients)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#side-or-corner"><span class="nav-number">1.0.1.</span> <span class="nav-text"><a href="#side-or-corner" class="headerlink" title="side-or-corner"></a>side-or-corner</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#angle"><span class="nav-number">1.0.2.</span> <span class="nav-text"><a href="#angle" class="headerlink" title="angle"></a>angle</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#color-stop"><span class="nav-number">1.0.3.</span> <span class="nav-text"><a href="#color-stop" class="headerlink" title="color-stop"></a>color-stop</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#渐变线"><span class="nav-number">1.0.4.</span> <span class="nav-text"><a href="#&#x6E10;&#x53D8;&#x7EBF;" class="headerlink" title="&#x6E10;&#x53D8;&#x7EBF;"></a>&#x6E10;&#x53D8;&#x7EBF;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#渐变角度"><span class="nav-number">1.0.5.</span> <span class="nav-text"><a href="#&#x6E10;&#x53D8;&#x89D2;&#x5EA6;" class="headerlink" title="&#x6E10;&#x53D8;&#x89D2;&#x5EA6;"></a>&#x6E10;&#x53D8;&#x89D2;&#x5EA6;</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jacoob Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
