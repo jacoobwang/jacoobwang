@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="chrome插件," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最近想升级下之前写过的一个chrome插件，升级的主要目的是为了优化一些操作上的体验。之前是需要手动点击插件上的按钮来激活插件，现在想要的是不需要用户去点击，自动开启插件的一些功能。 思路：安装好插件后可以在后台跑一些脚本。在网上搜了下，发现chrome刚好支持这个API。">
+<meta name="keywords" content="chrome插件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chrome插件开发之后台执行">
+<meta property="og:url" content="http://yoursite.com/2018/01/24/Chrome插件开发之后台执行/index.html">
+<meta property="og:site_name" content="勤勤恳恳">
+<meta property="og:description" content="最近想升级下之前写过的一个chrome插件，升级的主要目的是为了优化一些操作上的体验。之前是需要手动点击插件上的按钮来激活插件，现在想要的是不需要用户去点击，自动开启插件的一些功能。 思路：安装好插件后可以在后台跑一些脚本。在网上搜了下，发现chrome刚好支持这个API。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-24T08:15:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chrome插件开发之后台执行">
+<meta name="twitter:description" content="最近想升级下之前写过的一个chrome插件，升级的主要目的是为了优化一些操作上的体验。之前是需要手动点击插件上的按钮来激活插件，现在想要的是不需要用户去点击，自动开启插件的一些功能。 思路：安装好插件后可以在后台跑一些脚本。在网上搜了下，发现chrome刚好支持这个API。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/24/Chrome插件开发之后台执行/"/>
+
+
+
+
+
+  <title>Chrome插件开发之后台执行 | 勤勤恳恳</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">勤勤恳恳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客|撸码|生活|态度</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-自研php框架">
+          <a href="https://jacoobwang.github.io/vino/vino.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            自研php框架
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://jacoobwang.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/24/Chrome插件开发之后台执行/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Chrome插件开发之后台执行</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-24T11:12:30+08:00">
+                2018-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近想升级下之前写过的一个chrome插件，升级的主要目的是为了优化一些操作上的体验。之前是需要手动点击插件上的按钮来激活插件，现在想要的是不需要用户去点击，自动开启插件的一些功能。</p>
+<p>思路：安装好插件后可以在后台跑一些脚本。在网上搜了下，发现chrome刚好支持这个API。<br><a id="more"></a><br>先简单了解下Chrome插件：</p>
+<h3 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">|-- Out</span><br><span class="line">|   |-- background.js    //插件后台执行代码</span><br><span class="line">|   |-- icon.png      //插件图标</span><br><span class="line">|   |-- style.css     //样式文件</span><br><span class="line">|   |-- manifest.json //插件配置</span><br><span class="line">|   |-- popup.html    //点击插件的弹窗页面</span><br><span class="line">|   |-- popup.js      //弹窗页面引用的js文件</span><br></pre></td></tr></table></figure>
+<p>mainfest.json是插件的配置文件：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"manifest_version"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"Ecp Helper"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"Ecp助手，更好的服务于我们的合作伙伴"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0"</span>,</span><br><span class="line">  <span class="attr">"permissions"</span>: [<span class="string">"tabs"</span>,<span class="string">"cookies"</span>,<span class="string">"&lt;all_urls&gt;"</span>,<span class="string">"storage"</span>,<span class="string">"notifications"</span>],</span><br><span class="line">  <span class="attr">"icons"</span>: </span><br><span class="line">  &#123;             </span><br><span class="line">    <span class="attr">"48"</span>: <span class="string">"icon48.png"</span>,            </span><br><span class="line">    <span class="attr">"128"</span>: <span class="string">"icon128.png"</span> </span><br><span class="line">  &#125;,  </span><br><span class="line">  <span class="attr">"browser_action"</span>: &#123;</span><br><span class="line">    <span class="attr">"default_title"</span>: <span class="string">"Ecp"</span>,</span><br><span class="line">    <span class="attr">"default_icon"</span>: <span class="string">"icon48.png"</span>,</span><br><span class="line">    <span class="attr">"default_popup"</span>: <span class="string">"popup.html"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"background"</span>: &#123;</span><br><span class="line">    <span class="attr">"persistent"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"scripts"</span>: [<span class="string">"background.js"</span>]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"content_scripts"</span>: [&#123;</span><br><span class="line">    <span class="attr">"matches"</span>: [<span class="string">"&lt;all_urls&gt;"</span>],</span><br><span class="line">    <span class="attr">"js"</span>: [<span class="string">"jquery-1.7.2.min.js"</span>]</span><br><span class="line">  &#125;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>manifest_version 插件文件的版本，必须写，而且必须是2</p>
+<p>name 插件名</p>
+<p>description 插件描述</p>
+<p>version 插件版本</p>
+<p>permissions 插件需要的权限</p>
+<p>icons 插件图标</p>
+<p>browser_action 浏览器右上角图标设置</p>
+<p>backgroud 字段指明 background.js 为在后台永远默默执行的代码</p>
+<p>content_scripts 字段指明当我们在地址栏打开matches匹配的网站时，它会去执行 content.js，相当于监听正则表达式匹配的网站</p>
+<p>default_popup 字段指明点击插件按钮时弹出来的框的页面内容 popup.html，其实就是一个普通网页，如下所示，它需要单独的 popup.js 来进行交互。弹窗页面的 js 是打开后执行一次，生命周期和普通网页一样</p>
+<h3 id="后台执行"><a href="#后台执行" class="headerlink" title="后台执行"></a>后台执行</h3><p>是一个常驻的页面，它的生命周期是插件中所有类型页面中最长的，它随着浏览器的打开而打开，随着浏览器的关闭而关闭，所以通常把需要一直运行的、启动就运行的、全局的代码放在background里面。</p>
+<p>background的权限非常高，几乎可以调用所有的Chrome扩展API（除了devtools），而且它可以无限制跨域，也就是可以跨域访问任何网站而无需要求对方设置CORS。</p>
+<p>配置中，background可以通过page指定一张网页，也可以通过scripts直接指定一个JS，Chrome会自动为这个JS生成一个默认的网页：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">"background": &#123;</span><br><span class="line">  // 2种指定方式，如果指定JS，那么会自动生成一个背景页</span><br><span class="line">  "page": "background.html"</span><br><span class="line">  //"scripts": ["js/background.js"]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在我上面的配置中，我多加了一个persistent的配置，它是什么意思呢？</p>
+<p>鉴于background生命周期太长，长时间挂载后台可能会影响性能，所以Google又弄一个event-pages，在配置文件上，它与background的唯一区别就是多了一个persistent参数。</p>
+<p>它的生命周期是：在被需要时加载，在空闲时被关闭，什么叫被需要时呢？比如第一次安装、插件更新、有content-script向它发送消息，等等。</p>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><p>background.js 部分代码如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">autoCheck () &#123;</span><br><span class="line">  <span class="comment">// do something you wanted</span></span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">init</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">	autoCheck();</span><br><span class="line">	<span class="comment">// 10min 执行一次</span></span><br><span class="line">	setInterval(autoCheck, <span class="number">600000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">init();</span><br></pre></td></tr></table></figure></p>
+<p>安装好插件后，浏览器会执行这个background.js，在脚本中通过一个定时任务去跑一些代码。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://github.com/sxei/chrome-plugin-demo" target="_blank" rel="noopener">https://github.com/sxei/chrome-plugin-demo</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/chrome插件/" rel="tag"># chrome插件</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/19/NG的upstream容灾机制/" rel="next" title="NG的upstream容灾机制">
+                <i class="fa fa-chevron-left"></i> NG的upstream容灾机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/11434315"
+                alt="Jacoob Wang" />
+            
+              <p class="site-author-name" itemprop="name">Jacoob Wang</p>
+              <p class="site-description motion-element" itemprop="description">业精于勤荒于嬉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/jacoobwang" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:531532957@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件结构"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x6587;&#x4EF6;&#x7ED3;&#x6784;" class="headerlink" title="&#x6587;&#x4EF6;&#x7ED3;&#x6784;"></a>&#x6587;&#x4EF6;&#x7ED3;&#x6784;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后台执行"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x540E;&#x53F0;&#x6267;&#x884C;" class="headerlink" title="&#x540E;&#x53F0;&#x6267;&#x884C;"></a>&#x540E;&#x53F0;&#x6267;&#x884C;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体实现"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x5177;&#x4F53;&#x5B9E;&#x73B0;" class="headerlink" title="&#x5177;&#x4F53;&#x5B9E;&#x73B0;"></a>&#x5177;&#x4F53;&#x5B9E;&#x73B0;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jacoob Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
