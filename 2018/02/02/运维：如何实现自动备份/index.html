@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="运维," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="当我们做一些小项目时，需要自己去做开发且要做运维的时候，就面临着一个问题：如何对项目代码进行备份？可能有部分人会说我们是git构建项目，项目是放在github或公司搭建的git仓库上，依赖于git我可以快速回滚和版本迭代。但你同样会面临一些问题：1.git信息不能暴露在web目录下，存在安全风险；2.假如你web目录有大量上传的图片，你肯定会把图片的目录放到.gitignore。">
+<meta name="keywords" content="运维">
+<meta property="og:type" content="article">
+<meta property="og:title" content="运维：如何实现自动备份">
+<meta property="og:url" content="http://yoursite.com/2018/02/02/运维：如何实现自动备份/index.html">
+<meta property="og:site_name" content="勤勤恳恳">
+<meta property="og:description" content="当我们做一些小项目时，需要自己去做开发且要做运维的时候，就面临着一个问题：如何对项目代码进行备份？可能有部分人会说我们是git构建项目，项目是放在github或公司搭建的git仓库上，依赖于git我可以快速回滚和版本迭代。但你同样会面临一些问题：1.git信息不能暴露在web目录下，存在安全风险；2.假如你web目录有大量上传的图片，你肯定会把图片的目录放到.gitignore。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-02T08:40:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="运维：如何实现自动备份">
+<meta name="twitter:description" content="当我们做一些小项目时，需要自己去做开发且要做运维的时候，就面临着一个问题：如何对项目代码进行备份？可能有部分人会说我们是git构建项目，项目是放在github或公司搭建的git仓库上，依赖于git我可以快速回滚和版本迭代。但你同样会面临一些问题：1.git信息不能暴露在web目录下，存在安全风险；2.假如你web目录有大量上传的图片，你肯定会把图片的目录放到.gitignore。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/02/运维：如何实现自动备份/"/>
+
+
+
+
+
+  <title>运维：如何实现自动备份 | 勤勤恳恳</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">勤勤恳恳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客|撸码|生活|态度</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-自研php框架">
+          <a href="https://jacoobwang.github.io/vino/vino.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            自研php框架
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://jacoobwang.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/02/运维：如何实现自动备份/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">运维：如何实现自动备份</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-02T11:12:30+08:00">
+                2018-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>当我们做一些小项目时，需要自己去做开发且要做运维的时候，就面临着一个问题：如何对项目代码进行备份？可能有部分人会说我们是git构建项目，项目是放在github或公司搭建的git仓库上，依赖于git我可以快速回滚和版本迭代。但你同样会面临一些问题：<font color="#FFA500">1.git信息不能暴露在web目录下，存在安全风险；2.假如你web目录有大量上传的图片，你肯定会把图片的目录放到.gitignore</font>。<br><a id="more"></a><br>所以，我们依然面临着一些需要备份的场景。这里，我要记录的是使用shell脚本来备份！</p>
+<h3 id="mysql数据库备份-mysqldump"><a href="#mysql数据库备份-mysqldump" class="headerlink" title="mysql数据库备份-mysqldump"></a>mysql数据库备份-mysqldump</h3><blockquote>
+<p>花10分钟简单写一个脚本：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="comment">#author: Jacoob</span></span><br><span class="line"><span class="comment">#date: 2017-12-02</span></span><br><span class="line"><span class="comment">#role: backup files periodically.</span></span><br><span class="line"><span class="comment">##################################################</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据库名</span></span><br><span class="line">DB_NAME=<span class="string">'myApp'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用户名</span></span><br><span class="line">DB_USER=<span class="string">'xxx'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 密码</span></span><br><span class="line">DB_PWD=<span class="string">'********'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 时间（以天为单位）</span></span><br><span class="line">DAY=$(date +%Y%m%d)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 备份目录</span></span><br><span class="line">BACK_FOLDER=<span class="string">'/Data/bakup'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 保留多少份</span></span><br><span class="line">KEEP=5</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行mysqldump并将结果输出到gzip文件中</span></span><br><span class="line"><span class="function"><span class="title">dump</span></span> () &#123;</span><br><span class="line">	mysqldump -u<span class="variable">$&#123;DB_USER&#125;</span> -p<span class="variable">$&#123;DB_PWD&#125;</span> <span class="variable">$&#123;DB_NAME&#125;</span> | gzip &gt; <span class="variable">$&#123;BACK_FOLDER&#125;</span>/<span class="variable">$&#123;DAY&#125;</span>.sql.gz</span><br><span class="line">	<span class="keyword">if</span> [ $? -eq 0 ]</span><br><span class="line">	<span class="keyword">then</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">'success dump'</span> <span class="variable">$&#123;DAY&#125;</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">'fail dump'</span> <span class="variable">$&#123;DAY&#125;</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 备份文件rotate</span></span><br><span class="line"><span class="function"><span class="title">rotate</span></span>() &#123;</span><br><span class="line">	find <span class="variable">$&#123;BACK_FOLDER&#125;</span>/* -mtime +<span class="variable">$&#123;KEEP&#125;</span> -<span class="built_in">type</span> f -name <span class="string">'*.sql.gz'</span> -<span class="built_in">exec</span> rm -f &#123;&#125; \;</span><br><span class="line">	<span class="keyword">if</span> [ $? -eq 0 ]</span><br><span class="line">	<span class="keyword">then</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">'success rotate'</span> <span class="variable">$&#123;DAY&#125;</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">'fail rotate'</span> <span class="variable">$&#123;DAY&#125;</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dump &amp;&amp; rotate</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>技术要点：利用mysqldump导出整个数据库，并将结果传递给gzip进行压缩。</p>
+<h2 id="文件备份-tar"><a href="#文件备份-tar" class="headerlink" title="文件备份-tar"></a>文件备份-tar</h2><p>linux下有很多备份工具：gzip tar zip 等。tar是其中功能最全的一个，对于文件备份我借助于tar来实现：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#author: Jacoob</span></span><br><span class="line"><span class="comment">#date: 2018-02-02</span></span><br><span class="line"><span class="comment">#role: backup files periodically.</span></span><br><span class="line"><span class="comment">##################################################</span></span><br><span class="line"></span><br><span class="line">DATE=`date +<span class="string">"%Y-%m-%d"</span>`</span><br><span class="line">LogFile=/<span class="built_in">export</span>/bakup/<span class="built_in">log</span>/`date +<span class="string">"%Y-%m"</span>`.<span class="built_in">log</span></span><br><span class="line">SourceDir=/<span class="built_in">export</span>/Data</span><br><span class="line">ExcludeDir=xxx.com/task/design</span><br><span class="line">BakDir=/<span class="built_in">export</span>/bakup</span><br><span class="line">RetainDay=60</span><br><span class="line">Project=xxx.com</span><br><span class="line"></span><br><span class="line"><span class="comment">##################################################</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"backup start at <span class="variable">$(date +"%Y-%m-%d %H:%M:%S")</span>"</span> &gt; <span class="variable">$LogFile</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"--------------------------------------------------"</span> &gt;&gt; <span class="variable">$LogFile</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$BakDir</span></span><br><span class="line"></span><br><span class="line">PackFile=<span class="variable">$DATE</span>.<span class="variable">$Project</span>.tgz</span><br><span class="line"><span class="keyword">if</span> [ -f <span class="variable">$BakDir</span>/<span class="variable">$PackFile</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"backup file have exist !"</span> &gt;&gt; <span class="variable">$LogFile</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  tar -zcvf <span class="variable">$PackFile</span> -C <span class="variable">$SourceDir</span> <span class="variable">$Project</span> --exclude=<span class="variable">$ExcludeDir</span> &gt; /dev/null</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"backup <span class="variable">$Project</span> done into <span class="variable">$PackFile</span> "</span> &gt;&gt; <span class="variable">$LogFile</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">OldFile=<span class="string">"<span class="variable">$BakDir</span>/"</span>$(date --date=<span class="string">"<span class="variable">$RetainDay</span> days ago"</span> +<span class="string">"%Y-%m-%d"</span>).<span class="variable">$Project</span>.tgz</span><br><span class="line"><span class="keyword">if</span> [ -f <span class="variable">$OldFile</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">	/bin/rm -f <span class="variable">$OldFile</span> &gt; /dev/null</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"[<span class="variable">$OldFile</span>],Delete Old File Success!"</span> &gt;&gt; <span class="variable">$LogFile</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"--------------------------------------------------"</span> &gt;&gt; <span class="variable">$LogFile</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"backup end at <span class="variable">$(date +"%Y-%m-%d %H:%M:%S")</span>"</span> &gt;&gt; <span class="variable">$LogFile</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">" "</span> &gt;&gt; <span class="variable">$LogFile</span></span><br><span class="line"><span class="built_in">exit</span> 0</span><br></pre></td></tr></table></figure>
+<p>技术要点：利用tar对需要备份的文件打包！</p>
+<h2 id="tar使用技巧"><a href="#tar使用技巧" class="headerlink" title="tar使用技巧"></a>tar使用技巧</h2><p>对tar使用这里补充两个小的技能点：</p>
+<ol>
+<li><p>-C 可以去掉绝对路径<br>tar xxxx.tar.gz -C /export/web xxx.com /export/web/xxx.com<br>假如我们不使用-C 打包后的文件会跟上绝对路径，带来很多不便。举个例子：代码目录 /export/web/xxx.com ，使用 tar -zcvf xxx.com.tgz /export/web/xxx.com压缩后得到tar包 xxx.com.tgz ，解压这个tar包，会发现解压出来的文件是带有export/web的。</p>
+</li>
+<li><p>–exclude 排除一些目录<br>如果需要排除目录则可以使用exclude，<font color="#FF0000">但需要注意的是exclude对于语法比较敏感，比如末尾斜杠问题！另外与-C 一起使用的时候不能使用绝对路径</font></p>
+</li>
+</ol>
+<h2 id="变向实现rotate"><a href="#变向实现rotate" class="headerlink" title="变向实现rotate"></a>变向实现rotate</h2><p>rotate即对文件进行轮转，我们不希望备份文件一直放在磁盘上占用空间！当备份频率比较频繁的时候，这个显得尤为重要。我们可以借助一些方法实现rotate:</p>
+<ol>
+<li>find -mtime 查找多少天前创建的文件，比如 find -mtime +5 然后丢给rm去删掉！</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/运维/" rel="tag"># 运维</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/24/Chrome插件开发之后台执行/" rel="next" title="Chrome插件开发之后台执行">
+                <i class="fa fa-chevron-left"></i> Chrome插件开发之后台执行
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/11434315"
+                alt="Jacoob Wang" />
+            
+              <p class="site-author-name" itemprop="name">Jacoob Wang</p>
+              <p class="site-description motion-element" itemprop="description">业精于勤荒于嬉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/jacoobwang" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:531532957@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql数据库备份-mysqldump"><span class="nav-number">1.</span> <span class="nav-text"><a href="#mysql&#x6570;&#x636E;&#x5E93;&#x5907;&#x4EFD;-mysqldump" class="headerlink" title="mysql&#x6570;&#x636E;&#x5E93;&#x5907;&#x4EFD;-mysqldump"></a>mysql&#x6570;&#x636E;&#x5E93;&#x5907;&#x4EFD;-mysqldump</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件备份-tar"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x6587;&#x4EF6;&#x5907;&#x4EFD;-tar" class="headerlink" title="&#x6587;&#x4EF6;&#x5907;&#x4EFD;-tar"></a>&#x6587;&#x4EF6;&#x5907;&#x4EFD;-tar</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tar使用技巧"><span class="nav-number"></span> <span class="nav-text"><a href="#tar&#x4F7F;&#x7528;&#x6280;&#x5DE7;" class="headerlink" title="tar&#x4F7F;&#x7528;&#x6280;&#x5DE7;"></a>tar&#x4F7F;&#x7528;&#x6280;&#x5DE7;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变向实现rotate"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x53D8;&#x5411;&#x5B9E;&#x73B0;rotate" class="headerlink" title="&#x53D8;&#x5411;&#x5B9E;&#x73B0;rotate"></a>&#x53D8;&#x5411;&#x5B9E;&#x73B0;rotate</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jacoob Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
