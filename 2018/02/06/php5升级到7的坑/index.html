@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Mysql," />
+  <meta name="keywords" content="php," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="我负责的一个问卷系统是用php开源系统limesurvey搭建的，limesurvey是基于yii framework 1.0搭建。最近上线一套新的模板，在测试环境添加问卷逻辑时发现pdo执行报错：1General error: 2014 Cannot execute queries while other unbuffered queries are active. Consider using">
-<meta name="keywords" content="Mysql">
+<meta name="description" content="最近将公司的一个项目，从php5升级到php7。为什么要升级呢？主要是出于安全方面的考虑，在某些版本上存在PHP GD Graphics Library拒绝服务漏洞http://sec.jd.com/blog/archives/31748。">
+<meta name="keywords" content="php">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mysql PDO执行报错： Cannot execute queries while other unbuffered queries are active">
-<meta property="og:url" content="http://yoursite.com/2018/01/16/Mysql PDO执行报错： Cannot execute queries while other unbuffered queries are active/index.html">
+<meta property="og:title" content="php5升级到7的坑">
+<meta property="og:url" content="http://yoursite.com/2018/02/06/php5升级到7的坑/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="我负责的一个问卷系统是用php开源系统limesurvey搭建的，limesurvey是基于yii framework 1.0搭建。最近上线一套新的模板，在测试环境添加问卷逻辑时发现pdo执行报错：1General error: 2014 Cannot execute queries while other unbuffered queries are active. Consider using">
+<meta property="og:description" content="最近将公司的一个项目，从php5升级到php7。为什么要升级呢？主要是出于安全方面的考虑，在某些版本上存在PHP GD Graphics Library拒绝服务漏洞http://sec.jd.com/blog/archives/31748。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-16T05:06:54.000Z">
+<meta property="og:updated_time" content="2018-02-06T03:26:21.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mysql PDO执行报错： Cannot execute queries while other unbuffered queries are active">
-<meta name="twitter:description" content="我负责的一个问卷系统是用php开源系统limesurvey搭建的，limesurvey是基于yii framework 1.0搭建。最近上线一套新的模板，在测试环境添加问卷逻辑时发现pdo执行报错：1General error: 2014 Cannot execute queries while other unbuffered queries are active. Consider using">
+<meta name="twitter:title" content="php5升级到7的坑">
+<meta name="twitter:description" content="最近将公司的一个项目，从php5升级到php7。为什么要升级呢？主要是出于安全方面的考虑，在某些版本上存在PHP GD Graphics Library拒绝服务漏洞http://sec.jd.com/blog/archives/31748。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/16/Mysql PDO执行报错： Cannot execute queries while other unbuffered queries are active/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/02/06/php5升级到7的坑/"/>
 
 
 
 
 
-  <title>Mysql PDO执行报错： Cannot execute queries while other unbuffered queries are active | 勤勤恳恳</title>
+  <title>php5升级到7的坑 | 勤勤恳恳</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/16/Mysql PDO执行报错： Cannot execute queries while other unbuffered queries are active/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/06/php5升级到7的坑/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jacoob Wang">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Mysql PDO执行报错： Cannot execute queries while other unbuffered queries are active</h1>
+          <h1 class="post-title" itemprop="name headline">php5升级到7的坑</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-16T10:33:30+08:00">
-                2018-01-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-06T11:12:30+08:00">
+                2018-02-06
               </time>
             
 
@@ -320,23 +320,22 @@
       
 
       
-        <p>我负责的一个问卷系统是用php开源系统limesurvey搭建的，limesurvey是基于yii framework 1.0搭建。最近上线一套新的模板，在测试环境添加问卷逻辑时发现pdo执行报错：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">General error: 2014 Cannot execute queries <span class="keyword">while</span> other unbuffered queries are active. Consider using PDOStatement::fetchAll(). Alternatively, <span class="keyword">if</span> your code is only ever going to run against mysql, you may <span class="built_in">enable</span> query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute.</span><br></pre></td></tr></table></figure></p>
-<a id="more"></a>
-<h3 id="报错内容"><a href="#报错内容" class="headerlink" title="报错内容"></a>报错内容</h3><p>当存在一个未缓冲query且该连接还是active状态下时，pdo不会执行新的query。可以考虑使用fetchAll来执行新查询！另外，如果你使用的是mysql，你可以打开PDO关于MYSQL_ATTR_USE_BUFFERED_QUERY属性的设置！</p>
-<p>通常是由 fetch 而不是 fetchAll 引起的。 但是在这种情况下，只有一个结果，它正在被获取。 同样，如果只执行第一次 prepared 语句，错误就不会发生。 只有当第一个语句被 prepared 两次时才会发生。 它也只有当 PDO::ATTR_EMULATE_PREPARES 是 false 时才会发生。</p>
-<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><ol>
-<li><p>使用缓冲查询！</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  $pdo-&gt;setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, <span class="keyword">true</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用closeCursor，在上一个查询中释放连接！PDOStatement::closeCursor() 释放与服务器的连接，以便后面的连接可以使用。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 创建一个 PDOStatement 对象 */</span></span><br><span class="line">$stmt = $dbh-&gt;prepare(<span class="string">'SELECT foo FROM bar'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 创建第二个 PDOStatement 对象 */</span></span><br><span class="line">$otherStmt = $dbh-&gt;prepare(<span class="string">'SELECT foobaz FROM foobar'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 执行第一条语句 */</span></span><br><span class="line">$stmt-&gt;execute();</span><br><span class="line"></span><br><span class="line"><span class="comment">/*  从结果集中只取出第一行 */</span></span><br><span class="line">$stmt-&gt;fetch();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* The following call to closeCursor() may be required by some drivers */</span></span><br><span class="line">$stmt-&gt;closeCursor();</span><br><span class="line"></span><br><span class="line"><span class="comment">/*  现在可以执行第二条语句了 */</span></span><br><span class="line">$otherStmt-&gt;execute();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果使用了fetch，则替换成fetchAll</p>
-<p> 可以参考下php官网中的一段示例代码。<a href="http://php.net/manual/zh/pdo.exec.php#75070" target="_blank" rel="noopener">http://php.net/manual/zh/pdo.exec.php#75070</a></p>
-</li>
-</ol>
-<p>以上三种方法是基于googole找到的一些解决方法！</p>
-<p>在本项目中，因为做了大量的封装之后，我选择了第一种方法！找到limesurvey创建DB链接的库文件/framework/db/CDbConnection.php，在第446行添加<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$pdo-&gt;setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, <span class="keyword">true</span>);</span><br></pre></td></tr></table></figure></p>
+        <p>最近将公司的一个项目，从php5升级到php7。为什么要升级呢？主要是出于安全方面的考虑，在某些版本上存在PHP GD Graphics Library拒绝服务漏洞<a href="http://sec.jd.com/blog/archives/31748。" target="_blank" rel="noopener">http://sec.jd.com/blog/archives/31748。</a><br><a id="more"></a><br>公司发了安全邮件通知，仔细看了漏洞报告后，发现主要是使用<font color="#6f4e37">imagecreatefromgif或imagecreatefromstring</font>时出现漏洞。一开始我想直接屏蔽这两个函数就好了，但我还是找安全工程师聊了下！他的建议是尽量升级版本吧，因为怕存在其它函数也调用到这个底层函数，或者以后开发中有可能用到这两个函数。因此，决定升级到最新的php7.2。</p>
+<p>升级之前我先简单评估了下升级成本，因为项目并非什么大型项目，主要是我负责的一个内部平台，所以觉得没啥太大问题。</p>
+<h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/<span class="built_in">local</span>/php7.2 --with-pdo-mysql --with-mysqli --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir --<span class="built_in">enable</span>-xml --<span class="built_in">enable</span>-inline-optimization --with-curl --<span class="built_in">enable</span>-fpm --<span class="built_in">enable</span>-mbstring --with-gd --with-openssl</span><br></pre></td></tr></table></figure>
+<h2 id="处理php-fpm配置文件和php-ini配置"><a href="#处理php-fpm配置文件和php-ini配置" class="headerlink" title="处理php-fpm配置文件和php.ini配置"></a>处理php-fpm配置文件和php.ini配置</h2><p>copy php.ini<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp php.ini-production /usr/<span class="built_in">local</span>/php7.2/lib/php.ini</span><br></pre></td></tr></table></figure></p>
+<p>重命名php-fpm.conf<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/php7.2/etc</span><br><span class="line">cp php-fpm.conf.default php-fpm.conf</span><br></pre></td></tr></table></figure></p>
+<h2 id="编译扩展"><a href="#编译扩展" class="headerlink" title="编译扩展"></a>编译扩展</h2><p>因为项目中使用到redis 和 crypt等扩展，需要重新编译新的扩展<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 源码目录下有个ext目录，下面存放着一些扩展木库</span></span><br><span class="line"><span class="built_in">cd</span> ext/redis</span><br><span class="line">/usr/<span class="built_in">local</span>/php7.2/bin/phpize</span><br><span class="line">/usr/<span class="built_in">local</span>/php7.2/</span><br><span class="line">./configure --with-php-config=/usr/<span class="built_in">local</span>/php7.2/bin/php-config</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
+<p>执行完上述命令即可生成一个redis.so的扩展文件，现在需要在php.ini中找到extension=redis.so去掉前面的注释。</p>
+<p>以上只是举例说明下，还有些其他扩展需要编译执行同样的操作即可。</p>
+<h2 id="杀掉原有的php-fpm，启动新的php-fpm"><a href="#杀掉原有的php-fpm，启动新的php-fpm" class="headerlink" title="杀掉原有的php-fpm，启动新的php-fpm"></a>杀掉原有的php-fpm，启动新的php-fpm</h2><p>杀掉进程用kill即可，/usr/local/php7.2/sbin/php-fpm 即启动新的php-fpm进程。</p>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p><font color="#FFC0CB">问题1：无法访问首页，直接跳转到JD首页。</font>跳转是因为我在NG中配置了一些错误的status进行跳转。那么，来定位下是什么问题？</p>
+<p>使用 命令行调用方式运行php文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/php7.2/bin/php index.php</span><br></pre></td></tr></table></figure></p>
+<p>输出如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql pdo SQLSTATE[HY000] [2002] No such file or directory</span><br></pre></td></tr></table></figure></p>
+<p>pdo报这个错，以前居然没碰过，谷歌一下，发现是mysql.sock文件没找到的问题！那么在php.ini中指定下吧！<a href="https://stackoverflow.com/questions/20723803/pdoexception-sqlstatehy000-2002-no-such-file-or-directory" target="_blank" rel="noopener">https://stackoverflow.com/questions/20723803/pdoexception-sqlstatehy000-2002-no-such-file-or-directory</a></p>
+<p><font color="#FFC0CB">问题2：使用myqsli_connect的时候无法连接</font>，项目中有部分代码不是pdo，至于为什么不是，我也忘记当初的原因了，可能是历史遗留问题！</p>
+<p>如何fix呢？将localhost改为127.0.0.1即可！</p>
+<p>以上这2个问题主要是在mysql连接上，定位这些问题耗费了我一点时间。一方面因为这些代码在php5可以运行，但切到php7却不能运行，我一开始想的扩展原因；另外一方面我刚开始在浏览器中调试一出错就跳转到了jd主站，而没法看到输出的错误信息。</p>
 
       
     </div>
@@ -354,7 +353,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Mysql/" rel="tag"># Mysql</a>
+            <a href="/tags/php/" rel="tag"># php</a>
           
         </div>
       
@@ -367,8 +366,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/12/linear-gradient实现PhotoShop透明背景及兼容性/" rel="next" title="linear-gradient实现PhotoShop透明背景及兼容火狐">
-                <i class="fa fa-chevron-left"></i> linear-gradient实现PhotoShop透明背景及兼容火狐
+              <a href="/2018/02/02/运维：如何实现自动备份/" rel="next" title="运维：如何实现自动备份">
+                <i class="fa fa-chevron-left"></i> 运维：如何实现自动备份
               </a>
             
           </div>
@@ -376,10 +375,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/19/NG的upstream容灾机制/" rel="prev" title="NG的upstream容灾机制">
-                NG的upstream容灾机制 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -520,7 +515,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#报错内容"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x62A5;&#x9519;&#x5185;&#x5BB9;" class="headerlink" title="&#x62A5;&#x9519;&#x5185;&#x5BB9;"></a>&#x62A5;&#x9519;&#x5185;&#x5BB9;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x89E3;&#x51B3;&#x65B9;&#x6CD5;" class="headerlink" title="&#x89E3;&#x51B3;&#x65B9;&#x6CD5;"></a>&#x89E3;&#x51B3;&#x65B9;&#x6CD5;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x7F16;&#x8BD1;&#x5B89;&#x88C5;" class="headerlink" title="&#x7F16;&#x8BD1;&#x5B89;&#x88C5;"></a>&#x7F16;&#x8BD1;&#x5B89;&#x88C5;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理php-fpm配置文件和php-ini配置"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x5904;&#x7406;php-fpm&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x548C;php-ini&#x914D;&#x7F6E;" class="headerlink" title="&#x5904;&#x7406;php-fpm&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x548C;php.ini&#x914D;&#x7F6E;"></a>&#x5904;&#x7406;php-fpm&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x548C;php.ini&#x914D;&#x7F6E;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译扩展"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x7F16;&#x8BD1;&#x6269;&#x5C55;" class="headerlink" title="&#x7F16;&#x8BD1;&#x6269;&#x5C55;"></a>&#x7F16;&#x8BD1;&#x6269;&#x5C55;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#杀掉原有的php-fpm，启动新的php-fpm"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x6740;&#x6389;&#x539F;&#x6709;&#x7684;php-fpm&#xFF0C;&#x542F;&#x52A8;&#x65B0;&#x7684;php-fpm" class="headerlink" title="&#x6740;&#x6389;&#x539F;&#x6709;&#x7684;php-fpm&#xFF0C;&#x542F;&#x52A8;&#x65B0;&#x7684;php-fpm"></a>&#x6740;&#x6389;&#x539F;&#x6709;&#x7684;php-fpm&#xFF0C;&#x542F;&#x52A8;&#x65B0;&#x7684;php-fpm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x9A8C;&#x8BC1;" class="headerlink" title="&#x9A8C;&#x8BC1;"></a>&#x9A8C;&#x8BC1;</span></a></li></ol></div>
             
 
           </div>
