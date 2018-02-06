@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Mongodb," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="记得前不久写过一篇解锁MongoDb CPU过高的文章，今天，再来说说MongoDB查询慢的定位方法。 最近，同事写的服务在压测时发现MongoDB的查询时间过长，如何分析这个问题呢？因为我们对MongoDB的性能也不是特别熟悉，平常只用来开发一些小型应用，pv都是比较低的一些nodejs应用。 然而我们还是摸爬出一些方法来定位问题：">
+<meta name="keywords" content="Mongodb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何定位MongoDB查询慢问题">
+<meta property="og:url" content="http://yoursite.com/2018/02/06/如何定位MongoDB查询慢问题/index.html">
+<meta property="og:site_name" content="勤勤恳恳">
+<meta property="og:description" content="记得前不久写过一篇解锁MongoDb CPU过高的文章，今天，再来说说MongoDB查询慢的定位方法。 最近，同事写的服务在压测时发现MongoDB的查询时间过长，如何分析这个问题呢？因为我们对MongoDB的性能也不是特别熟悉，平常只用来开发一些小型应用，pv都是比较低的一些nodejs应用。 然而我们还是摸爬出一些方法来定位问题：">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/img/WX20180206-114403.png">
+<meta property="og:updated_time" content="2018-02-06T08:05:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何定位MongoDB查询慢问题">
+<meta name="twitter:description" content="记得前不久写过一篇解锁MongoDb CPU过高的文章，今天，再来说说MongoDB查询慢的定位方法。 最近，同事写的服务在压测时发现MongoDB的查询时间过长，如何分析这个问题呢？因为我们对MongoDB的性能也不是特别熟悉，平常只用来开发一些小型应用，pv都是比较低的一些nodejs应用。 然而我们还是摸爬出一些方法来定位问题：">
+<meta name="twitter:image" content="http://yoursite.com/img/WX20180206-114403.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/06/如何定位MongoDB查询慢问题/"/>
+
+
+
+
+
+  <title>如何定位MongoDB查询慢问题 | 勤勤恳恳</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">勤勤恳恳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客|撸码|生活|态度</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-自研php框架">
+          <a href="https://jacoobwang.github.io/vino/vino.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            自研php框架
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://jacoobwang.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/06/如何定位MongoDB查询慢问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何定位MongoDB查询慢问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-06T12:12:30+08:00">
+                2018-02-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>记得前不久写过一篇解锁MongoDb CPU过高的文章，今天，再来说说MongoDB查询慢的定位方法。</p>
+<p>最近，同事写的服务在压测时发现MongoDB的查询时间过长，如何分析这个问题呢？因为我们对MongoDB的性能也不是特别熟悉，平常只用来开发一些小型应用，pv都是比较低的一些nodejs应用。</p>
+<p>然而我们还是摸爬出一些方法来定位问题：<br><a id="more"></a></p>
+<h2 id="应用节点到MongoDB机器的网络状况"><a href="#应用节点到MongoDB机器的网络状况" class="headerlink" title="应用节点到MongoDB机器的网络状况"></a>应用节点到MongoDB机器的网络状况</h2><p>首先说明下MongoDB用的是三个节点搭的一套复制集。</p>
+<p>需要确认下应用节点到复制及主节点间网络状况如何，比如跨机房网络调度差存在延时等。我们可以通过ping确认：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping Mongodb Primary IP</span><br></pre></td></tr></table></figure></p>
+<p>根据ping响应时间确认是否网络问题。<br><img src="/img/WX20180206-114403.png" alt=""><br>如图，可见网络并不存在问题！</p>
+<h2 id="直连MongoDB，查看查询耗时"><a href="#直连MongoDB，查看查询耗时" class="headerlink" title="直连MongoDB，查看查询耗时"></a>直连MongoDB，查看查询耗时</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">db.composerecords.find(&#123;<span class="string">"$or"</span>:[</span><br><span class="line">	&#123;<span class="string">"sku_id"</span>:&#123;<span class="string">"$in"</span>:[<span class="string">"3065679"</span>,<span class="string">"1580141182"</span>,<span class="string">"4170403"</span>,<span class="string">"3577512"</span>,<span class="string">"10471077411"</span>]&#125;,<span class="string">"sub_key"</span>:<span class="string">"5a1391aba11a25c621abfbac"</span>,<span class="string">"texts"</span>:[<span class="string">"浪花有意千重雪"</span>,<span class="string">"桃李无言一队春3961"</span>]&#125;,</span><br><span class="line">	&#123;<span class="string">"sku_id"</span>:&#123;<span class="string">"$in"</span>:[<span class="string">"14229890160"</span>,<span class="string">"1726385"</span>,<span class="string">"280911"</span>,<span class="string">"10337952853"</span>,<span class="string">"1580141182"</span>]&#125;,<span class="string">"sub_key"</span>:<span class="string">"5a1391aba11a25c621abfbac"</span>,<span class="string">"texts"</span>:[<span class="string">"浪花有意千重雪"</span>,<span class="string">"桃李无言一队春1691"</span>]&#125;,</span><br><span class="line">	&#123;<span class="string">"sku_id"</span>:&#123;<span class="string">"$in"</span>:[<span class="string">"1255244"</span>,<span class="string">"4388348"</span>,<span class="string">"1180707766"</span>,<span class="string">"11140272487"</span>,<span class="string">"4301199"</span>]&#125;,<span class="string">"sub_key"</span>:<span class="string">"5a1391aba11a25c621abfbac"</span>,<span class="string">"texts"</span>:[<span class="string">"浪花有意千重雪"</span>,<span class="string">"桃李无言一队春329"</span>]&#125;,</span><br><span class="line">	&#123;<span class="string">"sku_id"</span>:&#123;<span class="string">"$in"</span>:[<span class="string">"1762631"</span>,<span class="string">"4742638"</span>,<span class="string">"3158722"</span>,<span class="string">"2763401"</span>,<span class="string">"11051364147"</span>]&#125;,<span class="string">"sub_key"</span>:<span class="string">"5a1391aba11a25c621abfbac"</span>,<span class="string">"texts"</span>:[<span class="string">"浪花有意千重雪"</span>,<span class="string">"桃李无言一队春1994"</span>]&#125;,</span><br><span class="line">	&#123;<span class="string">"sku_id"</span>:&#123;<span class="string">"$in"</span>:[<span class="string">"3504668"</span>,<span class="string">"1328728"</span>,<span class="string">"884354"</span>,<span class="string">"1015180070"</span>,<span class="string">"12318154868"</span>]&#125;,<span class="string">"sub_key"</span>:<span class="string">"5a1391aba11a25c621abfba8"</span>,<span class="string">"texts"</span>:[<span class="string">"浪花有意千重雪"</span>,<span class="string">"桃李无言一队春1303"</span>]&#125;,</span><br><span class="line">	&#123;<span class="string">"sku_id"</span>:&#123;<span class="string">"$in"</span>:[<span class="string">"1016711296"</span>,<span class="string">"1024920514"</span>,<span class="string">"10609044206"</span>,<span class="string">"10063096574"</span>,<span class="string">"731539"</span>]&#125;,<span class="string">"sub_key"</span>:<span class="string">"5a1391aba11a25c621abfbac"</span>,<span class="string">"texts"</span>:[<span class="string">"浪花有意千重雪"</span>,<span class="string">"桃李无言一队春1036"</span>]&#125;,</span><br><span class="line">	&#123;<span class="string">"sku_id"</span>:&#123;<span class="string">"$in"</span>:[<span class="string">"11260392814"</span>,<span class="string">"13140344430"</span>,<span class="string">"631643"</span>,<span class="string">"715969"</span>,<span class="string">"2358167"</span>]&#125;,<span class="string">"sub_key"</span>:<span class="string">"5a1391aba11a25c621abfbac"</span>,<span class="string">"texts"</span>:[<span class="string">"浪花有意千重雪"</span>,<span class="string">"桃李无言一队春1057"</span>]&#125;,</span><br><span class="line">	&#123;<span class="string">"sku_id"</span>:&#123;<span class="string">"$in"</span>:[<span class="string">"2989532"</span>,<span class="string">"5046742"</span>,<span class="string">"2496007"</span>,<span class="string">"10311733749"</span>,<span class="string">"1186521"</span>]&#125;,<span class="string">"sub_key"</span>:<span class="string">"5a66fd8d5202a309185efe69"</span>,<span class="string">"texts"</span>:[<span class="string">"浪花有意千重雪"</span>,<span class="string">"桃李无言一队春80"</span>]&#125;,</span><br><span class="line">	&#123;<span class="string">"sku_id"</span>:&#123;<span class="string">"$in"</span>:[<span class="string">"11687522552"</span>,<span class="string">"2342843"</span>,<span class="string">"4713760"</span>,<span class="string">"2358167"</span>,<span class="string">"11778037095"</span>]&#125;,<span class="string">"sub_key"</span>:<span class="string">"5a1391aba11a25c621abfbac"</span>,<span class="string">"texts"</span>:[<span class="string">"浪花有意千重雪"</span>,<span class="string">"桃李无言一队春1120"</span>]&#125;,</span><br><span class="line">	&#123;<span class="string">"sku_id"</span>:&#123;<span class="string">"$in"</span>:[<span class="string">"1269372"</span>,<span class="string">"1424799881"</span>,<span class="string">"10098425213"</span>,<span class="string">"1466792"</span>,<span class="string">"4390193"</span>]&#125;,<span class="string">"sub_key"</span>:<span class="string">"5a1391aba11a25c621abfba8"</span>,<span class="string">"texts"</span>:[<span class="string">"浪花有意千重雪"</span>,<span class="string">"桃李无言一队春701"</span>]&#125;]</span><br><span class="line">&#125;).explain(<span class="string">'executionStats'</span>)</span><br></pre></td></tr></table></figure>
+<p>mongo shell执行以上语句！重点在于<font color="#FF0000">explain(‘executionStats’)</font>。</p>
+<p>MongoDb 3.0后explain支持三种模式，分别是：queryPlanner、executionStats、allPlansExecution。</p>
+<ol>
+<li>queryPlanner：默认参数，运行查询优化器对当前的查询进行评估并选择一个最佳的查询计划</li>
+<li>executionStats：查询优化器对当前的查询进行评估并选择一个最佳的查询计划进行执行，在执行完毕后返回这个最佳执行计划执行完成时的相关统计信息</li>
+<li>allPlansExecution：该模式是前2种模式的更细化，即会包括上述2种模式的所有信息。即按照最佳的执行计划执行以及列出统计信息，而且还会列出一些候选的执行计划</li>
+</ol>
+<p>我们的目的是要记录执行find方法的耗时时间，所以用executionStats模式就可以了。返回的结果也是只关注executionStats就可以了。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"executionStats"</span>: &#123;</span><br><span class="line">    <span class="string">"executionSuccess"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"nReturned"</span>: <span class="number">20</span>,</span><br><span class="line">    <span class="string">"executionTimeMillis"</span>: <span class="number">91</span>,</span><br><span class="line">    <span class="string">"totalKeysExamined"</span>: <span class="number">21315</span>,</span><br><span class="line">    <span class="string">"totalDocsExamined"</span>: <span class="number">21224</span>,</span><br><span class="line">    <span class="string">"executionStages"</span>: &#123;</span><br><span class="line">        <span class="string">"stage"</span>: <span class="string">"SUBPLAN"</span>,</span><br><span class="line">        <span class="string">"nReturned"</span>: <span class="number">20</span>,</span><br><span class="line">        <span class="string">"executionTimeMillisEstimate"</span>: <span class="number">90</span>,</span><br><span class="line">        <span class="string">"works"</span>: <span class="number">21315</span>,</span><br><span class="line">        <span class="string">"advanced"</span>: <span class="number">20</span>,</span><br><span class="line">        <span class="string">"needTime"</span>: <span class="number">21294</span>,</span><br><span class="line">        <span class="string">"needYield"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">"saveState"</span>: <span class="number">166</span>,</span><br><span class="line">        <span class="string">"restoreState"</span>: <span class="number">166</span>,</span><br><span class="line">        <span class="string">"isEOF"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="string">"invalidates"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">"inputStage"</span>: &#123;</span><br><span class="line">            <span class="string">"stage"</span>: <span class="string">"OR"</span>,</span><br><span class="line">            <span class="string">"nReturned"</span>: <span class="number">20</span>,</span><br><span class="line">            <span class="string">"executionTimeMillisEstimate"</span>: <span class="number">90</span>,</span><br><span class="line">            <span class="string">"works"</span>: <span class="number">21315</span>,</span><br><span class="line">            <span class="string">"advanced"</span>: <span class="number">20</span>,</span><br><span class="line">            <span class="string">"needTime"</span>: <span class="number">21294</span>,</span><br><span class="line">            <span class="string">"needYield"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">"saveState"</span>: <span class="number">166</span>,</span><br><span class="line">            <span class="string">"restoreState"</span>: <span class="number">166</span>,</span><br><span class="line">            <span class="string">"isEOF"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="string">"invalidates"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">"dupsTested"</span>: <span class="number">20</span>,</span><br><span class="line">            <span class="string">"dupsDropped"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">"locsForgotten"</span>: <span class="number">0</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为内容实在太长，上面只放了一部分。</p>
+<ol>
+<li>executionTimeMillis: 标识执行时间，单位毫秒</li>
+<li>nReturned: 表示该查询条件下返回的文档数量</li>
+<li>totalKeysExamined: 索引扫描数量</li>
+<li>totalDocsExamined: 扫描扫描数量</li>
+<li>executionStages: 计划执行完成各个阶段的统计信息，一个阶段可以有一个inputStage或多个inputStages</li>
+</ol>
+<h3 id="stage状态分析"><a href="#stage状态分析" class="headerlink" title="stage状态分析"></a>stage状态分析</h3><ul>
+<li>COLLSCAN：全表扫描</li>
+<li>IXSCAN：索引扫描</li>
+<li>FETCH：根据索引去检索指定document</li>
+<li>SHARD_MERGE：将各个分片返回数据进行merge</li>
+<li>SORT：表明在内存中进行了排序</li>
+<li>LIMIT：使用limit限制返回数</li>
+<li>SKIP：使用skip进行跳过</li>
+<li>IDHACK：针对_id进行查询</li>
+<li>SHARDING_FILTER：通过mongos对分片数据进行查询</li>
+<li>COUNT：利用db.coll.explain().count()之类进行count运算</li>
+<li>COUNTSCAN：count不使用Index进行count时的stage返回</li>
+<li>COUNT_SCAN：count使用了Index进行count时的stage返回</li>
+<li>SUBPLA：未使用到索引的$or查询的stage返回</li>
+<li>TEXT：使用全文索引进行查询时候的stage返回</li>
+<li>PROJECTION：限定返回字段时候stage的返回</li>
+</ul>
+<p>根据executionStats我们可以分析我们的查询语句，上例中一个查询语言耗时90ms，确实比较慢了。具体到stage中，我们看到每一个阶段的查询都是使用了索引的，但还是这么慢，但说明查询语句太复杂了。</p>
+<h2 id="优化查询语句"><a href="#优化查询语句" class="headerlink" title="优化查询语句"></a>优化查询语句</h2><p>上例中使用了$or进行了批量查询，查询的条件中还有使用$in。根据DBA的意见$in操作是不好的，索引的帮助可能不大。如果是常规的key value 查询索引效率会非常高，所以这里优化思路就在改变查询语句上。</p>
+<p>另外针对于索引，DBA给了我们一些建议：原本我们是在sku_id,text,sub_key上建立联合索引，dba会觉得随着数据量增加，这个索引会越来越大，导致我们内存可能不够用。如果最后查询需要走磁盘IO，性能下降可能非常严重，<font color="#FF0000">他给的建议是把几个字段组合生成一个hash值，增加一个hash列,或者组合hash后的值唯一也可以直接写入_id字段。</font></p>
+<p>把索引写到_id里面确实是一个很好的思路，因为主键查询比常规索引查询要更快，且能够节省索引空间！</p>
+<p>最后，关于MongoDB的使用任重而道远，还好身边有可以咨询的DBA。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mongodb/" rel="tag"># Mongodb</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/06/php5升级到7的坑/" rel="next" title="php5升级到7的坑">
+                <i class="fa fa-chevron-left"></i> php5升级到7的坑
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/11434315"
+                alt="Jacoob Wang" />
+            
+              <p class="site-author-name" itemprop="name">Jacoob Wang</p>
+              <p class="site-description motion-element" itemprop="description">业精于勤荒于嬉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/jacoobwang" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:531532957@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用节点到MongoDB机器的网络状况"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x5E94;&#x7528;&#x8282;&#x70B9;&#x5230;MongoDB&#x673A;&#x5668;&#x7684;&#x7F51;&#x7EDC;&#x72B6;&#x51B5;" class="headerlink" title="&#x5E94;&#x7528;&#x8282;&#x70B9;&#x5230;MongoDB&#x673A;&#x5668;&#x7684;&#x7F51;&#x7EDC;&#x72B6;&#x51B5;"></a>&#x5E94;&#x7528;&#x8282;&#x70B9;&#x5230;MongoDB&#x673A;&#x5668;&#x7684;&#x7F51;&#x7EDC;&#x72B6;&#x51B5;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直连MongoDB，查看查询耗时"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x76F4;&#x8FDE;MongoDB&#xFF0C;&#x67E5;&#x770B;&#x67E5;&#x8BE2;&#x8017;&#x65F6;" class="headerlink" title="&#x76F4;&#x8FDE;MongoDB&#xFF0C;&#x67E5;&#x770B;&#x67E5;&#x8BE2;&#x8017;&#x65F6;"></a>&#x76F4;&#x8FDE;MongoDB&#xFF0C;&#x67E5;&#x770B;&#x67E5;&#x8BE2;&#x8017;&#x65F6;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stage状态分析"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#stage&#x72B6;&#x6001;&#x5206;&#x6790;" class="headerlink" title="stage&#x72B6;&#x6001;&#x5206;&#x6790;"></a>stage&#x72B6;&#x6001;&#x5206;&#x6790;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化查询语句"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x4F18;&#x5316;&#x67E5;&#x8BE2;&#x8BED;&#x53E5;" class="headerlink" title="&#x4F18;&#x5316;&#x67E5;&#x8BE2;&#x8BED;&#x53E5;"></a>&#x4F18;&#x5316;&#x67E5;&#x8BE2;&#x8BED;&#x53E5;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jacoob Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
