@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="勤勤恳恳">
 <meta property="og:description" content="最近将公司的一个项目，从php5升级到php7。为什么要升级呢？主要是出于安全方面的考虑，在某些版本上存在PHP GD Graphics Library拒绝服务漏洞http://sec.jd.com/blog/archives/31748。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-06T03:26:21.000Z">
+<meta property="og:updated_time" content="2018-02-07T12:34:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="php5升级到7的坑">
 <meta name="twitter:description" content="最近将公司的一个项目，从php5升级到php7。为什么要升级呢？主要是出于安全方面的考虑，在某些版本上存在PHP GD Graphics Library拒绝服务漏洞http://sec.jd.com/blog/archives/31748。">
@@ -335,7 +335,9 @@
 <p>pdo报这个错，以前居然没碰过，谷歌一下，发现是mysql.sock文件没找到的问题！那么在php.ini中指定下吧！<a href="https://stackoverflow.com/questions/20723803/pdoexception-sqlstatehy000-2002-no-such-file-or-directory" target="_blank" rel="noopener">https://stackoverflow.com/questions/20723803/pdoexception-sqlstatehy000-2002-no-such-file-or-directory</a></p>
 <p><font color="#FFC0CB">问题2：使用myqsli_connect的时候无法连接</font>，项目中有部分代码不是pdo，至于为什么不是，我也忘记当初的原因了，可能是历史遗留问题！</p>
 <p>如何fix呢？将localhost改为127.0.0.1即可！</p>
-<p>以上这2个问题主要是在mysql连接上，定位这些问题耗费了我一点时间。一方面因为这些代码在php5可以运行，但切到php7却不能运行，我一开始想的扩展原因；另外一方面我刚开始在浏览器中调试一出错就跳转到了jd主站，而没法看到输出的错误信息。</p>
+<p><font color="#FFC0CB">问题3：表单post或put数组超过330个的时候，获取到的值为空！</font>这个问题是后来在使用中发现的，属于升级带来的bug。一开始我以为是put问题，后来我发现跟put没啥关系！于是就猜想跟表单长度有关系，测试验证果然如此！但无论我怎么修改max_input_vars 居然没效！就去google上看看有没有其他人碰到这个问题，<a href="https://github.com/joomla/joomla-cms/issues/10021。" target="_blank" rel="noopener">https://github.com/joomla/joomla-cms/issues/10021。</a> 果然github上已经有人碰到过了，怀疑是php7的bug，解决方式是把max_input_vars 设置到20000。后面无奈之下，只好这么修改。</p>
+<p>以上有2个问题是在mysql连接上，另外1个则是隐藏的bug。</p>
+<p>定位这些问题耗费了我一点时间。一方面因为这些代码在php5可以运行，但切到php7却不能运行，我一开始想的扩展原因；另外一方面我刚开始在浏览器中调试一出错就跳转到了jd主站，而没法看到输出的错误信息。</p>
 
       
     </div>
