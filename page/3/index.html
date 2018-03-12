@@ -252,7 +252,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/28/shell脚本切割nginx日志/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/28/logrotate切割pm2日志/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jacoob Wang">
@@ -271,7 +271,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/28/shell脚本切割nginx日志/" itemprop="url">shell脚本切割nginx日志</a></h1>
+                <a class="post-title-link" href="/2017/12/28/logrotate切割pm2日志/" itemprop="url">logrotate切割pm2日志</a></h1>
         
 
         <div class="post-meta">
@@ -322,11 +322,10 @@
 
       
         
-          <p>nginx是web中使用最广泛的服务器程序之一，但是nginx的日志这块是有些在实际生产环境中不太爽的地方！今天我要说下nginx log切割方法之一，后续可能会讲到log rotate的方式来做。</p>
-<h2 id="为什么要切割日志"><a href="#为什么要切割日志" class="headerlink" title="为什么要切割日志?"></a>为什么要切割日志?</h2><p>Nginx安装好后有些人会打开日志记录，有些人会关闭日志记录，打开日志记录后，nginx默认会把所有请求记录存放到一个文件中 access.log，这样日积月累所有网站的访问记录就会把日志文件越积越大，当需要查看日志文件的时候一看就是一大串，不方便查找。另外，也会影响到nginx的效率，因为日志写入是非常频繁的操作，打开一个大文件句柄的io成本肯定远远高于打开一个小的文件。</p>
+          <p>pm2的日志文件默认在根目录下的.pm2/logs文件夹中，每个程序都会自动生成一个out.log和error.log文件，但是程序的日志只会写在这个两个文件中，并不会自动分割。那么，蛋疼的问题就来了，假如你在定位问题，怎么知道当前的请求会被记录哪个log里面呢？或者说你想查看今天一天的记录会被写到哪个log里面呢？此时，你就会很苦恼的骂pm2！</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/12/28/shell脚本切割nginx日志/#more" rel="contents">
+            <a class="btn" href="/2017/12/28/logrotate切割pm2日志/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

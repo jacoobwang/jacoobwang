@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="勤勤恳恳">
 <meta property="og:description" content="习惯了用IDE的童鞋，可能对VIM并不是很依赖或者很少用。但VIM其实有一些非常好用的功能，而且操作起来特别快。ok，今天要给大家分享的是VIM快速行首行尾插入！">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-12T07:02:16.000Z">
+<meta property="og:updated_time" content="2018-03-12T07:32:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vim小技巧快速行首行尾插入">
 <meta name="twitter:description" content="习惯了用IDE的童鞋，可能对VIM并不是很依赖或者很少用。但VIM其实有一些非常好用的功能，而且操作起来特别快。ok，今天要给大家分享的是VIM快速行首行尾插入！">
@@ -327,17 +327,19 @@
 <p><font color="#FFA500">:%s/^/要插入的字符串</font><br>实现方法：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#进入vi</span></span><br><span class="line">vi target.文档</span><br><span class="line">:%s/^/ng</span><br></pre></td></tr></table></figure></p>
 <h2 id="行尾插入"><a href="#行尾插入" class="headerlink" title="行尾插入"></a>行尾插入</h2><p>同样是上面的文档，我们需要在末尾添加.jpg，变成如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>jpg</span><br><span class="line"><span class="number">2.</span>jpg</span><br><span class="line"><span class="number">3.</span>jpg</span><br></pre></td></tr></table></figure></p>
 <p><font color="#FFA500">:%s/$/要插入的字符串</font><br>实现方法：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#进入vi</span></span><br><span class="line">vi target.文档</span><br><span class="line">:%s/$/.jpg</span><br></pre></td></tr></table></figure></p>
-<h2 id="语法解析"><a href="#语法解析" class="headerlink" title="语法解析"></a>语法解析</h2><p>作用域 s/目标字符串/替换字符串/标记位</p>
-<h4 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h4><ol>
-<li>%s 表示匹配所有行</li>
-<li>m,n s匹配第m行到第n行</li>
+<h2 id="语法解析"><a href="#语法解析" class="headerlink" title="语法解析"></a>语法解析</h2><p>:[range]s/from/to/[flags]</p>
+<h4 id="range-搜索范围，如果没有指定范围，则作用于但前行。"><a href="#range-搜索范围，如果没有指定范围，则作用于但前行。" class="headerlink" title="range:搜索范围，如果没有指定范围，则作用于但前行。"></a>range:搜索范围，如果没有指定范围，则作用于但前行。</h4><ol>
+<li>:1,10s/from/to/ 表示在第1到第10行（包含第1，第10行）之间搜索替换；</li>
+<li>:10s/from/to/ 表示只在第10行搜索替换；</li>
+<li>:%s/from/to/ 表示在所有行中搜索替换；</li>
+<li>1,$s/from/to/ 同上。</li>
 </ol>
 <h4 id="目标字符串"><a href="#目标字符串" class="headerlink" title="目标字符串"></a>目标字符串</h4><ol>
 <li>可以是正则表达式，也可以是纯字符串，对于一些特殊符号如.*当想把它当做字符来看待时需要加\，否则就是一个正则表达式。</li>
 <li>^ 匹配行首</li>
 <li>$ 匹配行尾</li>
 </ol>
-<h4 id="标记位"><a href="#标记位" class="headerlink" title="标记位"></a>标记位</h4><ol>
+<h4 id="flags"><a href="#flags" class="headerlink" title="flags"></a>flags</h4><ol>
 <li>g标记 表示全局搜索，对每一个匹配结果进行操作，缺省标记g，则只对第一个匹配结果进行操作。</li>
 <li>c标记 表示操作前需要进行确认</li>
 <li>i标记 表示大小写不敏感</li>
@@ -523,7 +525,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#行首插入"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x884C;&#x9996;&#x63D2;&#x5165;" class="headerlink" title="&#x884C;&#x9996;&#x63D2;&#x5165;"></a>&#x884C;&#x9996;&#x63D2;&#x5165;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行尾插入"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x884C;&#x5C3E;&#x63D2;&#x5165;" class="headerlink" title="&#x884C;&#x5C3E;&#x63D2;&#x5165;"></a>&#x884C;&#x5C3E;&#x63D2;&#x5165;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语法解析"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x8BED;&#x6CD5;&#x89E3;&#x6790;" class="headerlink" title="&#x8BED;&#x6CD5;&#x89E3;&#x6790;"></a>&#x8BED;&#x6CD5;&#x89E3;&#x6790;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#作用域"><span class="nav-number">3.0.1.</span> <span class="nav-text"><a href="#&#x4F5C;&#x7528;&#x57DF;" class="headerlink" title="&#x4F5C;&#x7528;&#x57DF;"></a>&#x4F5C;&#x7528;&#x57DF;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#目标字符串"><span class="nav-number">3.0.2.</span> <span class="nav-text"><a href="#&#x76EE;&#x6807;&#x5B57;&#x7B26;&#x4E32;" class="headerlink" title="&#x76EE;&#x6807;&#x5B57;&#x7B26;&#x4E32;"></a>&#x76EE;&#x6807;&#x5B57;&#x7B26;&#x4E32;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标记位"><span class="nav-number">3.0.3.</span> <span class="nav-text"><a href="#&#x6807;&#x8BB0;&#x4F4D;" class="headerlink" title="&#x6807;&#x8BB0;&#x4F4D;"></a>&#x6807;&#x8BB0;&#x4F4D;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#栗子"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x6817;&#x5B50;" class="headerlink" title="&#x6817;&#x5B50;"></a>&#x6817;&#x5B50;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#行首插入"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x884C;&#x9996;&#x63D2;&#x5165;" class="headerlink" title="&#x884C;&#x9996;&#x63D2;&#x5165;"></a>&#x884C;&#x9996;&#x63D2;&#x5165;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行尾插入"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x884C;&#x5C3E;&#x63D2;&#x5165;" class="headerlink" title="&#x884C;&#x5C3E;&#x63D2;&#x5165;"></a>&#x884C;&#x5C3E;&#x63D2;&#x5165;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语法解析"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x8BED;&#x6CD5;&#x89E3;&#x6790;" class="headerlink" title="&#x8BED;&#x6CD5;&#x89E3;&#x6790;"></a>&#x8BED;&#x6CD5;&#x89E3;&#x6790;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#range-搜索范围，如果没有指定范围，则作用于但前行。"><span class="nav-number">3.0.1.</span> <span class="nav-text"><a href="#range-&#x641C;&#x7D22;&#x8303;&#x56F4;&#xFF0C;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x6307;&#x5B9A;&#x8303;&#x56F4;&#xFF0C;&#x5219;&#x4F5C;&#x7528;&#x4E8E;&#x4F46;&#x524D;&#x884C;&#x3002;" class="headerlink" title="range:&#x641C;&#x7D22;&#x8303;&#x56F4;&#xFF0C;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x6307;&#x5B9A;&#x8303;&#x56F4;&#xFF0C;&#x5219;&#x4F5C;&#x7528;&#x4E8E;&#x4F46;&#x524D;&#x884C;&#x3002;"></a>range:&#x641C;&#x7D22;&#x8303;&#x56F4;&#xFF0C;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x6307;&#x5B9A;&#x8303;&#x56F4;&#xFF0C;&#x5219;&#x4F5C;&#x7528;&#x4E8E;&#x4F46;&#x524D;&#x884C;&#x3002;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#目标字符串"><span class="nav-number">3.0.2.</span> <span class="nav-text"><a href="#&#x76EE;&#x6807;&#x5B57;&#x7B26;&#x4E32;" class="headerlink" title="&#x76EE;&#x6807;&#x5B57;&#x7B26;&#x4E32;"></a>&#x76EE;&#x6807;&#x5B57;&#x7B26;&#x4E32;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#flags"><span class="nav-number">3.0.3.</span> <span class="nav-text"><a href="#flags" class="headerlink" title="flags"></a>flags</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#栗子"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x6817;&#x5B50;" class="headerlink" title="&#x6817;&#x5B50;"></a>&#x6817;&#x5B50;</span></a></li></ol></div>
             
 
           </div>
