@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="html实体," />
+  <meta name="keywords" content="Vim," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="关于html实体，web开发人员都或多或少知道一些！但很少有人详细提及过它，w3c对它的介绍也是笔墨不多。 最近因为接触一些xss的漏洞问题，想更加深入的了解下html实体。这篇文章，也是穷我所及之处，尽量全面的介绍下html实体。">
-<meta name="keywords" content="html实体">
+<meta name="description" content="习惯了用IDE的童鞋，可能对VIM并不是很依赖或者很少用。但VIM其实有一些非常好用的功能，而且操作起来特别快。ok，今天要给大家分享的是VIM快速行首行尾插入！">
+<meta name="keywords" content="Vim">
 <meta property="og:type" content="article">
-<meta property="og:title" content="html实体巩固">
-<meta property="og:url" content="http://yoursite.com/2017/12/24/html实体巩固/index.html">
+<meta property="og:title" content="Vim小技巧快速行首行尾插入">
+<meta property="og:url" content="http://yoursite.com/2018/03/12/Vim小技巧快速行尾插入/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="关于html实体，web开发人员都或多或少知道一些！但很少有人详细提及过它，w3c对它的介绍也是笔墨不多。 最近因为接触一些xss的漏洞问题，想更加深入的了解下html实体。这篇文章，也是穷我所及之处，尽量全面的介绍下html实体。">
+<meta property="og:description" content="习惯了用IDE的童鞋，可能对VIM并不是很依赖或者很少用。但VIM其实有一些非常好用的功能，而且操作起来特别快。ok，今天要给大家分享的是VIM快速行首行尾插入！">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-25T02:56:35.000Z">
+<meta property="og:updated_time" content="2018-03-12T07:02:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="html实体巩固">
-<meta name="twitter:description" content="关于html实体，web开发人员都或多或少知道一些！但很少有人详细提及过它，w3c对它的介绍也是笔墨不多。 最近因为接触一些xss的漏洞问题，想更加深入的了解下html实体。这篇文章，也是穷我所及之处，尽量全面的介绍下html实体。">
+<meta name="twitter:title" content="Vim小技巧快速行首行尾插入">
+<meta name="twitter:description" content="习惯了用IDE的童鞋，可能对VIM并不是很依赖或者很少用。但VIM其实有一些非常好用的功能，而且操作起来特别快。ok，今天要给大家分享的是VIM快速行首行尾插入！">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/12/24/html实体巩固/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/12/Vim小技巧快速行尾插入/"/>
 
 
 
 
 
-  <title>html实体巩固 | 勤勤恳恳</title>
+  <title>Vim小技巧快速行首行尾插入 | 勤勤恳恳</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/24/html实体巩固/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/12/Vim小技巧快速行尾插入/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jacoob Wang">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">html实体巩固</h1>
+          <h1 class="post-title" itemprop="name headline">Vim小技巧快速行首行尾插入</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-24T16:12:30+08:00">
-                2017-12-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-12T11:12:30+08:00">
+                2018-03-12
               </time>
             
 
@@ -320,27 +320,30 @@
       
 
       
-        <p>关于html实体，web开发人员都或多或少知道一些！但很少有人详细提及过它，w3c对它的介绍也是笔墨不多。</p>
-<p>最近因为接触一些xss的漏洞问题，想更加深入的了解下html实体。这篇文章，也是穷我所及之处，尽量全面的介绍下html实体。</p>
-<a id="more"></a>
-<h2 id="什么是html实体？"><a href="#什么是html实体？" class="headerlink" title="什么是html实体？"></a>什么是html实体？</h2><p>在MDN上它是这么被定义的：HTML实体是一类由&amp;开头，然后由；结尾的字符串，它通常被用来显示html的保留字符或者不可见字符（比如非隔断空格）。也可以被用来替换一些我们用键盘很难输入的字符，比如©对应的实体则是<code>&amp;copy;</code></p>
-<p>从结构上看，它分成三部分：</p>
-<ul>
-<li>第一部分是一个&amp;符号，英文叫ampersand；</li>
-<li>第二部分是字符实体名称（character entity names）或者是#加上实体编号；</li>
-<li>第三部分是一个分号。</li>
-</ul>
-<h3 id="html实体的组成"><a href="#html实体的组成" class="headerlink" title="html实体的组成"></a>html实体的组成</h3><p>在上面我们已经说到它有三部分组成，关于第一部分和最后一部分都是固定的格式，没有什么可说的。这里主要看下第二部分！</p>
-<p>第二部分有两种可能值：1.是字符实体名称 2.#加上实体编号。</p>
-<p>实体名称可以看作是对于字符的英文缩写形式，比如 &lt; 如果采用字符实体名称进行表示，就可以写成<code>&amp;lt;</code>。</p>
-<p>实体编号采用的是字符的Unicode编码序号(0-127与ASCII编码一样)，并且可以采用其对应的十进制编码或者十六进制编码进行表示。比如 &lt; 如果采用字符实体编号进行表示，就可以写成<code>&amp;#60;</code>或者<code>&amp;#x3c;</code>。</p>
-<p>同一个符号，可以用“实体名称”和“实体编号”两种方式进行表示，“实体名称”的优势在于便于记忆，但不能保证所有的浏览器都能顺利识别它；而“实体编号”，各种浏览器都能处理，其劣势在于不便于记忆。</p>
-<p>另外，实体名称（Entity）是区分大小写的。</p>
-<h3 id="常用的html实体"><a href="#常用的html实体" class="headerlink" title="常用的html实体"></a>常用的html实体</h3><p><a href="http://entitycode.com/#featured-content" target="_blank" rel="noopener">http://entitycode.com/#featured-content</a><br>打开这个链接，作者列出了所有常用的html实体，并分类显示，非常清晰，感谢国外友人。</p>
-<p><a href="https://dev.w3.org/html5/html-author/charref" target="_blank" rel="noopener">https://dev.w3.org/html5/html-author/charref</a> 这是官方列出来的字符实体，它非常详细。</p>
-<h3 id="js转码-解码实体"><a href="#js转码-解码实体" class="headerlink" title="js转码/解码实体"></a>js转码/解码实体</h3><p><a href="https://github.com/mathiasbynens/he" target="_blank" rel="noopener">https://github.com/mathiasbynens/he</a>一位谷歌大牛封装的实体编码/解码器。</p>
-<hr>
-<p>本文参考链接：1.<a href="https://developer.mozilla.org/en-US/docs/Glossary/Entity#Learn_more" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Glossary/Entity#Learn_more</a></p>
+        <p>习惯了用IDE的童鞋，可能对VIM并不是很依赖或者很少用。但VIM其实有一些非常好用的功能，而且操作起来特别快。ok，今天要给大家分享的是VIM快速行首行尾插入！<br><a id="more"></a></p>
+<h2 id="行首插入"><a href="#行首插入" class="headerlink" title="行首插入"></a>行首插入</h2><p>假如我们有一个文档，内容如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure></p>
+<p>需要转化成如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ng1</span><br><span class="line">ng2</span><br><span class="line">ng3</span><br></pre></td></tr></table></figure></p>
+<p>需要在每一行行首加字符”ng”。那么如何实现呢？</p>
+<p><font color="#FFA500">:%s/^/要插入的字符串</font><br>实现方法：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#进入vi</span></span><br><span class="line">vi target.文档</span><br><span class="line">:%s/^/ng</span><br></pre></td></tr></table></figure></p>
+<h2 id="行尾插入"><a href="#行尾插入" class="headerlink" title="行尾插入"></a>行尾插入</h2><p>同样是上面的文档，我们需要在末尾添加.jpg，变成如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>jpg</span><br><span class="line"><span class="number">2.</span>jpg</span><br><span class="line"><span class="number">3.</span>jpg</span><br></pre></td></tr></table></figure></p>
+<p><font color="#FFA500">:%s/$/要插入的字符串</font><br>实现方法：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#进入vi</span></span><br><span class="line">vi target.文档</span><br><span class="line">:%s/$/.jpg</span><br></pre></td></tr></table></figure></p>
+<h2 id="语法解析"><a href="#语法解析" class="headerlink" title="语法解析"></a>语法解析</h2><p>作用域 s/目标字符串/替换字符串/标记位</p>
+<h4 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h4><ol>
+<li>%s 表示匹配所有行</li>
+<li>m,n s匹配第m行到第n行</li>
+</ol>
+<h4 id="目标字符串"><a href="#目标字符串" class="headerlink" title="目标字符串"></a>目标字符串</h4><ol>
+<li>可以是正则表达式，也可以是纯字符串，对于一些特殊符号如.*当想把它当做字符来看待时需要加\，否则就是一个正则表达式。</li>
+<li>^ 匹配行首</li>
+<li>$ 匹配行尾</li>
+</ol>
+<h4 id="标记位"><a href="#标记位" class="headerlink" title="标记位"></a>标记位</h4><ol>
+<li>g标记 表示全局搜索，对每一个匹配结果进行操作，缺省标记g，则只对第一个匹配结果进行操作。</li>
+<li>c标记 表示操作前需要进行确认</li>
+<li>i标记 表示大小写不敏感</li>
+<li>I标记 表示大小写敏感</li>
+</ol>
+<h2 id="栗子"><a href="#栗子" class="headerlink" title="栗子"></a>栗子</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">: %s/foo/bar/g</span><br><span class="line">全文搜索每个foo并替换为bar。</span><br><span class="line"></span><br><span class="line">: %s/foo/bar/gc</span><br><span class="line">全文搜索每个foo并替换为bar，替换前需要确认。</span><br><span class="line"></span><br><span class="line">: %s/\&lt;foo\&gt;/bar/gc</span><br><span class="line">全文搜索每个单词foo并替换为bar，替换前需要确认。</span><br><span class="line"></span><br><span class="line">: %s/foo/bar/gci</span><br><span class="line">全文搜索每个foo并替换为bar，替换前需要确认，大小写不敏感。</span><br><span class="line"></span><br><span class="line">: %s/foo/bar/gcI</span><br><span class="line">全文搜索每个foo并替换为bar，替换前需要确认，大小写敏感。</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -358,7 +361,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/html实体/" rel="tag"># html实体</a>
+            <a href="/tags/Vim/" rel="tag"># Vim</a>
           
         </div>
       
@@ -371,8 +374,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/19/nodejs断言assert/" rel="next" title="nodejs断言assert">
-                <i class="fa fa-chevron-left"></i> nodejs断言assert
+              <a href="/2018/03/01/Bash中set用法初学/" rel="next" title="Bash中set用法初学">
+                <i class="fa fa-chevron-left"></i> Bash中set用法初学
               </a>
             
           </div>
@@ -380,10 +383,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/12/25/高效实用Chrome/" rel="prev" title="高效使用chrome">
-                高效使用chrome <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -524,7 +523,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是html实体？"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;html&#x5B9E;&#x4F53;&#xFF1F;" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;html&#x5B9E;&#x4F53;&#xFF1F;"></a>&#x4EC0;&#x4E48;&#x662F;html&#x5B9E;&#x4F53;&#xFF1F;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#html实体的组成"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#html&#x5B9E;&#x4F53;&#x7684;&#x7EC4;&#x6210;" class="headerlink" title="html&#x5B9E;&#x4F53;&#x7684;&#x7EC4;&#x6210;"></a>html&#x5B9E;&#x4F53;&#x7684;&#x7EC4;&#x6210;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的html实体"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#&#x5E38;&#x7528;&#x7684;html&#x5B9E;&#x4F53;" class="headerlink" title="&#x5E38;&#x7528;&#x7684;html&#x5B9E;&#x4F53;"></a>&#x5E38;&#x7528;&#x7684;html&#x5B9E;&#x4F53;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#js转码-解码实体"><span class="nav-number">1.3.</span> <span class="nav-text"><a href="#js&#x8F6C;&#x7801;-&#x89E3;&#x7801;&#x5B9E;&#x4F53;" class="headerlink" title="js&#x8F6C;&#x7801;/&#x89E3;&#x7801;&#x5B9E;&#x4F53;"></a>js&#x8F6C;&#x7801;/&#x89E3;&#x7801;&#x5B9E;&#x4F53;</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#行首插入"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x884C;&#x9996;&#x63D2;&#x5165;" class="headerlink" title="&#x884C;&#x9996;&#x63D2;&#x5165;"></a>&#x884C;&#x9996;&#x63D2;&#x5165;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行尾插入"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x884C;&#x5C3E;&#x63D2;&#x5165;" class="headerlink" title="&#x884C;&#x5C3E;&#x63D2;&#x5165;"></a>&#x884C;&#x5C3E;&#x63D2;&#x5165;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语法解析"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x8BED;&#x6CD5;&#x89E3;&#x6790;" class="headerlink" title="&#x8BED;&#x6CD5;&#x89E3;&#x6790;"></a>&#x8BED;&#x6CD5;&#x89E3;&#x6790;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#作用域"><span class="nav-number">3.0.1.</span> <span class="nav-text"><a href="#&#x4F5C;&#x7528;&#x57DF;" class="headerlink" title="&#x4F5C;&#x7528;&#x57DF;"></a>&#x4F5C;&#x7528;&#x57DF;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#目标字符串"><span class="nav-number">3.0.2.</span> <span class="nav-text"><a href="#&#x76EE;&#x6807;&#x5B57;&#x7B26;&#x4E32;" class="headerlink" title="&#x76EE;&#x6807;&#x5B57;&#x7B26;&#x4E32;"></a>&#x76EE;&#x6807;&#x5B57;&#x7B26;&#x4E32;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标记位"><span class="nav-number">3.0.3.</span> <span class="nav-text"><a href="#&#x6807;&#x8BB0;&#x4F4D;" class="headerlink" title="&#x6807;&#x8BB0;&#x4F4D;"></a>&#x6807;&#x8BB0;&#x4F4D;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#栗子"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x6817;&#x5B50;" class="headerlink" title="&#x6817;&#x5B50;"></a>&#x6817;&#x5B50;</span></a></li></ol></div>
             
 
           </div>
