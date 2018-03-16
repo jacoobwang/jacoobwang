@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Network," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一个前端人员估计很少去考虑什么是TimeWait及为什么会出现TimeWait？这好像更多属于后端人员的技能要求或者是运维人员需要掌握的！但作为一个爱学习的前端coder，我们可以花点时间研究下！">
+<meta name="keywords" content="Network">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初探TimeWait">
+<meta property="og:url" content="http://yoursite.com/2018/03/15/初探Timewait/index.html">
+<meta property="og:site_name" content="勤勤恳恳">
+<meta property="og:description" content="一个前端人员估计很少去考虑什么是TimeWait及为什么会出现TimeWait？这好像更多属于后端人员的技能要求或者是运维人员需要掌握的！但作为一个爱学习的前端coder，我们可以花点时间研究下！">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/img/WX20180315-203143.png">
+<meta property="og:image" content="http://yoursite.com/img/WX20180316-094945.png">
+<meta property="og:updated_time" content="2018-03-16T09:32:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="初探TimeWait">
+<meta name="twitter:description" content="一个前端人员估计很少去考虑什么是TimeWait及为什么会出现TimeWait？这好像更多属于后端人员的技能要求或者是运维人员需要掌握的！但作为一个爱学习的前端coder，我们可以花点时间研究下！">
+<meta name="twitter:image" content="http://yoursite.com/img/WX20180315-203143.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/15/初探Timewait/"/>
+
+
+
+
+
+  <title>初探TimeWait | 勤勤恳恳</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">勤勤恳恳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客|撸码|生活|态度</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-自研php框架">
+          <a href="https://jacoobwang.github.io/vino/vino.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            自研php框架
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://jacoobwang.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/15/初探Timewait/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">初探TimeWait</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-15T11:12:30+08:00">
+                2018-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一个前端人员估计很少去考虑什么是TimeWait及为什么会出现TimeWait？这好像更多属于后端人员的技能要求或者是运维人员需要掌握的！但作为一个爱学习的前端coder，我们可以花点时间研究下！<br><a id="more"></a><br>介绍Time_Wait之前我们先来回顾下TCP的三次握手与四次挥手。</p>
+<h2 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h2><p>三次握手是说在发送数据的准备阶段，client与服务端之间要进行三次交互。<br><img src="/img/WX20180315-203143.png" alt=""></p>
+<ol>
+<li>第一次握手：建立连接，client发送连接请求报文段，SYN为1，seq为x；然后，client进入SYN_SEND状态，等待服务器确认；</li>
+<li>第二次握手：服务器收到SYN报文，需要对这个报文段进行确认。将SYN为1, seq为y，ACK为x+1报文段发送给client，此时服务器进入SYN_RECV状态；</li>
+<li>第三次握手：client收到服务器的SYN+ACK报文段，将ACK设置为y+1，向服务器端发送ACK报文段，发送完毕后，client和服务器都进入ESTABLISHED状态，w按成三次握手。</li>
+</ol>
+<h2 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h2><p>当client和服务器数据传送完了后，需要断开TCP连接。在断开链接的过程中就有了四次挥手。<br><img src="/img/WX20180316-094945.png" alt=""></p>
+<ol>
+<li>第一次挥手： client向服务器发送FIN报文段，此时client进入FIN_WAIT状态，表示client没有数据要发送给服务器了；</li>
+<li>第二次挥手： 服务器收到FIN报文后，向client发送一个ACK报文段，告诉client，我同意你的关闭请求；</li>
+<li>第三次挥手： 服务器向client发送FIN报文段，请求关闭连接；</li>
+<li>第四次挥手： client收到FIN报文后，向服务器发送ACK报文，然后client进入TIME_WAIT状态；服务器收到client的ACK报文后就关闭连接。此时client等到2MSL后依然没有收到回复，则证明服务器已正常关闭，client也可以关闭连接了。</li>
+</ol>
+<p>ps: 此处的client不仅仅是指客户端电脑，同样也可能是服务器与服务器之间。</p>
+<h2 id="什么是TIME-WAIT"><a href="#什么是TIME-WAIT" class="headerlink" title="什么是TIME_WAIT"></a>什么是TIME_WAIT</h2><p>看了上面TCP连接的两大核心特点之后，可以看到TIME_WAIT出现在四次挥手，断开TCP连接的过程中，是主动关闭方在收到被动关闭方的FIN后发送ACK报文后进入的一个状态，然后由操作系统自动回收并将TCP连接设为CLOSED初始状态。</p>
+<p>上面看起来有点拗口，我简单梳理下TIME_WAIT的特点：</p>
+<ol>
+<li>主动关闭方在发出最后一个ACK包之后，主动关闭方进入TIME_WAIT状态；</li>
+<li>进入TIME_WAIT后会等待两个2MSL的时间；</li>
+<li>在TIME_WAIT结束之前，该连接占用的本地端口一直无法释放；</li>
+</ol>
+<h2 id="为什么有TIME-WAIT"><a href="#为什么有TIME-WAIT" class="headerlink" title="为什么有TIME_WAIT"></a>为什么有TIME_WAIT</h2><h3 id="1-可靠地实现TCP全双工连接的可靠终止"><a href="#1-可靠地实现TCP全双工连接的可靠终止" class="headerlink" title="1. 可靠地实现TCP全双工连接的可靠终止"></a>1. 可靠地实现TCP全双工连接的可靠终止</h3><p>TCP协议在关闭连接的四次握手过程中，最终ACK是由主动关闭连接的一端发出的，如果这个ACK丢失，对方将重发最终的FIN，因此主动关闭端必须维护状态TIME_WAIT允许它发送最终的ACK。如果主动关闭端不维持TIME_WAIT的状态，而是处于CLOSED状态，那么，主动关闭端将响应RST分节，对方收到后将解释成一个异常。</p>
+<p>因此，要实现TCP全双工连接的正常终止，主动关闭连接端必须维持TIME_WAIT状态。</p>
+<h3 id="2-保证此次连接的重复数据段从网络中消失"><a href="#2-保证此次连接的重复数据段从网络中消失" class="headerlink" title="2. 保证此次连接的重复数据段从网络中消失"></a>2. 保证此次连接的重复数据段从网络中消失</h3><p>TCP中是可靠的服务，当数据包丢失会重传，当有数据包迷路的情况下，如果不等待2MSL时，当客户端以同样地方式重新和服务建立连接后，上一次迷路的数据包这时可能会到达服务，这时会造成旧包被重新读取。</p>
+<p>为了避免以上情况，TCP/IP协议不允许处于TIME_WAIT状态的连接启动一个新的可用连接，因为TIME_WAIT状态持续2MSL，这就可以保证当成功建立一个新TCP连接的时候，来自旧连接重复分组已经在网络中消失。</p>
+<h2 id="服务端大量TIME-WAIT"><a href="#服务端大量TIME-WAIT" class="headerlink" title="服务端大量TIME_WAIT"></a>服务端大量TIME_WAIT</h2><p>nginx代理使用了短链接的方式和后端交互，如果使用了nginx代理，那么系统TIME_WAIT的数量会变得比较多，这是由于nginx代理使用了短链接的方式和后端交互的原因，使得nginx和后端的ESTABLISHED变得很少而TIME_WAIT很多。这不但发生在安装nginx的代理服务器上，而且也会使后端的app服务器上有大量的TIME_WAIT。查阅TIME_WAIT资料，发现这个状态很多也没什么大问题，但可能因为它占用了系统过多的端口，导致后续的请求无法获取端口而造成障碍。</p>
+<p>假如碰到上面这种情况，合理的解决方案是TCP连接复用。</p>
+<h3 id="TCP连接复用"><a href="#TCP连接复用" class="headerlink" title="TCP连接复用"></a>TCP连接复用</h3><p>TCP连接复用技术通过将前端多个客户的HTTP请求复用到后端与服务器建立的一个TCP连接上。这种技术能够大大减小服务器的性能负载，减少与服务器之间新建TCP连接所带来的延时，并最大限度的降低客户端对后端服务器的并发连接数请求，减少服务器的资源占用。</p>
+<p>采用TCP连接复用技术后，客户端（如：ClientA）与负载均衡设备之间进行三次握手并发送HTTP请求。负载均衡设备收到请求后，会检测服务器是否存在空闲的长连接，如果不存在，服务器将建立一个新连接。当HTTP请求响应完成后，客户端则与负载均衡设备协商关闭连接，而负载均衡则保持与服务器之间的这个连接。当有其它客户端（如：ClientB）需要发送HTTP请求时，负载均衡设备会直接向与服务器之间保持的这个空闲连接发送HTTP请求，避免了由于新建TCP连接造成的延时和服务器资源耗费。</p>
+<h3 id="TIME-WAIT调优参数"><a href="#TIME-WAIT调优参数" class="headerlink" title="TIME_WAIT调优参数"></a>TIME_WAIT调优参数</h3><h4 id="1-net-ipv4-tcp-timestamps"><a href="#1-net-ipv4-tcp-timestamps" class="headerlink" title="1. net.ipv4.tcp_timestamps"></a>1. net.ipv4.tcp_timestamps</h4><p>RFC 1323 在 TCP Reliability一节里， 引入了timestamp的TCP option， 两个4字节的时间戳字段， 其中第一个4字节字段用来保存发送该数据包的时间， 第二个4字节字段用来保存最近一次接收对方发送到数据的时间。 有了这两个时间字段， 也就有了后续优化的余地。</p>
+<p>tcp_tw_reuse 和 tcp_tw_recycle就依赖这些时间字段。</p>
+<h4 id="2-net-ipv4-tcp-tw-reuse"><a href="#2-net-ipv4-tcp-tw-reuse" class="headerlink" title="2. net.ipv4.tcp_tw_reuse"></a>2. net.ipv4.tcp_tw_reuse</h4><p>时刻记住一条socket连接， 就是那个五元组， 出现TIME_WAIT状态的连接， 一定出现在主动关闭连接的一方。 所以， 当主动关闭连接的一方， 再次向对方发起连接请求的时候（ 例如， 客户端关闭连接， 客户端再次连接服务端， 此时可以复用了； 负载均衡服务器， 主动关闭后端的连接， 当有新的HTTP请求， 负载均衡服务器再次连接后端服务器， 此时也可以复用）， 可以复用TIME_WAIT状态的连接。</p>
+<p>通过字面解释， 以及例子说明， 你看到了， tcp_tw_reuse应用的场景： 某一方， 需要不断的通过“ 短连接” 连接其他服务器， 总是自己先关闭连接(TIME_WAIT在自己这方)， 关闭后又不断的重新连接对方。</p>
+<p>那么， 当连接被复用了之后， 延迟或者重发的数据包到达， 新的连接怎么判断， 到达的数据是属于复用后的连接， 还是复用前的连接呢？ 那就需要依赖前面提到的两个时间字段了。 复用连接后， 这条连接的时间被更新为当前的时间， 当延迟的数据达到， 延迟数据的时间是小于新连接的时间， 所以， 内核可以通过时间判断出， 延迟的数据可以安全的丢弃掉了。</p>
+<p>这个配置， 依赖于连接双方， 同时对timestamps的支持。 同时， 这个配置， 仅仅影响outbound连接， 即做为客户端的角色， 连接服务端[connect(dest_ip, dest_port)] 时复用TIME_WAIT的socket。</p>
+<h4 id="3-net-ipv4-tcp-tw-recycle"><a href="#3-net-ipv4-tcp-tw-recycle" class="headerlink" title="3. net.ipv4.tcp_tw_recycle"></a>3. net.ipv4.tcp_tw_recycle</h4><p>当开启了这个配置后， 内核会快速的回收处于TIME_WAIT状态的socket连接。 多快？ 不再是2MSL， 而是一个RTO（ retransmission timeout， 数据包重传的timeout时间） 的时间， 这个时间根据RTT动态计算出来， 但是远小于2MSL。</p>
+<p>有了这个配置， 还是需要保障 丢失重传或者延迟的数据包， 不会被新的连接(注意， 这里不再是复用了， 而是之前处于TIME_WAIT状态的连接已经被destroy掉了， 新的连接， 刚好是和某一个被destroy掉的连接使用了相同的五元组而已) 所错误的接收。 在启用该配置， 当一个socket连接进入TIME_WAIT状态后， 内核里会记录包括该socket连接对应的五元组中的对方IP等在内的一些统计数据， 当然也包括从该对方IP所接收到的最近的一次数据包时间。 当有新的数据包到达， 只要时间晚于内核记录的这个时间， 数据包都会被统统的丢掉。</p>
+<p>这个配置， 依赖于连接双方对timestamps的支持。 同时， 这个配置， 主要影响到了inbound的连接（ 对outbound的连接也有影响， 但是不是复用）， 即做为服务端角色， 客户端连进来， 服务端主动关闭了连接， TIME_WAIT状态的socket处于服务端， 服务端快速的回收该状态的连接。</p>
+<p>由此， 如果客户端处于NAT的网络(多个客户端， 同一个IP出口的网络环境)， 如果配置了tw_recycle， 就可能在一个RTO的时间内， 只能有一个客户端和自己连接成功(不同的客户端发包的时间不一致， 造成服务端直接把数据包丢弃掉)。</p>
+<p>参考链接：</p>
+<ol>
+<li><a href="http://openskill.cn/article/270" target="_blank" rel="noopener">TIME_WAIT和CLOSE_WAIT解疑(上)</a></li>
+<li><a href="http://openskill.cn/article/277" target="_blank" rel="noopener">高性能网络里,你不知道的TIME_WAIT解疑(下)</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Network/" rel="tag"># Network</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/12/Vim小技巧快速行尾插入/" rel="next" title="Vim小技巧快速行首行尾插入">
+                <i class="fa fa-chevron-left"></i> Vim小技巧快速行首行尾插入
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/11434315"
+                alt="Jacoob Wang" />
+            
+              <p class="site-author-name" itemprop="name">Jacoob Wang</p>
+              <p class="site-description motion-element" itemprop="description">业精于勤荒于嬉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/jacoobwang" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:531532957@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#三次握手"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4E09;&#x6B21;&#x63E1;&#x624B;" class="headerlink" title="&#x4E09;&#x6B21;&#x63E1;&#x624B;"></a>&#x4E09;&#x6B21;&#x63E1;&#x624B;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四次挥手"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x56DB;&#x6B21;&#x6325;&#x624B;" class="headerlink" title="&#x56DB;&#x6B21;&#x6325;&#x624B;"></a>&#x56DB;&#x6B21;&#x6325;&#x624B;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是TIME-WAIT"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;TIME-WAIT" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;TIME_WAIT"></a>&#x4EC0;&#x4E48;&#x662F;TIME_WAIT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么有TIME-WAIT"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x4E3A;&#x4EC0;&#x4E48;&#x6709;TIME-WAIT" class="headerlink" title="&#x4E3A;&#x4EC0;&#x4E48;&#x6709;TIME_WAIT"></a>&#x4E3A;&#x4EC0;&#x4E48;&#x6709;TIME_WAIT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-可靠地实现TCP全双工连接的可靠终止"><span class="nav-number">4.1.</span> <span class="nav-text"><a href="#1-&#x53EF;&#x9760;&#x5730;&#x5B9E;&#x73B0;TCP&#x5168;&#x53CC;&#x5DE5;&#x8FDE;&#x63A5;&#x7684;&#x53EF;&#x9760;&#x7EC8;&#x6B62;" class="headerlink" title="1. &#x53EF;&#x9760;&#x5730;&#x5B9E;&#x73B0;TCP&#x5168;&#x53CC;&#x5DE5;&#x8FDE;&#x63A5;&#x7684;&#x53EF;&#x9760;&#x7EC8;&#x6B62;"></a>1. &#x53EF;&#x9760;&#x5730;&#x5B9E;&#x73B0;TCP&#x5168;&#x53CC;&#x5DE5;&#x8FDE;&#x63A5;&#x7684;&#x53EF;&#x9760;&#x7EC8;&#x6B62;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-保证此次连接的重复数据段从网络中消失"><span class="nav-number">4.2.</span> <span class="nav-text"><a href="#2-&#x4FDD;&#x8BC1;&#x6B64;&#x6B21;&#x8FDE;&#x63A5;&#x7684;&#x91CD;&#x590D;&#x6570;&#x636E;&#x6BB5;&#x4ECE;&#x7F51;&#x7EDC;&#x4E2D;&#x6D88;&#x5931;" class="headerlink" title="2. &#x4FDD;&#x8BC1;&#x6B64;&#x6B21;&#x8FDE;&#x63A5;&#x7684;&#x91CD;&#x590D;&#x6570;&#x636E;&#x6BB5;&#x4ECE;&#x7F51;&#x7EDC;&#x4E2D;&#x6D88;&#x5931;"></a>2. &#x4FDD;&#x8BC1;&#x6B64;&#x6B21;&#x8FDE;&#x63A5;&#x7684;&#x91CD;&#x590D;&#x6570;&#x636E;&#x6BB5;&#x4ECE;&#x7F51;&#x7EDC;&#x4E2D;&#x6D88;&#x5931;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端大量TIME-WAIT"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x670D;&#x52A1;&#x7AEF;&#x5927;&#x91CF;TIME-WAIT" class="headerlink" title="&#x670D;&#x52A1;&#x7AEF;&#x5927;&#x91CF;TIME_WAIT"></a>&#x670D;&#x52A1;&#x7AEF;&#x5927;&#x91CF;TIME_WAIT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP连接复用"><span class="nav-number">5.1.</span> <span class="nav-text"><a href="#TCP&#x8FDE;&#x63A5;&#x590D;&#x7528;" class="headerlink" title="TCP&#x8FDE;&#x63A5;&#x590D;&#x7528;"></a>TCP&#x8FDE;&#x63A5;&#x590D;&#x7528;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TIME-WAIT调优参数"><span class="nav-number">5.2.</span> <span class="nav-text"><a href="#TIME-WAIT&#x8C03;&#x4F18;&#x53C2;&#x6570;" class="headerlink" title="TIME_WAIT&#x8C03;&#x4F18;&#x53C2;&#x6570;"></a>TIME_WAIT&#x8C03;&#x4F18;&#x53C2;&#x6570;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-net-ipv4-tcp-timestamps"><span class="nav-number">5.2.1.</span> <span class="nav-text"><a href="#1-net-ipv4-tcp-timestamps" class="headerlink" title="1. net.ipv4.tcp_timestamps"></a>1. net.ipv4.tcp_timestamps</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-net-ipv4-tcp-tw-reuse"><span class="nav-number">5.2.2.</span> <span class="nav-text"><a href="#2-net-ipv4-tcp-tw-reuse" class="headerlink" title="2. net.ipv4.tcp_tw_reuse"></a>2. net.ipv4.tcp_tw_reuse</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-net-ipv4-tcp-tw-recycle"><span class="nav-number">5.2.3.</span> <span class="nav-text"><a href="#3-net-ipv4-tcp-tw-recycle" class="headerlink" title="3. net.ipv4.tcp_tw_recycle"></a>3. net.ipv4.tcp_tw_recycle</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jacoob Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
