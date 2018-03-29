@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="当你在linux上撸的时间越多，你就会linux的命令越发熟悉。这篇文章主要记录我觉得比较实用的一些命令！ top查看服务器资源实用情况！类似于windows下的资源管理器！但比资源管理器更清晰明了，可以清楚看到cpu内存等实用情况。">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux定位问题常用的命令">
+<meta property="og:url" content="http://yoursite.com/2018/03/26/Linux定位问题常用的命令/index.html">
+<meta property="og:site_name" content="勤勤恳恳">
+<meta property="og:description" content="当你在linux上撸的时间越多，你就会linux的命令越发熟悉。这篇文章主要记录我觉得比较实用的一些命令！ top查看服务器资源实用情况！类似于windows下的资源管理器！但比资源管理器更清晰明了，可以清楚看到cpu内存等实用情况。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-29T14:37:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux定位问题常用的命令">
+<meta name="twitter:description" content="当你在linux上撸的时间越多，你就会linux的命令越发熟悉。这篇文章主要记录我觉得比较实用的一些命令！ top查看服务器资源实用情况！类似于windows下的资源管理器！但比资源管理器更清晰明了，可以清楚看到cpu内存等实用情况。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/26/Linux定位问题常用的命令/"/>
+
+
+
+
+
+  <title>Linux定位问题常用的命令 | 勤勤恳恳</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">勤勤恳恳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客|撸码|生活|态度</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-自研php框架">
+          <a href="https://jacoobwang.github.io/vino/vino.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            自研php框架
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://jacoobwang.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/26/Linux定位问题常用的命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux定位问题常用的命令</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-26T16:12:30+08:00">
+                2018-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>当你在linux上撸的时间越多，你就会linux的命令越发熟悉。这篇文章主要记录我觉得比较实用的一些命令！</p>
+<h2 id="top"><a href="#top" class="headerlink" title="top"></a>top</h2><p>查看服务器资源实用情况！类似于windows下的资源管理器！但比资源管理器更清晰明了，可以清楚看到cpu内存等实用情况。<br><a id="more"></a><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">top - <span class="number">20</span>:<span class="number">03</span>:<span class="number">23</span> up <span class="number">293</span> days,  <span class="number">2</span>:<span class="number">31</span>,  <span class="number">1</span> user,  load average: <span class="number">0.74</span>, <span class="number">0.49</span>, <span class="number">0.47</span></span><br><span class="line">Tasks: <span class="number">149</span> total,   <span class="number">1</span> running, <span class="number">148</span> sleeping,   <span class="number">0</span> stopped,   <span class="number">0</span> zombie</span><br><span class="line">Cpu(s):  <span class="number">0.4</span>%us,  <span class="number">0.3</span>%sy,  <span class="number">0.0</span>%ni, <span class="number">99.0</span>%id,  <span class="number">0.2</span>%wa,  <span class="number">0.0</span>%hi,  <span class="number">0.1</span>%si,  <span class="number">0.0</span>%st</span><br><span class="line">Mem:  <span class="number">264286940</span>k total, <span class="number">183340724</span>k used, <span class="number">80946216</span>k free,  <span class="number">4196800</span>k buffers</span><br><span class="line">Swap: <span class="number">16777212</span>k total,   <span class="number">879036</span>k used, <span class="number">15898176</span>k free, <span class="number">103527728</span>k cached</span><br><span class="line"></span><br><span class="line">   PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</span><br><span class="line"> <span class="number">12765</span> root      <span class="number">20</span>   <span class="number">0</span>  <span class="number">827</span>m <span class="number">6932</span> <span class="number">2716</span> S  <span class="number">0.7</span>  <span class="number">0.0</span>   <span class="number">1573</span>:<span class="number">07</span> pp-minitor-dock</span><br><span class="line"><span class="number">471931</span> root      <span class="number">20</span>   <span class="number">0</span> <span class="number">6344</span>m <span class="number">3.1</span>g <span class="number">6440</span> S  <span class="number">0.7</span>  <span class="number">1.2</span>   <span class="number">1169</span>:<span class="number">49</span> mongod</span><br><span class="line">   <span class="number">128</span> admin     <span class="number">20</span>   <span class="number">0</span> <span class="number">5399</span>m <span class="number">180</span>m <span class="number">1984</span> S  <span class="number">0.3</span>  <span class="number">0.1</span> <span class="number">109</span>:<span class="number">28.26</span> java</span><br><span class="line">   <span class="number">483</span> root      <span class="number">20</span>   <span class="number">0</span>  <span class="number">195</span>m <span class="number">1596</span>  <span class="number">696</span> S  <span class="number">0.3</span>  <span class="number">0.0</span> <span class="number">206</span>:<span class="number">20.33</span> snmpd</span><br><span class="line"><span class="number">126893</span> boss      <span class="number">20</span>   <span class="number">0</span> <span class="number">1130</span>m  <span class="number">48</span>m  <span class="number">13</span>m S  <span class="number">0.3</span>  <span class="number">0.0</span>   <span class="number">1</span>:<span class="number">11.40</span> node /<span class="keyword">export</span>/Ap</span><br><span class="line"><span class="number">301447</span> root      <span class="number">20</span>   <span class="number">0</span>  <span class="number">908</span>m  <span class="number">21</span>m <span class="number">2316</span> S  <span class="number">0.3</span>  <span class="number">0.0</span>  <span class="number">21</span>:<span class="number">43.61</span> node</span><br><span class="line"><span class="number">320232</span> root      <span class="number">20</span>   <span class="number">0</span>  <span class="number">913</span>m  <span class="number">27</span>m <span class="number">2316</span> S  <span class="number">0.3</span>  <span class="number">0.0</span>  <span class="number">21</span>:<span class="number">43.08</span> node</span><br><span class="line"><span class="number">346322</span> root      <span class="number">20</span>   <span class="number">0</span>  <span class="number">912</span>m  <span class="number">28</span>m <span class="number">2316</span> S  <span class="number">0.3</span>  <span class="number">0.0</span>  <span class="number">21</span>:<span class="number">22.86</span> node</span><br><span class="line"><span class="number">359163</span> root      <span class="number">20</span>   <span class="number">0</span>  <span class="number">906</span>m  <span class="number">20</span>m <span class="number">2316</span> S  <span class="number">0.3</span>  <span class="number">0.0</span>  <span class="number">21</span>:<span class="number">38.20</span> node</span><br></pre></td></tr></table></figure></p>
+<p>上面是我在某台机器上执行top时的部分输出。简单介绍下：</p>
+<ol>
+<li>20:03:23 当前系统时间</li>
+<li>up 293 days,  2:31 运行的时长</li>
+<li>1 user 当前有1个用户登录</li>
+<li>load average: 0.74, 0.49, 0.47 负载情况:1分钟 5分钟 15分钟</li>
+<li>Tasks 系统有149个进程 1个正在运行 148个在休眠 0个stopped 0个zombie（僵尸进程）</li>
+<li><p>Cpu 系统cpu使用情况</p>
+<p> | 指标 | 释义 |<br> | ——| —— |<br> | us | 用户空间占用cpu比例 |<br> | sy | 内核空间占用cpu比例 |<br> | ni | 改变过优先级的进程占用cpu比例 |<br> | id | 空闲cpu比例 |<br> | wa | IO等待占用cpu比例 |<br> | hi | 硬中断占用cpu |<br> | si | 软中断占用cpu |</p>
+</li>
+<li>Mem 系统内存使用情况：total 物理内存总量；used 使用中的内存；free 未使用内存总量;buffers 缓存的内存总量。</li>
+<li>Swap 交换分区信息：total 交互去总量；used 使用的交换区；free 未使用的交换区；cached 缓存的交换区总量。</li>
+<li>接下来就是各个进程的一些情况，比较简单，这里就不说了。</li>
+</ol>
+<h4 id="top-命令小技巧"><a href="#top-命令小技巧" class="headerlink" title="top 命令小技巧"></a>top 命令小技巧</h4><ul>
+<li>1(数字1)：列出所有的逻辑CPU负载情况</li>
+<li>z: 高亮显示</li>
+<li>P: 按cpuz占用高低排序</li>
+<li>M: 按内存占用高低排序</li>
+<li>shift &lt; : 向下翻页</li>
+<li>shift &gt; : 向上翻页</li>
+<li>c: <font color="#FF0000">显示进程命令的全路径与参数 （这个非常有用，帮助我们找到一些僵尸进程或者cpu过高的进程信息）</font></li>
+<li>H: <font color="#FF0000">H:显示线程，默认只显示进程</font></li>
+</ul>
+<h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h2><ol>
+<li><p>netstat -tnl 列出所有正在被监听的tcp端口。任何网络服务的后台进程都会打开一个端口，用于监听接入的请求。这些正在监听的套接字也和连接的套接字一样，也能被 netstat 列出来。</p>
+</li>
+<li><p>netstat -unl 列出所有正在被监听的udp端口。</p>
+</li>
+<li><p>netstat -an|grep xxxx 查看xxx端口是否被占用。</p>
+</li>
+<li><p>netstat -p 显示进程名称和pid。</p>
+</li>
+<li><p>netstat -ant |grep “:80”|awk ‘{print $5}’|awk -F: ‘{print $1}’|sort|uniq -c|sort -nr|head -20 查看连接某服务端口最多的的IP地址</p>
+</li>
+<li><p>netstat -ant|grep -i “TIME_WAIT”|wc -l 查看Tcp状态TIME_WAIT的数量</p>
+</li>
+<li><p>netstat -ant | grep -e 127.0.0.1 -e 0.0.0.0 -e ::: -v | awk ‘/^tcp/ {++state[$NF]} END {for(i in state) print i,”\t”,state[i]}’ TCP各种状态列表</p>
+</li>
+</ol>
+<h2 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h2><p>它可以打印所有经过网络接口的数据包的头信息，也可以使用-w选项将数据包保存到文件中，方便以后分析。</p>
+<ol>
+<li><p>tcpdump -i eth1 查看eth1网卡的数据包，如果不指定网卡，默认监视第一个网络接口，一般是eth0。</p>
+</li>
+<li><p>tcpdump host 10.184.89.19 截获所有10.184.89.19 的主机收到的和发出的所有的数据包。</p>
+</li>
+<li><p><font color="#FF0000">tcpdump -i eth1 -X -s 0 -c 10 host 10.184.89.19 and tcp port 3800 -w /tmp/tcp.cap 将3800端口上收到的数据包写入到tcp.cap文件中</font>。</p>
+<ul>
+<li>s 0 如果不设置默认将会是68字节，需要注意的是, 采用长的抓取长度(nt: snaplen比较大), 会增加包的处理时间, 并且会减少tcpdump 可缓存的数据包的数量， 从而会导致数据包的丢失. 所以, 在能抓取我们想要的包的前提下, 抓取长度越小越好.把snaplen 设置为0 意味着让tcpdump自动选择合适的长度来抓取数据包。</li>
+<li>c 10 指定包的个数，这里是抓取10个数据包后自动退出监视</li>
+<li>X 当分析和打印时, tcpdump 会打印每个包的头部数据, 同时会以16进制和ASCII码形式打印出每个包的数据</li>
+<li>w 写入的文件</li>
+<li>host 10.184.89.19 and tcp port 3800 指定监听的主机和端口</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/24/Linux用户与用户组/" rel="next" title="Linux用户与用户组">
+                <i class="fa fa-chevron-left"></i> Linux用户与用户组
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/29/MongoDb关于stats的使用/" rel="prev" title="MongoDb关于stats的使用">
+                MongoDb关于stats的使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/11434315"
+                alt="Jacoob Wang" />
+            
+              <p class="site-author-name" itemprop="name">Jacoob Wang</p>
+              <p class="site-description motion-element" itemprop="description">业精于勤荒于嬉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/jacoobwang" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:531532957@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#top"><span class="nav-number">1.</span> <span class="nav-text"><a href="#top" class="headerlink" title="top"></a>top</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#top-命令小技巧"><span class="nav-number">1.0.1.</span> <span class="nav-text"><a href="#top-&#x547D;&#x4EE4;&#x5C0F;&#x6280;&#x5DE7;" class="headerlink" title="top &#x547D;&#x4EE4;&#x5C0F;&#x6280;&#x5DE7;"></a>top &#x547D;&#x4EE4;&#x5C0F;&#x6280;&#x5DE7;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#netstat"><span class="nav-number">2.</span> <span class="nav-text"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tcpdump"><span class="nav-number">3.</span> <span class="nav-text"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jacoob Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
