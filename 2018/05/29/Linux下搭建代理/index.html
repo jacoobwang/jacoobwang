@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。 一、在可访问外网机器上搭建ss5代理服务 下载，编译安装 Socks5  1234567到此下载 http: //sourceforge.net/projects/ss5/files/    wget - c http: //down">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下搭建代理">
+<meta property="og:url" content="http://yoursite.com/2018/05/29/Linux下搭建代理/index.html">
+<meta property="og:site_name" content="勤勤恳恳">
+<meta property="og:description" content="公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。 一、在可访问外网机器上搭建ss5代理服务 下载，编译安装 Socks5  1234567到此下载 http: //sourceforge.net/projects/ss5/files/    wget - c http: //down">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-30T18:32:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux下搭建代理">
+<meta name="twitter:description" content="公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。 一、在可访问外网机器上搭建ss5代理服务 下载，编译安装 Socks5  1234567到此下载 http: //sourceforge.net/projects/ss5/files/    wget - c http: //down">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/29/Linux下搭建代理/"/>
+
+
+
+
+
+  <title>Linux下搭建代理 | 勤勤恳恳</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">勤勤恳恳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客|撸码|生活|态度</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-自研php框架">
+          <a href="https://jacoobwang.github.io/vino/vino.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            自研php框架
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://jacoobwang.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/29/Linux下搭建代理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux下搭建代理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-29T20:12:30+08:00">
+                2018-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。</p>
+<h2 id="一、在可访问外网机器上搭建ss5代理服务"><a href="#一、在可访问外网机器上搭建ss5代理服务" class="headerlink" title="一、在可访问外网机器上搭建ss5代理服务"></a>一、在可访问外网机器上搭建ss5代理服务</h2><ol>
+<li><p>下载，编译安装 Socks5 </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">到此下载 http: <span class="comment">//sourceforge.net/projects/ss5/files/</span></span><br><span class="line">    wget - c http: <span class="comment">//downloads.sourceforge.net/project/ss5/ss5/3.6.4-3/ss5-3.6.4-3.tar.gz</span></span><br><span class="line">    tar zxvf ss5 - <span class="number">3.6</span> <span class="number">.4</span> - <span class="number">3.</span> tar.gz</span><br><span class="line">cd ss5 - <span class="number">3.6</span> <span class="number">.4</span></span><br><span class="line">    . / configure <span class="comment">//notes:(默认是1080端口，如果想改端口的话，./configure –with-defaultport=10800</span></span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动ss5服务</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d / ss5 start</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加 SS5 用户<br>ss5 默认使用1080端口，并允许任何人使用。<br>我们可以修改 /etc/opt/ss5/ss5.conf 中的</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line">SHost SPort Authentication#</span><br><span class="line">auth <span class="number">0.0</span> <span class="number">.0</span> <span class="number">.0</span> / <span class="number">0</span> - -</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>为<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line">SHost SPort Authentication#</span><br><span class="line">auth <span class="number">0.0</span> <span class="number">.0</span> <span class="number">.0</span> / <span class="number">0</span> - u</span><br></pre></td></tr></table></figure></p>
+<p>在 /etc/opt/ss5/ss5.passwd 中添加 用户名和密码如：<br>test test</p>
+<ol>
+<li>重启服务<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d / ss5 restart</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="二、在idc机器上安装ProxyChains-NG实现终端下任意应用代理"><a href="#二、在idc机器上安装ProxyChains-NG实现终端下任意应用代理" class="headerlink" title="二、在idc机器上安装ProxyChains-NG实现终端下任意应用代理"></a>二、在idc机器上安装ProxyChains-NG实现终端下任意应用代理</h2><h3 id="proxychains-ng-介绍"><a href="#proxychains-ng-介绍" class="headerlink" title="proxychains-ng 介绍"></a>proxychains-ng 介绍</h3><p>proxychains-ng是proxychains的加强版，主要有以下功能和不足：</p>
+<ol>
+<li>支持http/https/socks4/socks5</li>
+<li>支持认证</li>
+<li>远端dns查询</li>
+<li>多种代理模式</li>
+<li>不支持udp/icmp转发</li>
+<li>少部分程序和在后台运行的可能无法代理</li>
+</ol>
+<h3 id="proxychains-ng-原理"><a href="#proxychains-ng-原理" class="headerlink" title="proxychains-ng 原理"></a>proxychains-ng 原理</h3><p>简单的说就是这个程序 Hook 了 sockets 相关的操作，让普通程序的 sockets 数据走 SOCKS/HTTP 代理。</p>
+<p>其核心就是利用了 LD_PRELOAD 这个环境变量（Mac 上是 DYLD_INSERT_LIBRARIES）。</p>
+<p>在 Unix 系统中，如果设置了 LD_PRELOAD 环境变量，那么在程序运行时，动态链接器会先加载该环境变量所指定的动态库。也就是说，这个动态库的加载优先于任何其它的库，包括 libc。</p>
+<p>ProxyChains 创建了一个叫 libproxychains4.so（Mac 上是 libproxychains4.dylib）的动态库。里面重写了 connect、close 以及 sendto 等与 socket 相关的函数，通过这些函数发出的数据将会走代理，详细代码可以参考 libproxychains.c。</p>
+<p>在主程序里，它会读取配置文件，查找 libproxychains4 所在位置，把这些信息存入环境变量后执行子程序。这样子程序里对 socket 相关的函数调用就会被 Hook 了，对子程序来说，跟代理相关的东西都是透明的。</p>
+<h3 id="安装-proxychains-ng"><a href="#安装-proxychains-ng" class="headerlink" title="安装 proxychains-ng"></a>安装 proxychains-ng</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone https:<span class="comment">//github.com/rofl0r/proxychains-ng</span></span><br><span class="line">. / configure--prefix = <span class="regexp">/usr --sysconfdir=/</span>etc</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line">make install - config(安装proxychains.conf配置文件)</span><br></pre></td></tr></table></figure>
+<h3 id="配置-proxychains-ng"><a href="#配置-proxychains-ng" class="headerlink" title="配置 proxychains-ng"></a>配置 proxychains-ng</h3><p>proxychains-ng默认配置文件名为proxychains.conf。通过源代码编译安装的默认为/etc/proxychains.conf。</p>
+<p>proxychains-ng的配置非常简单，只需将代理加入[ProxyList]中即可。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ vi proxychains.conf</span><br><span class="line"></span><br><span class="line">quiet_mode</span><br><span class="line">dynamic_chain</span><br><span class="line">chain_len = 1# round_robin_chain和random_chain使用</span><br><span class="line">proxy_dns</span><br><span class="line">remote_dns_subnet <span class="number">224</span></span><br><span class="line">tcp_read_time_out <span class="number">15000</span></span><br><span class="line">tcp_connect_time_out <span class="number">8000</span></span><br><span class="line">localnet <span class="number">127.0</span> <span class="number">.0</span> <span class="number">.0</span> / <span class="number">255.0</span> <span class="number">.0</span> <span class="number">.0</span></span><br><span class="line">localnet <span class="number">10.0</span> <span class="number">.0</span> <span class="number">.0</span> / <span class="number">255.0</span> <span class="number">.0</span> <span class="number">.0</span></span><br><span class="line">localnet <span class="number">172.16</span> <span class="number">.0</span> <span class="number">.0</span> / <span class="number">255.240</span> <span class="number">.0</span> <span class="number">.0</span></span><br><span class="line">localnet <span class="number">192.168</span> <span class="number">.0</span> <span class="number">.0</span> / <span class="number">255.255</span> <span class="number">.0</span> <span class="number">.0</span></span><br><span class="line"></span><br><span class="line">[ProxyList]</span><br><span class="line">socks5 <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="number">1080</span> user password</span><br></pre></td></tr></table></figure>
+<p>通常情况下，我们只需要加入这一句 socks5 127.0.0.1 1080 user password</p>
+<h3 id="proxychains-ng-使用"><a href="#proxychains-ng-使用" class="headerlink" title="proxychains-ng 使用"></a>proxychains-ng 使用</h3><p>proxychains-ng用法非常简单，使用格式如下:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ proxychains4 程序 参数</span><br></pre></td></tr></table></figure></p>
+<h3 id="proxychains-ng-测试"><a href="#proxychains-ng-测试" class="headerlink" title="proxychains-ng 测试"></a>proxychains-ng 测试</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 curl baidu.com</span><br></pre></td></tr></table></figure>
+<h3 id="通过代理SHELL实现全局代理"><a href="#通过代理SHELL实现全局代理" class="headerlink" title="通过代理SHELL实现全局代理"></a>通过代理SHELL实现全局代理</h3><p>如果你还是觉得每次使用都要输入proxychains4或其别名，比较麻烦。你还可以用proxychains-ng代理一个shell，在shell中执行的命令就会自动使用代理了。</p>
+<ol>
+<li>proxychains-ng直接调用SHELL</li>
+</ol>
+<p>BASH<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 - q / bin / bash</span><br></pre></td></tr></table></figure></p>
+<p>ZSH<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 - q / bin / zsh</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/01/谷歌html-css规范/" rel="next" title="谷歌Html/css规范缩减版">
+                <i class="fa fa-chevron-left"></i> 谷歌Html/css规范缩减版
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/11434315"
+                alt="Jacoob Wang" />
+            
+              <p class="site-author-name" itemprop="name">Jacoob Wang</p>
+              <p class="site-description motion-element" itemprop="description">业精于勤荒于嬉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/jacoobwang" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:531532957@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、在可访问外网机器上搭建ss5代理服务"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4E00;&#x3001;&#x5728;&#x53EF;&#x8BBF;&#x95EE;&#x5916;&#x7F51;&#x673A;&#x5668;&#x4E0A;&#x642D;&#x5EFA;ss5&#x4EE3;&#x7406;&#x670D;&#x52A1;" class="headerlink" title="&#x4E00;&#x3001;&#x5728;&#x53EF;&#x8BBF;&#x95EE;&#x5916;&#x7F51;&#x673A;&#x5668;&#x4E0A;&#x642D;&#x5EFA;ss5&#x4EE3;&#x7406;&#x670D;&#x52A1;"></a>&#x4E00;&#x3001;&#x5728;&#x53EF;&#x8BBF;&#x95EE;&#x5916;&#x7F51;&#x673A;&#x5668;&#x4E0A;&#x642D;&#x5EFA;ss5&#x4EE3;&#x7406;&#x670D;&#x52A1;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、在idc机器上安装ProxyChains-NG实现终端下任意应用代理"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x4E8C;&#x3001;&#x5728;idc&#x673A;&#x5668;&#x4E0A;&#x5B89;&#x88C5;ProxyChains-NG&#x5B9E;&#x73B0;&#x7EC8;&#x7AEF;&#x4E0B;&#x4EFB;&#x610F;&#x5E94;&#x7528;&#x4EE3;&#x7406;" class="headerlink" title="&#x4E8C;&#x3001;&#x5728;idc&#x673A;&#x5668;&#x4E0A;&#x5B89;&#x88C5;ProxyChains-NG&#x5B9E;&#x73B0;&#x7EC8;&#x7AEF;&#x4E0B;&#x4EFB;&#x610F;&#x5E94;&#x7528;&#x4EE3;&#x7406;"></a>&#x4E8C;&#x3001;&#x5728;idc&#x673A;&#x5668;&#x4E0A;&#x5B89;&#x88C5;ProxyChains-NG&#x5B9E;&#x73B0;&#x7EC8;&#x7AEF;&#x4E0B;&#x4EFB;&#x610F;&#x5E94;&#x7528;&#x4EE3;&#x7406;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#proxychains-ng-介绍"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#proxychains-ng-&#x4ECB;&#x7ECD;" class="headerlink" title="proxychains-ng &#x4ECB;&#x7ECD;"></a>proxychains-ng &#x4ECB;&#x7ECD;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proxychains-ng-原理"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#proxychains-ng-&#x539F;&#x7406;" class="headerlink" title="proxychains-ng &#x539F;&#x7406;"></a>proxychains-ng &#x539F;&#x7406;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-proxychains-ng"><span class="nav-number">2.3.</span> <span class="nav-text"><a href="#&#x5B89;&#x88C5;-proxychains-ng" class="headerlink" title="&#x5B89;&#x88C5; proxychains-ng"></a>&#x5B89;&#x88C5; proxychains-ng</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-proxychains-ng"><span class="nav-number">2.4.</span> <span class="nav-text"><a href="#&#x914D;&#x7F6E;-proxychains-ng" class="headerlink" title="&#x914D;&#x7F6E; proxychains-ng"></a>&#x914D;&#x7F6E; proxychains-ng</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proxychains-ng-使用"><span class="nav-number">2.5.</span> <span class="nav-text"><a href="#proxychains-ng-&#x4F7F;&#x7528;" class="headerlink" title="proxychains-ng &#x4F7F;&#x7528;"></a>proxychains-ng &#x4F7F;&#x7528;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proxychains-ng-测试"><span class="nav-number">2.6.</span> <span class="nav-text"><a href="#proxychains-ng-&#x6D4B;&#x8BD5;" class="headerlink" title="proxychains-ng &#x6D4B;&#x8BD5;"></a>proxychains-ng &#x6D4B;&#x8BD5;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过代理SHELL实现全局代理"><span class="nav-number">2.7.</span> <span class="nav-text"><a href="#&#x901A;&#x8FC7;&#x4EE3;&#x7406;SHELL&#x5B9E;&#x73B0;&#x5168;&#x5C40;&#x4EE3;&#x7406;" class="headerlink" title="&#x901A;&#x8FC7;&#x4EE3;&#x7406;SHELL&#x5B9E;&#x73B0;&#x5168;&#x5C40;&#x4EE3;&#x7406;"></a>&#x901A;&#x8FC7;&#x4EE3;&#x7406;SHELL&#x5B9E;&#x73B0;&#x5168;&#x5C40;&#x4EE3;&#x7406;</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jacoob Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
