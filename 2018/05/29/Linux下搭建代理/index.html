@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。 一、在可访问外网机器上搭建ss5代理服务 下载，编译安装 Socks5  1234567到此下载 http: //sourceforge.net/projects/ss5/files/    wget - c http: //down">
+<meta name="description" content="公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。 一、在可访问外网机器上搭建ss5代理服务 下载，编译安装 Socks5 1234567到此下载 http: //sourceforge.net/projects/ss5/files/    wget - c http: //downl">
 <meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux下搭建代理">
 <meta property="og:url" content="http://yoursite.com/2018/05/29/Linux下搭建代理/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。 一、在可访问外网机器上搭建ss5代理服务 下载，编译安装 Socks5  1234567到此下载 http: //sourceforge.net/projects/ss5/files/    wget - c http: //down">
+<meta property="og:description" content="公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。 一、在可访问外网机器上搭建ss5代理服务 下载，编译安装 Socks5 1234567到此下载 http: //sourceforge.net/projects/ss5/files/    wget - c http: //downl">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-30T18:32:17.000Z">
+<meta property="og:updated_time" content="2018-05-30T18:34:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux下搭建代理">
-<meta name="twitter:description" content="公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。 一、在可访问外网机器上搭建ss5代理服务 下载，编译安装 Socks5  1234567到此下载 http: //sourceforge.net/projects/ss5/files/    wget - c http: //down">
+<meta name="twitter:description" content="公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。 一、在可访问外网机器上搭建ss5代理服务 下载，编译安装 Socks5 1234567到此下载 http: //sourceforge.net/projects/ss5/files/    wget - c http: //downl">
 
 
 
@@ -322,9 +322,11 @@
       
         <p>公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。</p>
 <h2 id="一、在可访问外网机器上搭建ss5代理服务"><a href="#一、在可访问外网机器上搭建ss5代理服务" class="headerlink" title="一、在可访问外网机器上搭建ss5代理服务"></a>一、在可访问外网机器上搭建ss5代理服务</h2><ol>
-<li><p>下载，编译安装 Socks5 </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">到此下载 http: <span class="comment">//sourceforge.net/projects/ss5/files/</span></span><br><span class="line">    wget - c http: <span class="comment">//downloads.sourceforge.net/project/ss5/ss5/3.6.4-3/ss5-3.6.4-3.tar.gz</span></span><br><span class="line">    tar zxvf ss5 - <span class="number">3.6</span> <span class="number">.4</span> - <span class="number">3.</span> tar.gz</span><br><span class="line">cd ss5 - <span class="number">3.6</span> <span class="number">.4</span></span><br><span class="line">    . / configure <span class="comment">//notes:(默认是1080端口，如果想改端口的话，./configure –with-defaultport=10800</span></span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<li>下载，编译安装 Socks5 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">到此下载 http: <span class="comment">//sourceforge.net/projects/ss5/files/</span></span><br><span class="line">    wget - c http: <span class="comment">//downloads.sourceforge.net/project/ss5/ss5/3.6.4-3/ss5-3.6.4-3.tar.gz</span></span><br><span class="line">    tar zxvf ss5 - <span class="number">3.6</span> <span class="number">.4</span> - <span class="number">3.</span> tar.gz</span><br><span class="line">cd ss5 - <span class="number">3.6</span> <span class="number">.4</span></span><br><span class="line">    . / configure <span class="comment">//notes:(默认是1080端口，如果想改端口的话，./configure –with-defaultport=10800</span></span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
 </li>
+</ol>
+<a id="more"></a>
+<ol>
 <li><p>启动ss5服务</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d / ss5 start</span><br></pre></td></tr></table></figure>
 </li>

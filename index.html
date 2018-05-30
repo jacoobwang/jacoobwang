@@ -322,54 +322,18 @@
 
       
         
-          
-            <p>公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。</p>
+          <p>公司idc的机器都是没有外网权限的，一般情况下不觉得有什么问题，但当需要安装一些依赖的工具时候就会特别麻烦。本文讲述如何搭建代理服务器，让idc机器穿透到外网。</p>
 <h2 id="一、在可访问外网机器上搭建ss5代理服务"><a href="#一、在可访问外网机器上搭建ss5代理服务" class="headerlink" title="一、在可访问外网机器上搭建ss5代理服务"></a>一、在可访问外网机器上搭建ss5代理服务</h2><ol>
-<li><p>下载，编译安装 Socks5 </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">到此下载 http: <span class="comment">//sourceforge.net/projects/ss5/files/</span></span><br><span class="line">    wget - c http: <span class="comment">//downloads.sourceforge.net/project/ss5/ss5/3.6.4-3/ss5-3.6.4-3.tar.gz</span></span><br><span class="line">    tar zxvf ss5 - <span class="number">3.6</span> <span class="number">.4</span> - <span class="number">3.</span> tar.gz</span><br><span class="line">cd ss5 - <span class="number">3.6</span> <span class="number">.4</span></span><br><span class="line">    . / configure <span class="comment">//notes:(默认是1080端口，如果想改端口的话，./configure –with-defaultport=10800</span></span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>启动ss5服务</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d / ss5 start</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>添加 SS5 用户<br>ss5 默认使用1080端口，并允许任何人使用。<br>我们可以修改 /etc/opt/ss5/ss5.conf 中的</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line">SHost SPort Authentication#</span><br><span class="line">auth <span class="number">0.0</span> <span class="number">.0</span> <span class="number">.0</span> / <span class="number">0</span> - -</span><br></pre></td></tr></table></figure>
+<li>下载，编译安装 Socks5 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">到此下载 http: <span class="comment">//sourceforge.net/projects/ss5/files/</span></span><br><span class="line">    wget - c http: <span class="comment">//downloads.sourceforge.net/project/ss5/ss5/3.6.4-3/ss5-3.6.4-3.tar.gz</span></span><br><span class="line">    tar zxvf ss5 - <span class="number">3.6</span> <span class="number">.4</span> - <span class="number">3.</span> tar.gz</span><br><span class="line">cd ss5 - <span class="number">3.6</span> <span class="number">.4</span></span><br><span class="line">    . / configure <span class="comment">//notes:(默认是1080端口，如果想改端口的话，./configure –with-defaultport=10800</span></span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>为<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line">SHost SPort Authentication#</span><br><span class="line">auth <span class="number">0.0</span> <span class="number">.0</span> <span class="number">.0</span> / <span class="number">0</span> - u</span><br></pre></td></tr></table></figure></p>
-<p>在 /etc/opt/ss5/ss5.passwd 中添加 用户名和密码如：<br>test test</p>
-<ol>
-<li>重启服务<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d / ss5 restart</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="二、在idc机器上安装ProxyChains-NG实现终端下任意应用代理"><a href="#二、在idc机器上安装ProxyChains-NG实现终端下任意应用代理" class="headerlink" title="二、在idc机器上安装ProxyChains-NG实现终端下任意应用代理"></a>二、在idc机器上安装ProxyChains-NG实现终端下任意应用代理</h2><h3 id="proxychains-ng-介绍"><a href="#proxychains-ng-介绍" class="headerlink" title="proxychains-ng 介绍"></a>proxychains-ng 介绍</h3><p>proxychains-ng是proxychains的加强版，主要有以下功能和不足：</p>
-<ol>
-<li>支持http/https/socks4/socks5</li>
-<li>支持认证</li>
-<li>远端dns查询</li>
-<li>多种代理模式</li>
-<li>不支持udp/icmp转发</li>
-<li>少部分程序和在后台运行的可能无法代理</li>
-</ol>
-<h3 id="proxychains-ng-原理"><a href="#proxychains-ng-原理" class="headerlink" title="proxychains-ng 原理"></a>proxychains-ng 原理</h3><p>简单的说就是这个程序 Hook 了 sockets 相关的操作，让普通程序的 sockets 数据走 SOCKS/HTTP 代理。</p>
-<p>其核心就是利用了 LD_PRELOAD 这个环境变量（Mac 上是 DYLD_INSERT_LIBRARIES）。</p>
-<p>在 Unix 系统中，如果设置了 LD_PRELOAD 环境变量，那么在程序运行时，动态链接器会先加载该环境变量所指定的动态库。也就是说，这个动态库的加载优先于任何其它的库，包括 libc。</p>
-<p>ProxyChains 创建了一个叫 libproxychains4.so（Mac 上是 libproxychains4.dylib）的动态库。里面重写了 connect、close 以及 sendto 等与 socket 相关的函数，通过这些函数发出的数据将会走代理，详细代码可以参考 libproxychains.c。</p>
-<p>在主程序里，它会读取配置文件，查找 libproxychains4 所在位置，把这些信息存入环境变量后执行子程序。这样子程序里对 socket 相关的函数调用就会被 Hook 了，对子程序来说，跟代理相关的东西都是透明的。</p>
-<h3 id="安装-proxychains-ng"><a href="#安装-proxychains-ng" class="headerlink" title="安装 proxychains-ng"></a>安装 proxychains-ng</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone https:<span class="comment">//github.com/rofl0r/proxychains-ng</span></span><br><span class="line">. / configure--prefix = <span class="regexp">/usr --sysconfdir=/</span>etc</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line">make install - config(安装proxychains.conf配置文件)</span><br></pre></td></tr></table></figure>
-<h3 id="配置-proxychains-ng"><a href="#配置-proxychains-ng" class="headerlink" title="配置 proxychains-ng"></a>配置 proxychains-ng</h3><p>proxychains-ng默认配置文件名为proxychains.conf。通过源代码编译安装的默认为/etc/proxychains.conf。</p>
-<p>proxychains-ng的配置非常简单，只需将代理加入[ProxyList]中即可。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ vi proxychains.conf</span><br><span class="line"></span><br><span class="line">quiet_mode</span><br><span class="line">dynamic_chain</span><br><span class="line">chain_len = 1# round_robin_chain和random_chain使用</span><br><span class="line">proxy_dns</span><br><span class="line">remote_dns_subnet <span class="number">224</span></span><br><span class="line">tcp_read_time_out <span class="number">15000</span></span><br><span class="line">tcp_connect_time_out <span class="number">8000</span></span><br><span class="line">localnet <span class="number">127.0</span> <span class="number">.0</span> <span class="number">.0</span> / <span class="number">255.0</span> <span class="number">.0</span> <span class="number">.0</span></span><br><span class="line">localnet <span class="number">10.0</span> <span class="number">.0</span> <span class="number">.0</span> / <span class="number">255.0</span> <span class="number">.0</span> <span class="number">.0</span></span><br><span class="line">localnet <span class="number">172.16</span> <span class="number">.0</span> <span class="number">.0</span> / <span class="number">255.240</span> <span class="number">.0</span> <span class="number">.0</span></span><br><span class="line">localnet <span class="number">192.168</span> <span class="number">.0</span> <span class="number">.0</span> / <span class="number">255.255</span> <span class="number">.0</span> <span class="number">.0</span></span><br><span class="line"></span><br><span class="line">[ProxyList]</span><br><span class="line">socks5 <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="number">1080</span> user password</span><br></pre></td></tr></table></figure>
-<p>通常情况下，我们只需要加入这一句 socks5 127.0.0.1 1080 user password</p>
-<h3 id="proxychains-ng-使用"><a href="#proxychains-ng-使用" class="headerlink" title="proxychains-ng 使用"></a>proxychains-ng 使用</h3><p>proxychains-ng用法非常简单，使用格式如下:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ proxychains4 程序 参数</span><br></pre></td></tr></table></figure></p>
-<h3 id="proxychains-ng-测试"><a href="#proxychains-ng-测试" class="headerlink" title="proxychains-ng 测试"></a>proxychains-ng 测试</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 curl baidu.com</span><br></pre></td></tr></table></figure>
-<h3 id="通过代理SHELL实现全局代理"><a href="#通过代理SHELL实现全局代理" class="headerlink" title="通过代理SHELL实现全局代理"></a>通过代理SHELL实现全局代理</h3><p>如果你还是觉得每次使用都要输入proxychains4或其别名，比较麻烦。你还可以用proxychains-ng代理一个shell，在shell中执行的命令就会自动使用代理了。</p>
-<ol>
-<li>proxychains-ng直接调用SHELL</li>
-</ol>
-<p>BASH<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 - q / bin / bash</span><br></pre></td></tr></table></figure></p>
-<p>ZSH<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 - q / bin / zsh</span><br></pre></td></tr></table></figure></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/29/Linux下搭建代理/#espandi" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -492,7 +456,7 @@
 <li>有人推荐了一个html工具 <a href="http://www.html-tidy.org/documentation/" target="_blank" rel="noopener">tidy</a>。看了下感觉还可以，比较适合新手吧！老司机们不需要啦~
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/04/01/谷歌html-css规范/#more" rel="contents">
+            <a class="btn" href="/2018/04/01/谷歌html-css规范/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -617,7 +581,7 @@
 <h2 id="db-stats"><a href="#db-stats" class="headerlink" title="db.stats"></a>db.stats</h2><p>返回整个数据库的基本情况。可以参入一个number类型参数，它会将数据按指定的倍数去显示数据，例如 db.stats(1024) 则按kb显示数据，默认按byte显示。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/29/MongoDb关于stats的使用/#more" rel="contents">
+            <a class="btn" href="/2018/03/29/MongoDb关于stats的使用/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -742,7 +706,7 @@
 <h2 id="top"><a href="#top" class="headerlink" title="top"></a>top</h2><p>查看服务器资源实用情况！类似于windows下的资源管理器！但比资源管理器更清晰明了，可以清楚看到cpu内存等实用情况。<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/26/Linux定位问题常用的命令/#more" rel="contents">
+            <a class="btn" href="/2018/03/26/Linux定位问题常用的命令/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -867,7 +831,7 @@
 <p>用户之间执行的任务是隔离开的，互不影响，而每个用户之间不能越权访问，就像你是mongo用户那你不能管理ftp。另外系统的安全性也得到一定保证，将整台机器的所有权限随意交给一个人是危险的，更多的用户使用机器仅仅需要一部分权限而不需要整个权限。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/24/Linux用户与用户组/#more" rel="contents">
+            <a class="btn" href="/2018/03/24/Linux用户与用户组/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -991,7 +955,7 @@
           <p>一个前端人员估计很少去考虑什么是TimeWait及为什么会出现TimeWait？这好像更多属于后端人员的技能要求或者是运维人员需要掌握的！但作为一个爱学习的前端coder，我们可以花点时间研究下！<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/15/初探Timewait/#more" rel="contents">
+            <a class="btn" href="/2018/03/15/初探Timewait/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1115,7 +1079,7 @@
           <p>习惯了用IDE的童鞋，可能对VIM并不是很依赖或者很少用。但VIM其实有一些非常好用的功能，而且操作起来特别快。ok，今天要给大家分享的是VIM快速行首行尾插入！<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/12/Vim小技巧快速行尾插入/#more" rel="contents">
+            <a class="btn" href="/2018/03/12/Vim小技巧快速行尾插入/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1240,7 +1204,7 @@
 <h2 id="set-u"><a href="#set-u" class="headerlink" title="set -u"></a>set -u</h2><p>执行脚本的时候，如果遇到不存在的变量，Bash 默认忽略它。<font color="#FF0000">而在脚本顶部加上set -u，遇到不存在的变量就会报错，并停止执行。</font><br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/01/Bash中set用法初学/#more" rel="contents">
+            <a class="btn" href="/2018/03/01/Bash中set用法初学/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1366,7 +1330,7 @@
 <p>然而我们还是摸爬出一些方法来定位问题：<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/06/如何定位MongoDB查询慢问题/#more" rel="contents">
+            <a class="btn" href="/2018/02/06/如何定位MongoDB查询慢问题/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1490,7 +1454,7 @@
           <p>最近将公司的一个项目，从php5升级到php7。为什么要升级呢？主要是出于安全方面的考虑，在某些版本上存在PHP GD Graphics Library拒绝服务漏洞<a href="http://sec.jd.com/blog/archives/31748。" target="_blank" rel="noopener">http://sec.jd.com/blog/archives/31748。</a><br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/06/php5升级到7的坑/#more" rel="contents">
+            <a class="btn" href="/2018/02/06/php5升级到7的坑/#espandi" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
