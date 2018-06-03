@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Mongodb," />
+  <meta name="keywords" content="webpack," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="MongoDB 固定集合（Capped Collections）是性能出色且有着固定大小的集合，对于大小固定，我们可以想象其就像一个环形队列，当集合空间用完后，再插入的元素就会覆盖最初始的头部的元素！">
-<meta name="keywords" content="Mongodb">
+<meta name="description" content="事情起因：最近同事在服务器上编译项目的静态页面时，发现build会报错：123ERROR in ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js? type=script&amp;amp;index=0!./src/views/App.vueModule not found: Error: Can&apos;t res">
+<meta name="keywords" content="webpack">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MongoDb的固定集合capped collection">
-<meta property="og:url" content="http://yoursite.com/2018/01/09/MongoDb的固定集合capped collection/index.html">
+<meta property="og:title" content="Module not found:Error Can&#39;t resolve">
+<meta property="og:url" content="http://yoursite.com/2018/06/03/Vue在linux下编译Module not found错误/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="MongoDB 固定集合（Capped Collections）是性能出色且有着固定大小的集合，对于大小固定，我们可以想象其就像一个环形队列，当集合空间用完后，再插入的元素就会覆盖最初始的头部的元素！">
+<meta property="og:description" content="事情起因：最近同事在服务器上编译项目的静态页面时，发现build会报错：123ERROR in ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js? type=script&amp;amp;index=0!./src/views/App.vueModule not found: Error: Can&apos;t res">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-09T03:17:55.000Z">
+<meta property="og:updated_time" content="2018-06-03T04:05:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MongoDb的固定集合capped collection">
-<meta name="twitter:description" content="MongoDB 固定集合（Capped Collections）是性能出色且有着固定大小的集合，对于大小固定，我们可以想象其就像一个环形队列，当集合空间用完后，再插入的元素就会覆盖最初始的头部的元素！">
+<meta name="twitter:title" content="Module not found:Error Can&#39;t resolve">
+<meta name="twitter:description" content="事情起因：最近同事在服务器上编译项目的静态页面时，发现build会报错：123ERROR in ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js? type=script&amp;amp;index=0!./src/views/App.vueModule not found: Error: Can&apos;t res">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/09/MongoDb的固定集合capped collection/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/06/03/Vue在linux下编译Module not found错误/"/>
 
 
 
 
 
-  <title>MongoDb的固定集合capped collection | 勤勤恳恳</title>
+  <title>Module not found:Error Can't resolve | 勤勤恳恳</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/09/MongoDb的固定集合capped collection/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/03/Vue在linux下编译Module not found错误/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jacoob Wang">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MongoDb的固定集合capped collection</h1>
+          <h1 class="post-title" itemprop="name headline">Module not found:Error Can't resolve</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-09T18:12:30+08:00">
-                2018-01-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-03T10:12:30+08:00">
+                2018-06-03
               </time>
             
 
@@ -320,32 +320,27 @@
       
 
       
-        <p>MongoDB 固定集合（Capped Collections）是性能出色且有着固定大小的集合，对于大小固定，我们可以想象其就像一个环形队列，当集合空间用完后，再插入的元素就会覆盖最初始的头部的元素！<br><a id="more"></a></p>
-<h2 id="创建固定集合"><a href="#创建固定集合" class="headerlink" title="创建固定集合"></a>创建固定集合</h2><p>Mongo shell：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">db.createCollection(<span class="string">"cappedLogCollection"</span>,&#123;capped:<span class="literal">true</span>,size:10000&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># max row number</span></span><br><span class="line">db.createCollection(<span class="string">"cappedLogCollection"</span>,&#123;capped:<span class="literal">true</span>,size:10000,max:1000&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 普通collection 转化成 capped collection</span></span><br><span class="line">db.runCommand(&#123;<span class="string">"convertToCapped"</span>:<span class="string">"posts"</span>,size:10000&#125;)</span><br></pre></td></tr></table></figure></p>
-<p>创建集合的时候Max属性是可选的，文档数量限制是在容量没满的时候进行淘汰，要是满了，就根据容量限制来替换数据。</p>
-<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><h3 id="1-插入极快"><a href="#1-插入极快" class="headerlink" title="1. 插入极快"></a>1. 插入极快</h3><ul>
-<li>由于Capped collection是按照文档的插入顺序而不是使用索引确定插入位置，这样的话可以提高增添数据的效率。在没有索引的的集合中插入文档与将日志信息直接写入文件系统的速度接近。</li>
-</ul>
-<h3 id="2-自动淘汰旧记录"><a href="#2-自动淘汰旧记录" class="headerlink" title="2. 自动淘汰旧记录"></a>2. 自动淘汰旧记录</h3><ul>
-<li>如果指定的空间用完，新添加的对象将会取代集合中最旧的对象。MongoDB的操作日志文件oplog.rs就是利用Capped Collection来实现的。</li>
-</ul>
-<h3 id="3-只能插入更新，不允许删除"><a href="#3-只能插入更新，不允许删除" class="headerlink" title="3. 只能插入更新，不允许删除"></a>3. 只能插入更新，不允许删除</h3><ul>
-<li>capped collection 不允许执行remove操作，但是可以使用drop整个collection来达到删除的目的。</li>
-</ul>
-<h3 id="4-更新操作不能超过空间大小"><a href="#4-更新操作不能超过空间大小" class="headerlink" title="4. 更新操作不能超过空间大小"></a>4. 更新操作不能超过空间大小</h3><ul>
-<li>进行update某个文档的时候，如果更新的文档大小大于原来指定的空间大小则会失败。</li>
-</ul>
-<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>结合固定集合的特点，它的使用场景一般有如下几种情况：</p>
-<ol>
-<li>日志存储<ul>
-<li>利用其自动淘汰及快速插入的特性，相比写入log文件再手动维护日志归档来说，利用固定集合作为日志存储非常实用和方便。</li>
-</ul>
-</li>
-<li>数据库缓存<ul>
-<li>缓存一些对象在数据库中，比如计算出来的统计信息。这时需要在 collection 上建立索引，因为使用缓存往往是读比写多。</li>
-</ul>
+        <p>事情起因：最近同事在服务器上编译项目的静态页面时，发现build会报错：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERROR <span class="keyword">in</span> ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js? type=script&amp;index=<span class="number">0</span>!./src/views/App.vue</span><br><span class="line">Module not found: <span class="built_in">Error</span>: Can<span class="string">'t resolve '</span>./common/footer<span class="string">' in '</span>/<span class="keyword">export</span>/App/jdc-share-client/src/views <span class="string">'</span></span><br><span class="line"><span class="string">@./node_modules/babel-loader/lib!./ node_modules/vue-loader/lib/selector.js? type=script&amp;index=0!./src/views/App.vue 13:0 - 37</span></span><br></pre></td></tr></table></figure></p>
+<p>然后让我帮忙看看是什么问题。<br><a id="more"></a></p>
+<h2 id="查错过程"><a href="#查错过程" class="headerlink" title="查错过程"></a>查错过程</h2><p>第一反应应该是代码中引入路径错误了，nodejs项目使用的是import或require来引入一个模块。报错原因是模块路径错误引起的。</p>
+<p>查看代码，发现引入代码：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> footer = <span class="keyword">import</span> <span class="string">'@/common/footer'</span></span><br></pre></td></tr></table></figure></p>
+<p>该项目使用的是webpack 3来构建项目。打开webpack.base.conf.js中可以看到@已经设置为正确的别名。</p>
+<p>@路径是正确的项目路径，如果这个alias生效，那么应该能够加载到正确的js模块，在nodejs中js文件即模块。</p>
+<p>刚开始我怀疑是webpack的alias没有生效，因为我对webpack3并不是特别熟悉，所以猜想是不是alias没有生效呢？</p>
+<p>于是，先沿着这个猜想去网上找找看。也看到一堆关于alias not working的问题，在webpack的github上也有人反馈这个issue，<a href="https://github.com/webpack/webpack/issues/4160" target="_blank" rel="noopener">https://github.com/webpack/webpack/issues/4160</a> 有近70多个反馈，但出问题的场景各异。没有一个统一的fix方案，想了想觉得不对。</p>
+<p>此时同事给我发来一个链接，说可能是文件名大小写问题。因为他在本地可以正常编译，本地用的是MAC，而服务器是Linux。</p>
+<p>卧槽，Linux是严格区分大小写的呀，原因就是它了。他在common/footer目录下有一个Index.vue的文件，在MAC下是不区分大小写就可以正常build。而在Linux下，由于区分大小写，webpack在目录下没有找到index.vue 或 index.js就会报错找不到模块。</p>
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>修改Index.vue 为 index.vue，然后再编译成功了。</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><ol>
+<li>关于nodejs引入目录模块机制<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myMod = <span class="built_in">require</span>(<span class="string">'./folder'</span>)</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
+<p>Node将搜索整个folder目录，Node会假设folder为一个包并试图找到包定义文件package.json。如果folder目录里没有包含package.json文件，Node会假设默认主文件为index.js，即会加载index.js。如果index.js也不存在，那么加载将失败。</p>
+<ol>
+<li>关于文件命名</li>
+</ol>
+<p>项目在正式开发之前最好有一个文件或目录的命名约定，比如统一使用驼峰是命名，避免项目后期的一些不必要成本。</p>
+<p>规范参考：<a href="https://juejin.im/entry/56e8c0c1816dfa0051376758#" target="_blank" rel="noopener">https://juejin.im/entry/56e8c0c1816dfa0051376758#</a></p>
 
       
     </div>
@@ -363,7 +358,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Mongodb/" rel="tag"># Mongodb</a>
+            <a href="/tags/webpack/" rel="tag"># webpack</a>
           
         </div>
       
@@ -376,8 +371,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/08/MongoDb向复制集导入数据/" rel="next" title="MongoDb向复制集导入数据">
-                <i class="fa fa-chevron-left"></i> MongoDb向复制集导入数据
+              <a href="/2018/05/29/Linux下搭建代理/" rel="next" title="Linux下搭建代理">
+                <i class="fa fa-chevron-left"></i> Linux下搭建代理
               </a>
             
           </div>
@@ -385,10 +380,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/10/MongoDb读策略read concern/" rel="prev" title="MongoDb读策略read concern">
-                MongoDb读策略read concern <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -529,7 +520,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建固定集合"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x521B;&#x5EFA;&#x56FA;&#x5B9A;&#x96C6;&#x5408;" class="headerlink" title="&#x521B;&#x5EFA;&#x56FA;&#x5B9A;&#x96C6;&#x5408;"></a>&#x521B;&#x5EFA;&#x56FA;&#x5B9A;&#x96C6;&#x5408;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特性"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x7279;&#x6027;" class="headerlink" title="&#x7279;&#x6027;"></a>&#x7279;&#x6027;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-插入极快"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#1-&#x63D2;&#x5165;&#x6781;&#x5FEB;" class="headerlink" title="1. &#x63D2;&#x5165;&#x6781;&#x5FEB;"></a>1. &#x63D2;&#x5165;&#x6781;&#x5FEB;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-自动淘汰旧记录"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#2-&#x81EA;&#x52A8;&#x6DD8;&#x6C70;&#x65E7;&#x8BB0;&#x5F55;" class="headerlink" title="2. &#x81EA;&#x52A8;&#x6DD8;&#x6C70;&#x65E7;&#x8BB0;&#x5F55;"></a>2. &#x81EA;&#x52A8;&#x6DD8;&#x6C70;&#x65E7;&#x8BB0;&#x5F55;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-只能插入更新，不允许删除"><span class="nav-number">2.3.</span> <span class="nav-text"><a href="#3-&#x53EA;&#x80FD;&#x63D2;&#x5165;&#x66F4;&#x65B0;&#xFF0C;&#x4E0D;&#x5141;&#x8BB8;&#x5220;&#x9664;" class="headerlink" title="3. &#x53EA;&#x80FD;&#x63D2;&#x5165;&#x66F4;&#x65B0;&#xFF0C;&#x4E0D;&#x5141;&#x8BB8;&#x5220;&#x9664;"></a>3. &#x53EA;&#x80FD;&#x63D2;&#x5165;&#x66F4;&#x65B0;&#xFF0C;&#x4E0D;&#x5141;&#x8BB8;&#x5220;&#x9664;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-更新操作不能超过空间大小"><span class="nav-number">2.4.</span> <span class="nav-text"><a href="#4-&#x66F4;&#x65B0;&#x64CD;&#x4F5C;&#x4E0D;&#x80FD;&#x8D85;&#x8FC7;&#x7A7A;&#x95F4;&#x5927;&#x5C0F;" class="headerlink" title="4. &#x66F4;&#x65B0;&#x64CD;&#x4F5C;&#x4E0D;&#x80FD;&#x8D85;&#x8FC7;&#x7A7A;&#x95F4;&#x5927;&#x5C0F;"></a>4. &#x66F4;&#x65B0;&#x64CD;&#x4F5C;&#x4E0D;&#x80FD;&#x8D85;&#x8FC7;&#x7A7A;&#x95F4;&#x5927;&#x5C0F;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x4F7F;&#x7528;&#x573A;&#x666F;" class="headerlink" title="&#x4F7F;&#x7528;&#x573A;&#x666F;"></a>&#x4F7F;&#x7528;&#x573A;&#x666F;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#查错过程"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x67E5;&#x9519;&#x8FC7;&#x7A0B;" class="headerlink" title="&#x67E5;&#x9519;&#x8FC7;&#x7A0B;"></a>&#x67E5;&#x9519;&#x8FC7;&#x7A0B;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决办法"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x89E3;&#x51B3;&#x529E;&#x6CD5;" class="headerlink" title="&#x89E3;&#x51B3;&#x529E;&#x6CD5;"></a>&#x89E3;&#x51B3;&#x529E;&#x6CD5;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x601D;&#x8003;" class="headerlink" title="&#x601D;&#x8003;"></a>&#x601D;&#x8003;</span></a></li></ol></div>
             
 
           </div>
