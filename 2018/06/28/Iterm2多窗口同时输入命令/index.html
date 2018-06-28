@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Mongodb," />
+  <meta name="keywords" content="iTerm," />
 
 
 
@@ -79,18 +79,22 @@
 
 
 
-<meta name="description" content="MongoDB 固定集合（Capped Collections）是性能出色且有着固定大小的集合，对于大小固定，我们可以想象其就像一个环形队列，当集合空间用完后，再插入的元素就会覆盖最初始的头部的元素！">
-<meta name="keywords" content="Mongodb">
+<meta name="description" content="可能很多人都遇到过类似的问题：使用 iTerm2 时打开了多个窗口，却在改动配置后需要在每个窗口依次执行 source 指令以激活改动的配置。 其实，iTerm2 支持向多窗口（当前打开的所有窗口）同时输入相同的指令。只需要输入快捷键 ⌘(command) + ⇧(shift) + i。默认会跳出告警提示窗口：">
+<meta name="keywords" content="iTerm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MongoDb的固定集合capped collection">
-<meta property="og:url" content="http://yoursite.com/2018/01/09/MongoDb的固定集合capped collection/index.html">
+<meta property="og:title" content="Iterm2多窗口同时输入命令">
+<meta property="og:url" content="http://yoursite.com/2018/06/28/Iterm2多窗口同时输入命令/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="MongoDB 固定集合（Capped Collections）是性能出色且有着固定大小的集合，对于大小固定，我们可以想象其就像一个环形队列，当集合空间用完后，再插入的元素就会覆盖最初始的头部的元素！">
+<meta property="og:description" content="可能很多人都遇到过类似的问题：使用 iTerm2 时打开了多个窗口，却在改动配置后需要在每个窗口依次执行 source 指令以激活改动的配置。 其实，iTerm2 支持向多窗口（当前打开的所有窗口）同时输入相同的指令。只需要输入快捷键 ⌘(command) + ⇧(shift) + i。默认会跳出告警提示窗口：">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-09T03:17:55.000Z">
+<meta property="og:image" content="http://devops-club.com/storage/temp/iNOOEDBNOMqTmRodhRdKIzJn3E3RHghdHU59bgtG.png">
+<meta property="og:image" content="http://devops-club.com/storage/temp/QnBAKi5CFCcw2fBn1jZyYDPwKBOjIvks0CxBxjjz.png">
+<meta property="og:image" content="http://devops-club.com/storage/temp/njuS07EkiJdt83Gmr94Kqd7YkzZvuDLMz0IV4T8A.gif">
+<meta property="og:updated_time" content="2018-06-28T13:41:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MongoDb的固定集合capped collection">
-<meta name="twitter:description" content="MongoDB 固定集合（Capped Collections）是性能出色且有着固定大小的集合，对于大小固定，我们可以想象其就像一个环形队列，当集合空间用完后，再插入的元素就会覆盖最初始的头部的元素！">
+<meta name="twitter:title" content="Iterm2多窗口同时输入命令">
+<meta name="twitter:description" content="可能很多人都遇到过类似的问题：使用 iTerm2 时打开了多个窗口，却在改动配置后需要在每个窗口依次执行 source 指令以激活改动的配置。 其实，iTerm2 支持向多窗口（当前打开的所有窗口）同时输入相同的指令。只需要输入快捷键 ⌘(command) + ⇧(shift) + i。默认会跳出告警提示窗口：">
+<meta name="twitter:image" content="http://devops-club.com/storage/temp/iNOOEDBNOMqTmRodhRdKIzJn3E3RHghdHU59bgtG.png">
 
 
 
@@ -120,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/09/MongoDb的固定集合capped collection/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/06/28/Iterm2多窗口同时输入命令/"/>
 
 
 
 
 
-  <title>MongoDb的固定集合capped collection | 勤勤恳恳</title>
+  <title>Iterm2多窗口同时输入命令 | 勤勤恳恳</title>
   
 
 
@@ -253,7 +257,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/09/MongoDb的固定集合capped collection/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/28/Iterm2多窗口同时输入命令/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jacoob Wang">
@@ -270,7 +274,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MongoDb的固定集合capped collection</h1>
+          <h1 class="post-title" itemprop="name headline">Iterm2多窗口同时输入命令</h1>
         
 
         <div class="post-meta">
@@ -282,8 +286,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-09T18:12:30+08:00">
-                2018-01-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-28T21:12:30+08:00">
+                2018-06-28
               </time>
             
 
@@ -320,32 +324,25 @@
       
 
       
-        <p>MongoDB 固定集合（Capped Collections）是性能出色且有着固定大小的集合，对于大小固定，我们可以想象其就像一个环形队列，当集合空间用完后，再插入的元素就会覆盖最初始的头部的元素！<br><a id="more"></a></p>
-<h2 id="创建固定集合"><a href="#创建固定集合" class="headerlink" title="创建固定集合"></a>创建固定集合</h2><p>Mongo shell：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">db.createCollection(<span class="string">"cappedLogCollection"</span>,&#123;capped:<span class="literal">true</span>,size:10000&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># max row number</span></span><br><span class="line">db.createCollection(<span class="string">"cappedLogCollection"</span>,&#123;capped:<span class="literal">true</span>,size:10000,max:1000&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 普通collection 转化成 capped collection</span></span><br><span class="line">db.runCommand(&#123;<span class="string">"convertToCapped"</span>:<span class="string">"posts"</span>,size:10000&#125;)</span><br></pre></td></tr></table></figure></p>
-<p>创建集合的时候Max属性是可选的，文档数量限制是在容量没满的时候进行淘汰，要是满了，就根据容量限制来替换数据。</p>
-<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><h3 id="1-插入极快"><a href="#1-插入极快" class="headerlink" title="1. 插入极快"></a>1. 插入极快</h3><ul>
-<li>由于Capped collection是按照文档的插入顺序而不是使用索引确定插入位置，这样的话可以提高增添数据的效率。在没有索引的的集合中插入文档与将日志信息直接写入文件系统的速度接近。</li>
+        <p>可能很多人都遇到过类似的问题：使用 iTerm2 时打开了多个窗口，却在改动配置后需要在每个窗口依次执行 source 指令以激活改动的配置。</p>
+<p>其实，iTerm2 支持向多窗口（当前打开的所有窗口）同时输入相同的指令。只需要输入快捷键 ⌘(command) + ⇧(shift) + i。默认会跳出告警提示窗口：<br><a id="more"></a><br><img src="http://devops-club.com/storage/temp/iNOOEDBNOMqTmRodhRdKIzJn3E3RHghdHU59bgtG.png" alt=""></p>
+<p>可以勾选 Suppress this message permanently 取消告警，并 OK 确认。这时每个窗口右上角都会出现图标 <img src="http://devops-club.com/storage/temp/QnBAKi5CFCcw2fBn1jZyYDPwKBOjIvks0CxBxjjz.png" alt=""> 表示当前已激活向所有窗口输入指令。</p>
+<p><img src="http://devops-club.com/storage/temp/njuS07EkiJdt83Gmr94Kqd7YkzZvuDLMz0IV4T8A.gif" alt=""></p>
+<p>关闭该功能的方式是再次输入快捷键 ⌘(command) + ⇧(shift) + i 即可。</p>
+<h2 id="iTerm-常用快捷键"><a href="#iTerm-常用快捷键" class="headerlink" title="iTerm 常用快捷键"></a>iTerm 常用快捷键</h2><ul>
+<li>⌘(command) + t 新建tab页</li>
+<li>⌘(command) + d 水平分屏</li>
+<li>⌘(command) + 左右方向键 切换标签</li>
+<li>⌘(command) + ; 查看历史命令</li>
+<li>⌘(command) + ⇧(shift) + d 垂直分屏</li>
+<li>⌘(command) + ⇧(shift) + e 显示时间线</li>
+<li>⌘(command) + ⇧(shift) + h 查看剪贴板历史</li>
 </ul>
-<h3 id="2-自动淘汰旧记录"><a href="#2-自动淘汰旧记录" class="headerlink" title="2. 自动淘汰旧记录"></a>2. 自动淘汰旧记录</h3><ul>
-<li>如果指定的空间用完，新添加的对象将会取代集合中最旧的对象。MongoDB的操作日志文件oplog.rs就是利用Capped Collection来实现的。</li>
+<hr>
+<ul>
+<li>ctrl + a 行首</li>
+<li>ctrl + e 行尾</li>
 </ul>
-<h3 id="3-只能插入更新，不允许删除"><a href="#3-只能插入更新，不允许删除" class="headerlink" title="3. 只能插入更新，不允许删除"></a>3. 只能插入更新，不允许删除</h3><ul>
-<li>capped collection 不允许执行remove操作，但是可以使用drop整个collection来达到删除的目的。</li>
-</ul>
-<h3 id="4-更新操作不能超过空间大小"><a href="#4-更新操作不能超过空间大小" class="headerlink" title="4. 更新操作不能超过空间大小"></a>4. 更新操作不能超过空间大小</h3><ul>
-<li>进行update某个文档的时候，如果更新的文档大小大于原来指定的空间大小则会失败。</li>
-</ul>
-<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>结合固定集合的特点，它的使用场景一般有如下几种情况：</p>
-<ol>
-<li>日志存储<ul>
-<li>利用其自动淘汰及快速插入的特性，相比写入log文件再手动维护日志归档来说，利用固定集合作为日志存储非常实用和方便。</li>
-</ul>
-</li>
-<li>数据库缓存<ul>
-<li>缓存一些对象在数据库中，比如计算出来的统计信息。这时需要在 collection 上建立索引，因为使用缓存往往是读比写多。</li>
-</ul>
-</li>
-</ol>
 
       
     </div>
@@ -363,7 +360,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Mongodb/" rel="tag"># Mongodb</a>
+            <a href="/tags/iTerm/" rel="tag"># iTerm</a>
           
         </div>
       
@@ -376,8 +373,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/08/MongoDb向复制集导入数据/" rel="next" title="MongoDb向复制集导入数据">
-                <i class="fa fa-chevron-left"></i> MongoDb向复制集导入数据
+              <a href="/2018/06/12/CSS盒模型学习/" rel="next" title="CSS盒模型学习">
+                <i class="fa fa-chevron-left"></i> CSS盒模型学习
               </a>
             
           </div>
@@ -385,10 +382,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/10/MongoDb读策略read concern/" rel="prev" title="MongoDb读策略read concern">
-                MongoDb读策略read concern <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -529,7 +522,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建固定集合"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x521B;&#x5EFA;&#x56FA;&#x5B9A;&#x96C6;&#x5408;" class="headerlink" title="&#x521B;&#x5EFA;&#x56FA;&#x5B9A;&#x96C6;&#x5408;"></a>&#x521B;&#x5EFA;&#x56FA;&#x5B9A;&#x96C6;&#x5408;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特性"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x7279;&#x6027;" class="headerlink" title="&#x7279;&#x6027;"></a>&#x7279;&#x6027;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-插入极快"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#1-&#x63D2;&#x5165;&#x6781;&#x5FEB;" class="headerlink" title="1. &#x63D2;&#x5165;&#x6781;&#x5FEB;"></a>1. &#x63D2;&#x5165;&#x6781;&#x5FEB;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-自动淘汰旧记录"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#2-&#x81EA;&#x52A8;&#x6DD8;&#x6C70;&#x65E7;&#x8BB0;&#x5F55;" class="headerlink" title="2. &#x81EA;&#x52A8;&#x6DD8;&#x6C70;&#x65E7;&#x8BB0;&#x5F55;"></a>2. &#x81EA;&#x52A8;&#x6DD8;&#x6C70;&#x65E7;&#x8BB0;&#x5F55;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-只能插入更新，不允许删除"><span class="nav-number">2.3.</span> <span class="nav-text"><a href="#3-&#x53EA;&#x80FD;&#x63D2;&#x5165;&#x66F4;&#x65B0;&#xFF0C;&#x4E0D;&#x5141;&#x8BB8;&#x5220;&#x9664;" class="headerlink" title="3. &#x53EA;&#x80FD;&#x63D2;&#x5165;&#x66F4;&#x65B0;&#xFF0C;&#x4E0D;&#x5141;&#x8BB8;&#x5220;&#x9664;"></a>3. &#x53EA;&#x80FD;&#x63D2;&#x5165;&#x66F4;&#x65B0;&#xFF0C;&#x4E0D;&#x5141;&#x8BB8;&#x5220;&#x9664;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-更新操作不能超过空间大小"><span class="nav-number">2.4.</span> <span class="nav-text"><a href="#4-&#x66F4;&#x65B0;&#x64CD;&#x4F5C;&#x4E0D;&#x80FD;&#x8D85;&#x8FC7;&#x7A7A;&#x95F4;&#x5927;&#x5C0F;" class="headerlink" title="4. &#x66F4;&#x65B0;&#x64CD;&#x4F5C;&#x4E0D;&#x80FD;&#x8D85;&#x8FC7;&#x7A7A;&#x95F4;&#x5927;&#x5C0F;"></a>4. &#x66F4;&#x65B0;&#x64CD;&#x4F5C;&#x4E0D;&#x80FD;&#x8D85;&#x8FC7;&#x7A7A;&#x95F4;&#x5927;&#x5C0F;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x4F7F;&#x7528;&#x573A;&#x666F;" class="headerlink" title="&#x4F7F;&#x7528;&#x573A;&#x666F;"></a>&#x4F7F;&#x7528;&#x573A;&#x666F;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#iTerm-常用快捷键"><span class="nav-number">1.</span> <span class="nav-text"><a href="#iTerm-&#x5E38;&#x7528;&#x5FEB;&#x6377;&#x952E;" class="headerlink" title="iTerm &#x5E38;&#x7528;&#x5FEB;&#x6377;&#x952E;"></a>iTerm &#x5E38;&#x7528;&#x5FEB;&#x6377;&#x952E;</span></a></li></ol></div>
             
 
           </div>
