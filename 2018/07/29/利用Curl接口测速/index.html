@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="php," />
+  <meta name="keywords" content="curl," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="最近将公司的一个项目，从php5升级到php7。为什么要升级呢？主要是出于安全方面的考虑，在某些版本上存在PHP GD Graphics Library拒绝服务漏洞http://sec.jd.com/blog/archives/31748。">
-<meta name="keywords" content="php">
+<meta name="description" content="在开发过程中，有时候会需要对接口进行简单测速。这个接口可能是其它部门提供过来的，但是我们对于性能并不知情，需要进行下简单快速的测试，这里不是一个标准的性能测试流程。此刻，就非常需要一个工具来帮你做，而curl就是这么一个工具。">
+<meta name="keywords" content="curl">
 <meta property="og:type" content="article">
-<meta property="og:title" content="php5升级到7的坑">
-<meta property="og:url" content="http://yoursite.com/2018/02/06/php5升级到7的坑/index.html">
+<meta property="og:title" content="利用Curl接口测速">
+<meta property="og:url" content="http://yoursite.com/2018/07/29/利用Curl接口测速/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="最近将公司的一个项目，从php5升级到php7。为什么要升级呢？主要是出于安全方面的考虑，在某些版本上存在PHP GD Graphics Library拒绝服务漏洞http://sec.jd.com/blog/archives/31748。">
+<meta property="og:description" content="在开发过程中，有时候会需要对接口进行简单测速。这个接口可能是其它部门提供过来的，但是我们对于性能并不知情，需要进行下简单快速的测试，这里不是一个标准的性能测试流程。此刻，就非常需要一个工具来帮你做，而curl就是这么一个工具。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-07T12:34:23.000Z">
+<meta property="og:updated_time" content="2018-07-29T10:48:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="php5升级到7的坑">
-<meta name="twitter:description" content="最近将公司的一个项目，从php5升级到php7。为什么要升级呢？主要是出于安全方面的考虑，在某些版本上存在PHP GD Graphics Library拒绝服务漏洞http://sec.jd.com/blog/archives/31748。">
+<meta name="twitter:title" content="利用Curl接口测速">
+<meta name="twitter:description" content="在开发过程中，有时候会需要对接口进行简单测速。这个接口可能是其它部门提供过来的，但是我们对于性能并不知情，需要进行下简单快速的测试，这里不是一个标准的性能测试流程。此刻，就非常需要一个工具来帮你做，而curl就是这么一个工具。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/02/06/php5升级到7的坑/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/29/利用Curl接口测速/"/>
 
 
 
 
 
-  <title>php5升级到7的坑 | 勤勤恳恳</title>
+  <title>利用Curl接口测速 | 勤勤恳恳</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/06/php5升级到7的坑/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/29/利用Curl接口测速/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jacoob Wang">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">php5升级到7的坑</h1>
+          <h1 class="post-title" itemprop="name headline">利用Curl接口测速</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-06T11:12:30+08:00">
-                2018-02-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-29T15:12:30+08:00">
+                2018-07-29
               </time>
             
 
@@ -320,24 +320,43 @@
       
 
       
-        <p>最近将公司的一个项目，从php5升级到php7。为什么要升级呢？主要是出于安全方面的考虑，在某些版本上存在PHP GD Graphics Library拒绝服务漏洞<a href="http://sec.jd.com/blog/archives/31748。" target="_blank" rel="noopener">http://sec.jd.com/blog/archives/31748。</a><br><a id="more"></a><br>公司发了安全邮件通知，仔细看了漏洞报告后，发现主要是使用<font color="#6f4e37">imagecreatefromgif或imagecreatefromstring</font>时出现漏洞。一开始我想直接屏蔽这两个函数就好了，但我还是找安全工程师聊了下！他的建议是尽量升级版本吧，因为怕存在其它函数也调用到这个底层函数，或者以后开发中有可能用到这两个函数。因此，决定升级到最新的php7.2。</p>
-<p>升级之前我先简单评估了下升级成本，因为项目并非什么大型项目，主要是我负责的一个内部平台，所以觉得没啥太大问题。</p>
-<h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/<span class="built_in">local</span>/php7.2 --with-pdo-mysql --with-mysqli --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir --<span class="built_in">enable</span>-xml --<span class="built_in">enable</span>-inline-optimization --with-curl --<span class="built_in">enable</span>-fpm --<span class="built_in">enable</span>-mbstring --with-gd --with-openssl</span><br></pre></td></tr></table></figure>
-<h2 id="处理php-fpm配置文件和php-ini配置"><a href="#处理php-fpm配置文件和php-ini配置" class="headerlink" title="处理php-fpm配置文件和php.ini配置"></a>处理php-fpm配置文件和php.ini配置</h2><p>copy php.ini<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp php.ini-production /usr/<span class="built_in">local</span>/php7.2/lib/php.ini</span><br></pre></td></tr></table></figure></p>
-<p>重命名php-fpm.conf<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/php7.2/etc</span><br><span class="line">cp php-fpm.conf.default php-fpm.conf</span><br></pre></td></tr></table></figure></p>
-<h2 id="编译扩展"><a href="#编译扩展" class="headerlink" title="编译扩展"></a>编译扩展</h2><p>因为项目中使用到redis 和 crypt等扩展，需要重新编译新的扩展<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 源码目录下有个ext目录，下面存放着一些扩展木库</span></span><br><span class="line"><span class="built_in">cd</span> ext/redis</span><br><span class="line">/usr/<span class="built_in">local</span>/php7.2/bin/phpize</span><br><span class="line">/usr/<span class="built_in">local</span>/php7.2/</span><br><span class="line">./configure --with-php-config=/usr/<span class="built_in">local</span>/php7.2/bin/php-config</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
-<p>执行完上述命令即可生成一个redis.so的扩展文件，现在需要在php.ini中找到extension=redis.so去掉前面的注释。</p>
-<p>以上只是举例说明下，还有些其他扩展需要编译执行同样的操作即可。</p>
-<h2 id="杀掉原有的php-fpm，启动新的php-fpm"><a href="#杀掉原有的php-fpm，启动新的php-fpm" class="headerlink" title="杀掉原有的php-fpm，启动新的php-fpm"></a>杀掉原有的php-fpm，启动新的php-fpm</h2><p>杀掉进程用kill即可，/usr/local/php7.2/sbin/php-fpm 即启动新的php-fpm进程。</p>
-<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p><font color="#FFC0CB">问题1：无法访问首页，直接跳转到JD首页。</font>跳转是因为我在NG中配置了一些错误的status进行跳转。那么，来定位下是什么问题？</p>
-<p>使用 命令行调用方式运行php文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/php7.2/bin/php index.php</span><br></pre></td></tr></table></figure></p>
-<p>输出如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql pdo SQLSTATE[HY000] [2002] No such file or directory</span><br></pre></td></tr></table></figure></p>
-<p>pdo报这个错，以前居然没碰过，谷歌一下，发现是mysql.sock文件没找到的问题！那么在php.ini中指定下吧！<a href="https://stackoverflow.com/questions/20723803/pdoexception-sqlstatehy000-2002-no-such-file-or-directory" target="_blank" rel="noopener">https://stackoverflow.com/questions/20723803/pdoexception-sqlstatehy000-2002-no-such-file-or-directory</a></p>
-<p><font color="#FFC0CB">问题2：使用myqsli_connect的时候无法连接</font>，项目中有部分代码不是pdo，至于为什么不是，我也忘记当初的原因了，可能是历史遗留问题！</p>
-<p>如何fix呢？将localhost改为127.0.0.1即可！</p>
-<p><font color="#FFC0CB">问题3：表单post或put数组超过330个的时候，获取到的值为空！</font>这个问题是后来在使用中发现的，属于升级带来的bug。一开始我以为是put问题，后来我发现跟put没啥关系！于是就猜想跟表单长度有关系，测试验证果然如此！但无论我怎么修改max_input_vars 居然没效！就去google上看看有没有其他人碰到这个问题，<a href="https://github.com/joomla/joomla-cms/issues/10021。" target="_blank" rel="noopener">https://github.com/joomla/joomla-cms/issues/10021。</a> 果然github上已经有人碰到过了，怀疑是php7的bug，解决方式是把max_input_vars 设置到20000。后面无奈之下，只好这么修改。</p>
-<p>以上有2个问题是在mysql连接上，另外1个则是隐藏的bug。</p>
-<p>定位这些问题耗费了我一点时间。一方面因为这些代码在php5可以运行，但切到php7却不能运行，我一开始想的扩展原因；另外一方面我刚开始在浏览器中调试一出错就跳转到了jd主站，而没法看到输出的错误信息。</p>
+        <p>在开发过程中，有时候会需要对接口进行简单测速。这个接口可能是其它部门提供过来的，但是我们对于性能并不知情，需要进行下简单快速的测试，这里不是一个标准的性能测试流程。此刻，就非常需要一个工具来帮你做，而curl就是这么一个工具。<br><a id="more"></a></p>
+<h1 id="什么是curl"><a href="#什么是curl" class="headerlink" title="什么是curl?"></a>什么是curl?</h1><p>curl是linux下的一个命令行工具，业界更多称作它为下载工具，支持文件上传和下载，支持包括HTTP、HTTPS、FTP等众多协议，还支持POST、COOKIES、认证、从指定偏移处下载部分文件、用户代理、网络测速、文件大小、进度条等功能。</p>
+<p>可以说它是一个非常有用的网络命令行工具。</p>
+<h1 id="利用curl简单接口测速"><a href="#利用curl简单接口测速" class="headerlink" title="利用curl简单接口测速"></a>利用curl简单接口测速</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -s -w <span class="string">'%&#123;time_connect&#125;:%&#123;time_starttransfer&#125;:%&#123;time_total&#125;\n'</span> <span class="string">'http://example.com/api/user'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># result </span></span><br><span class="line">0.081:0.272:0.779</span><br></pre></td></tr></table></figure>
+<p>上面示例用curl对example.com的某个api进行测速，-s 参数去掉所有状态信息，-w 参数让 curl 写出列出的计时器的状态信息。</p>
+<p>计时器参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>一个普通标题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>time_connect</td>
+<td>客户端建立服务器TCP连接用时</td>
+</tr>
+<tr>
+<td>time_starttransfer</td>
+<td>发出请求后，服务器返回数据的第一个字节用时</td>
+</tr>
+<tr>
+<td>time_total</td>
+<td>完成请求用时</td>
+</tr>
+<tr>
+<td>time_namelookup</td>
+<td>DNS解析用时</td>
+</tr>
+<tr>
+<td>speed_download</td>
+<td>下载速度，单位-字节每秒</td>
+</tr>
+</tbody>
+</table>
+<p>通过观察curl数据及其随时间变化的趋势,可以很好地了解接口的响应速度。以上变量会按CURL认为合适的格式输出，输出变量需要按照%{variable_name}的格式，如果需要输出%，double一下即可，即%%，同时，\n是换行，\r是回车，\t是TAB。</p>
 
       
     </div>
@@ -355,7 +374,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/php/" rel="tag"># php</a>
+            <a href="/tags/curl/" rel="tag"># curl</a>
           
         </div>
       
@@ -368,8 +387,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/02/运维：如何实现自动备份/" rel="next" title="运维：如何实现自动备份">
-                <i class="fa fa-chevron-left"></i> 运维：如何实现自动备份
+              <a href="/2018/07/12/Accept-Language多语言web应用/" rel="next" title="Accept-Language多语言web应用">
+                <i class="fa fa-chevron-left"></i> Accept-Language多语言web应用
               </a>
             
           </div>
@@ -377,10 +396,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/02/06/如何定位MongoDB查询慢问题/" rel="prev" title="如何定位MongoDB查询慢问题">
-                如何定位MongoDB查询慢问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -521,7 +536,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x7F16;&#x8BD1;&#x5B89;&#x88C5;" class="headerlink" title="&#x7F16;&#x8BD1;&#x5B89;&#x88C5;"></a>&#x7F16;&#x8BD1;&#x5B89;&#x88C5;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理php-fpm配置文件和php-ini配置"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x5904;&#x7406;php-fpm&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x548C;php-ini&#x914D;&#x7F6E;" class="headerlink" title="&#x5904;&#x7406;php-fpm&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x548C;php.ini&#x914D;&#x7F6E;"></a>&#x5904;&#x7406;php-fpm&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x548C;php.ini&#x914D;&#x7F6E;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译扩展"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x7F16;&#x8BD1;&#x6269;&#x5C55;" class="headerlink" title="&#x7F16;&#x8BD1;&#x6269;&#x5C55;"></a>&#x7F16;&#x8BD1;&#x6269;&#x5C55;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#杀掉原有的php-fpm，启动新的php-fpm"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x6740;&#x6389;&#x539F;&#x6709;&#x7684;php-fpm&#xFF0C;&#x542F;&#x52A8;&#x65B0;&#x7684;php-fpm" class="headerlink" title="&#x6740;&#x6389;&#x539F;&#x6709;&#x7684;php-fpm&#xFF0C;&#x542F;&#x52A8;&#x65B0;&#x7684;php-fpm"></a>&#x6740;&#x6389;&#x539F;&#x6709;&#x7684;php-fpm&#xFF0C;&#x542F;&#x52A8;&#x65B0;&#x7684;php-fpm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x9A8C;&#x8BC1;" class="headerlink" title="&#x9A8C;&#x8BC1;"></a>&#x9A8C;&#x8BC1;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是curl"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;curl" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;curl?"></a>&#x4EC0;&#x4E48;&#x662F;curl?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#利用curl简单接口测速"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x5229;&#x7528;curl&#x7B80;&#x5355;&#x63A5;&#x53E3;&#x6D4B;&#x901F;" class="headerlink" title="&#x5229;&#x7528;curl&#x7B80;&#x5355;&#x63A5;&#x53E3;&#x6D4B;&#x901F;"></a>&#x5229;&#x7528;curl&#x7B80;&#x5355;&#x63A5;&#x53E3;&#x6D4B;&#x901F;</span></a></li></ol></div>
             
 
           </div>
