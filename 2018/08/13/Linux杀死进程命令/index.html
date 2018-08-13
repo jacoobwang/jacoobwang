@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Linux提供了杀死进程的相关命令，来帮助我们重启或者关掉一些应用程序。 根据进程ID杀死进程-killkill用来杀死某个进程，前提是我们知道进程ID，可以用pidof 进程 来获取某个进程ID，当然也可以使用 ps 命令。 信号不是必须的，最常用的信号代码是 -9 ，对僵尸进程我们可以使用 kill -9 进程ID 强行杀死进程。 关于更多的信号代码可以使用 kill -l">
+<meta name="description" content="Linux提供了杀死进程的相关命令，来帮助我们重启或者关掉一些应用程序。 根据进程ID杀死进程-killkill用来杀死某个进程，前提是我们知道进程ID，可以用pidof 进程 来获取某个进程ID，当然也可以使用 ps 命令。">
 <meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux杀死进程命令">
 <meta property="og:url" content="http://yoursite.com/2018/08/13/Linux杀死进程命令/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="Linux提供了杀死进程的相关命令，来帮助我们重启或者关掉一些应用程序。 根据进程ID杀死进程-killkill用来杀死某个进程，前提是我们知道进程ID，可以用pidof 进程 来获取某个进程ID，当然也可以使用 ps 命令。 信号不是必须的，最常用的信号代码是 -9 ，对僵尸进程我们可以使用 kill -9 进程ID 强行杀死进程。 关于更多的信号代码可以使用 kill -l">
+<meta property="og:description" content="Linux提供了杀死进程的相关命令，来帮助我们重启或者关掉一些应用程序。 根据进程ID杀死进程-killkill用来杀死某个进程，前提是我们知道进程ID，可以用pidof 进程 来获取某个进程ID，当然也可以使用 ps 命令。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-13T07:18:32.000Z">
+<meta property="og:updated_time" content="2018-08-13T07:21:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux杀死进程命令">
-<meta name="twitter:description" content="Linux提供了杀死进程的相关命令，来帮助我们重启或者关掉一些应用程序。 根据进程ID杀死进程-killkill用来杀死某个进程，前提是我们知道进程ID，可以用pidof 进程 来获取某个进程ID，当然也可以使用 ps 命令。 信号不是必须的，最常用的信号代码是 -9 ，对僵尸进程我们可以使用 kill -9 进程ID 强行杀死进程。 关于更多的信号代码可以使用 kill -l">
+<meta name="twitter:description" content="Linux提供了杀死进程的相关命令，来帮助我们重启或者关掉一些应用程序。 根据进程ID杀死进程-killkill用来杀死某个进程，前提是我们知道进程ID，可以用pidof 进程 来获取某个进程ID，当然也可以使用 ps 命令。">
 
 
 
@@ -321,8 +321,7 @@
 
       
         <p>Linux提供了杀死进程的相关命令，来帮助我们重启或者关掉一些应用程序。</p>
-<h1 id="根据进程ID杀死进程-kill"><a href="#根据进程ID杀死进程-kill" class="headerlink" title="根据进程ID杀死进程-kill"></a>根据进程ID杀死进程-kill</h1><p>kill用来杀死某个进程，前提是我们知道进程ID，可以用pidof 进程 来获取某个进程ID，当然也可以使用 ps 命令。</p>
-<p>信号不是必须的，最常用的信号代码是 -9 ，对僵尸进程我们可以使用 kill -9 进程ID 强行杀死进程。</p>
+<h1 id="根据进程ID杀死进程-kill"><a href="#根据进程ID杀死进程-kill" class="headerlink" title="根据进程ID杀死进程-kill"></a>根据进程ID杀死进程-kill</h1><p>kill用来杀死某个进程，前提是我们知道进程ID，可以用pidof 进程 来获取某个进程ID，当然也可以使用 ps 命令。<br><a id="more"></a><br>信号不是必须的，最常用的信号代码是 -9 ，对僵尸进程我们可以使用 kill -9 进程ID 强行杀死进程。</p>
 <p>关于更多的信号代码可以使用 kill -l 获取。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kill［ 信号代码］ 进程ID（ kill - pid）</span><br><span class="line"></span><br><span class="line">－ s： 指定发送的信号</span><br><span class="line">－ p： 模拟发送信号</span><br><span class="line">－ l： 指定信号的名称列表</span><br></pre></td></tr></table></figure>
 <h3 id="举例：杀死mysql进程"><a href="#举例：杀死mysql进程" class="headerlink" title="举例：杀死mysql进程"></a>举例：杀死mysql进程</h3><ol>

@@ -322,23 +322,15 @@
 
       
         
-          
-            <p>Linux提供了杀死进程的相关命令，来帮助我们重启或者关掉一些应用程序。</p>
-<h1 id="根据进程ID杀死进程-kill"><a href="#根据进程ID杀死进程-kill" class="headerlink" title="根据进程ID杀死进程-kill"></a>根据进程ID杀死进程-kill</h1><p>kill用来杀死某个进程，前提是我们知道进程ID，可以用pidof 进程 来获取某个进程ID，当然也可以使用 ps 命令。</p>
-<p>信号不是必须的，最常用的信号代码是 -9 ，对僵尸进程我们可以使用 kill -9 进程ID 强行杀死进程。</p>
-<p>关于更多的信号代码可以使用 kill -l 获取。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kill［ 信号代码］ 进程ID（ kill - pid）</span><br><span class="line"></span><br><span class="line">－ s： 指定发送的信号</span><br><span class="line">－ p： 模拟发送信号</span><br><span class="line">－ l： 指定信号的名称列表</span><br></pre></td></tr></table></figure>
-<h3 id="举例：杀死mysql进程"><a href="#举例：杀死mysql进程" class="headerlink" title="举例：杀死mysql进程"></a>举例：杀死mysql进程</h3><ol>
-<li>获取mysql的进程ID，运行 pidof mysqld ，得到 32432 。</li>
-<li>使用kill命令杀掉上述进程ID。 kill -9 32432。</li>
-<li>再次执行 pidof mysqld，输出空，证明该进程已经被干掉。</li>
-</ol>
-<h1 id="根据进程名杀死进程-pkill和killall"><a href="#根据进程名杀死进程-pkill和killall" class="headerlink" title="根据进程名杀死进程-pkill和killall"></a>根据进程名杀死进程-pkill和killall</h1><p>pkill 和 killall被归到不太常用这一类，是因为大多数情况下，kill已经能满足我们的需求。但有些时候仍然需要用到，这两个命令擅长于通过进程名杀掉进程。</p>
-<p>有时候一个进程名对应多个进程，而我们用kill 去杀的时候需要一个个去杀。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># kill PID1 PID2 PID3</span><br><span class="line">or</span><br><span class="line"># kill - 9 PID1 PID2 PID3</span><br><span class="line">or</span><br><span class="line"># kill - SIGKILL PID1 PID2 PID3</span><br></pre></td></tr></table></figure></p>
-<p>那么这个时候我们可以用 pkill 或 killall Process Name来杀掉所有进程。</p>
-<h3 id="举例：杀死php进程"><a href="#举例：杀死php进程" class="headerlink" title="举例：杀死php进程"></a>举例：杀死php进程</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> ps - ef | grep php - fpm 查看php进程</span><br><span class="line">    <span class="number">0</span> <span class="number">72713</span>     <span class="number">1</span>   <span class="number">0</span> <span class="number">14</span> <span class="number">618</span>  ??         <span class="number">1</span>:<span class="number">38.40</span> php-fpm</span><br><span class="line">   <span class="number">-2</span> <span class="number">72714</span> <span class="number">72713</span>   <span class="number">0</span> <span class="number">14</span> <span class="number">618</span>  ??         <span class="number">0</span>:<span class="number">00.02</span> php-fpm</span><br><span class="line">   <span class="number">-2</span> <span class="number">72715</span> <span class="number">72713</span>   <span class="number">0</span> <span class="number">14</span> <span class="number">618</span>  ??         <span class="number">0</span>:<span class="number">00.01</span> php-fpm</span><br><span class="line"><span class="number">2.</span> pkill php - fpm</span><br><span class="line"><span class="number">3.</span> ps - ef | grep php - fpm 查看php进程</span><br></pre></td></tr></table></figure>
-
-          
+          <p>Linux提供了杀死进程的相关命令，来帮助我们重启或者关掉一些应用程序。</p>
+<h1 id="根据进程ID杀死进程-kill"><a href="#根据进程ID杀死进程-kill" class="headerlink" title="根据进程ID杀死进程-kill"></a>根据进程ID杀死进程-kill</h1><p>kill用来杀死某个进程，前提是我们知道进程ID，可以用pidof 进程 来获取某个进程ID，当然也可以使用 ps 命令。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/13/Linux杀死进程命令/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
