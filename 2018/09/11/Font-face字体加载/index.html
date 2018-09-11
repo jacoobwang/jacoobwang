@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Font-face," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Font-face是css3中的一个模块，它主要把自定义字体嵌入到你的网页中，@font-face 可以消除对用户电脑字体的依赖。用的比较多的场景就是用来生成自定义字符小图标，但font-face能做到的远不至于此！">
+<meta name="keywords" content="Font-face">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Font-face字体加载">
+<meta property="og:url" content="http://yoursite.com/2018/09/11/Font-face字体加载/index.html">
+<meta property="og:site_name" content="勤勤恳恳">
+<meta property="og:description" content="Font-face是css3中的一个模块，它主要把自定义字体嵌入到你的网页中，@font-face 可以消除对用户电脑字体的依赖。用的比较多的场景就是用来生成自定义字符小图标，但font-face能做到的远不至于此！">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-09-11T09:54:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Font-face字体加载">
+<meta name="twitter:description" content="Font-face是css3中的一个模块，它主要把自定义字体嵌入到你的网页中，@font-face 可以消除对用户电脑字体的依赖。用的比较多的场景就是用来生成自定义字符小图标，但font-face能做到的远不至于此！">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/11/Font-face字体加载/"/>
+
+
+
+
+
+  <title>Font-face字体加载 | 勤勤恳恳</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">勤勤恳恳</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客|撸码|生活|态度</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-自研php框架">
+          <a href="https://jacoobwang.github.io/vino/vino.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            自研php框架
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://jacoobwang.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/Font-face字体加载/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Font-face字体加载</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-11T15:12:30+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Font-face是css3中的一个模块，它主要把自定义字体嵌入到你的网页中，@font-face 可以消除对用户电脑字体的依赖。用的比较多的场景就是用来生成自定义字符小图标，但font-face能做到的远不至于此！<br><a id="more"></a></p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p>首先我们一起来看看@font-face的语法规则：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: &lt;YourWebFontName&gt;;</span><br><span class="line">  <span class="attribute">src</span>: &lt;source&gt; [&lt;format&gt;][,&lt;source&gt; [&lt;format&gt;]]*;</span><br><span class="line">  [font-weight: &lt;weight&gt;];</span><br><span class="line">  <span class="selector-attr">[font-style: &lt;style&gt;]</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>font-family</td>
+<td>自定义的字体名称</td>
+</tr>
+<tr>
+<td>src</td>
+<td>source:自定义的字体的存放路径 format: 自定义的字体的格式，主要用来帮助浏览器识别，其值主要有以下几种类型: truetype,opentype,woff,svg等</td>
+</tr>
+<tr>
+<td>font-weight</td>
+<td>字重</td>
+</tr>
+<tr>
+<td>font-style</td>
+<td>字体样式 normal italic oblique</td>
+</tr>
+</tbody>
+</table>
+<h2 id="关于src"><a href="#关于src" class="headerlink" title="关于src"></a>关于src</h2><p>src表示调用字体文件，可以是本地字体文件（IE9+支持），也可以是线上地址（可能有跨域限制）。</p>
+<h3 id="1-字体文件名简写"><a href="#1-字体文件名简写" class="headerlink" title="1. 字体文件名简写"></a>1. 字体文件名简写</h3><p>现在很多网站会使用“微软雅黑”字体，但是，“微软雅黑”的名称有点长：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.font</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">'Microsoft Yahei'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此时我们就可以利用@font face规则简化，这样就容易记忆了，书写更快了：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: YH;</span><br><span class="line">  <span class="attribute">src</span>: <span class="built_in">local</span>(<span class="string">"Microsoft Yahei"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用的时候直接：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.font</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: YH;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-更完美的用户体验"><a href="#2-更完美的用户体验" class="headerlink" title="2. 更完美的用户体验"></a>2. 更完美的用户体验</h3><p>一些特殊的标题设计师就是喜欢用“方正粗雅宋”这个字体（已经购得版权），但是很显然，这么帅气的字体，几乎很少有用户安装的，所以实际开发的时候，全都是通过工具而生成一个全新的精简版的“方正粗雅宋”字体文件，再通过src属性url()方法外链这个字体文件。</p>
+<p>很棒的方案，但还不够完美，为什么呢？虽然安装“方正粗雅宋”这个字体的用户并不多，但并不表示没有用户使用之。试想一下，假如有用户安装了这个字体，结果你在网页呈现的时候，还要再去外链一个额外的文件地址，岂不是白白的浪费？既浪费流量，体验又不一定好，如果字体文件加载慢，会看到文字“变形”的过程，显然是不友好的。</p>
+<p>我们可以借助@font face规则中的local实现代码和体验上的进一步的提升，如下：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: FZCYS;</span><br><span class="line">  <span class="attribute">src</span>: <span class="built_in">local</span>(<span class="string">"FZYaSongS-B-GB"</span>), </span><br><span class="line">       <span class="built_in">url</span>(<span class="string">"FZCYS.woff2"</span>),  </span><br><span class="line">       <span class="built_in">url</span>(<span class="string">"FZCYS.woff"</span>),</span><br><span class="line">       <span class="built_in">url</span>(<span class="string">"FZCYS.ttf"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>于是乎，那些安装了“方正粗雅宋”这个字体的用户，就没有任何字体文件请求。加载更快了，用户体验上升了，还省了流量，如此百益无一害的事情，还不妥妥的用起来。</p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><h3 id="1-远端加载css字体。"><a href="#1-远端加载css字体。" class="headerlink" title="1. 远端加载css字体。"></a>1. 远端加载css字体。</h3><p>有时候我们需要的字体是根据用户输入来决定加载的字体，那么，我们肯定是不希望加载所有文字的字体文件，而只是用户用到的字体。这个时候我们需要监控用户输入，在用户输入之后去调用api来生成一段字体的代码，然后把这段代码注入到页面中。让字体效果得以显示。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">"FZLTZHK--GBK1-0"</span>;</span><br><span class="line">  <span class="attribute">src</span>: <span class="built_in">url</span>(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAAOAIAAAwBgT1MvMnBM34MAAADsAAAAYGNtYXAADgH5AAABTAAAAUJjdnQgABUAAAAAApAAAAACZnBnbWXpIJkAAAKUAAABoWdhc3AA=) <span class="built_in">format</span>(<span class="string">"truetype"</span>);</span><br><span class="line">  <span class="attribute">font-style</span>: normal;</span><br><span class="line">  <span class="attribute">font-weight</span>: normal;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里source用的是base64处理过后的一个字体文件，它也可以是服务端生成的一个字体文件路径。</p>
+<h3 id="2-js控制字体引入"><a href="#2-js控制字体引入" class="headerlink" title="2. js控制字体引入"></a>2. js控制字体引入</h3><p>在上面的案例中，通过向页面插入style节点，可以对dom中的文字生效，但canvas中的文字是不生效的，下面有另外一种方式，通过js的document.fonts来加载字体可以解决这个问题。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fontFamily = <span class="string">'FZZZHONGJW--GB1-0'</span></span><br><span class="line"><span class="keyword">const</span> h = <span class="string">`http://xxx.com/fonts/api/font/ttffontFamily=<span class="subst">$&#123;fontFamily&#125;</span>&amp;text=全球潮范一站购齐`</span></span><br><span class="line"><span class="keyword">new</span> FontFace(fontFamily, <span class="string">'url('</span> + h + <span class="string">')'</span>).load().then(<span class="function"><span class="keyword">function</span> (<span class="params">t</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">document</span>.fonts.add(t)</span><br><span class="line">  <span class="keyword">this</span>.initCanvas()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>关于更多document.fons，可以参考这里 <a href="https://googlechrome.github.io/samples/font-face-set/" target="_blank" rel="noopener">https://googlechrome.github.io/samples/font-face-set/</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Font-face/" rel="tag"># Font-face</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/14/MacOS安装flutter/" rel="next" title="MacOS安装flutter">
+                <i class="fa fa-chevron-left"></i> MacOS安装flutter
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/11434315"
+                alt="Jacoob Wang" />
+            
+              <p class="site-author-name" itemprop="name">Jacoob Wang</p>
+              <p class="site-description motion-element" itemprop="description">业精于勤荒于嬉</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/jacoobwang" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:531532957@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x8BED;&#x6CD5;" class="headerlink" title="&#x8BED;&#x6CD5;"></a>&#x8BED;&#x6CD5;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于src"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x5173;&#x4E8E;src" class="headerlink" title="&#x5173;&#x4E8E;src"></a>&#x5173;&#x4E8E;src</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-字体文件名简写"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#1-&#x5B57;&#x4F53;&#x6587;&#x4EF6;&#x540D;&#x7B80;&#x5199;" class="headerlink" title="1. &#x5B57;&#x4F53;&#x6587;&#x4EF6;&#x540D;&#x7B80;&#x5199;"></a>1. &#x5B57;&#x4F53;&#x6587;&#x4EF6;&#x540D;&#x7B80;&#x5199;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-更完美的用户体验"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#2-&#x66F4;&#x5B8C;&#x7F8E;&#x7684;&#x7528;&#x6237;&#x4F53;&#x9A8C;" class="headerlink" title="2. &#x66F4;&#x5B8C;&#x7F8E;&#x7684;&#x7528;&#x6237;&#x4F53;&#x9A8C;"></a>2. &#x66F4;&#x5B8C;&#x7F8E;&#x7684;&#x7528;&#x6237;&#x4F53;&#x9A8C;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x5E94;&#x7528;" class="headerlink" title="&#x5E94;&#x7528;"></a>&#x5E94;&#x7528;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-远端加载css字体。"><span class="nav-number">3.1.</span> <span class="nav-text"><a href="#1-&#x8FDC;&#x7AEF;&#x52A0;&#x8F7D;css&#x5B57;&#x4F53;&#x3002;" class="headerlink" title="1. &#x8FDC;&#x7AEF;&#x52A0;&#x8F7D;css&#x5B57;&#x4F53;&#x3002;"></a>1. &#x8FDC;&#x7AEF;&#x52A0;&#x8F7D;css&#x5B57;&#x4F53;&#x3002;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-js控制字体引入"><span class="nav-number">3.2.</span> <span class="nav-text"><a href="#2-js&#x63A7;&#x5236;&#x5B57;&#x4F53;&#x5F15;&#x5165;" class="headerlink" title="2. js&#x63A7;&#x5236;&#x5B57;&#x4F53;&#x5F15;&#x5165;"></a>2. js&#x63A7;&#x5236;&#x5B57;&#x4F53;&#x5F15;&#x5165;</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jacoob Wang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
