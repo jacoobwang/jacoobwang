@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="linux," />
+  <meta name="keywords" content="wordpress," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="xargs是linux的一个命令，它的作用是：  命令组合：尤其是一些命令不支持管道输入，比如ls； 避免参数过长：xargs可以通过-nx来将参数分组，避免参数过长。">
-<meta name="keywords" content="linux">
+<meta name="description" content="事情起因：部门博客由于安全问题，需要把管理后台迁移到内网，也就是将wp-admin那一堆东西部署到内网域名上。 最简单直接的方式就是申请另外一个域名然后解析到同一个服务器的同一个项目下，通过NG对外网域名访问后台的路由做rewrite。">
+<meta name="keywords" content="wordpress">
 <meta property="og:type" content="article">
-<meta property="og:title" content="xargs的用法">
-<meta property="og:url" content="http://yoursite.com/2018/09/20/xargs的用法/index.html">
+<meta property="og:title" content="Wordpress多域名部署">
+<meta property="og:url" content="http://yoursite.com/2018/10/08/wordpress支持多域名部署/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="xargs是linux的一个命令，它的作用是：  命令组合：尤其是一些命令不支持管道输入，比如ls； 避免参数过长：xargs可以通过-nx来将参数分组，避免参数过长。">
+<meta property="og:description" content="事情起因：部门博客由于安全问题，需要把管理后台迁移到内网，也就是将wp-admin那一堆东西部署到内网域名上。 最简单直接的方式就是申请另外一个域名然后解析到同一个服务器的同一个项目下，通过NG对外网域名访问后台的路由做rewrite。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-20T13:34:05.000Z">
+<meta property="og:updated_time" content="2018-10-08T13:05:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="xargs的用法">
-<meta name="twitter:description" content="xargs是linux的一个命令，它的作用是：  命令组合：尤其是一些命令不支持管道输入，比如ls； 避免参数过长：xargs可以通过-nx来将参数分组，避免参数过长。">
+<meta name="twitter:title" content="Wordpress多域名部署">
+<meta name="twitter:description" content="事情起因：部门博客由于安全问题，需要把管理后台迁移到内网，也就是将wp-admin那一堆东西部署到内网域名上。 最简单直接的方式就是申请另外一个域名然后解析到同一个服务器的同一个项目下，通过NG对外网域名访问后台的路由做rewrite。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/20/xargs的用法/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/08/wordpress支持多域名部署/"/>
 
 
 
 
 
-  <title>xargs的用法 | 勤勤恳恳</title>
+  <title>Wordpress多域名部署 | 勤勤恳恳</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/20/xargs的用法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/08/wordpress支持多域名部署/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jacoob Wang">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">xargs的用法</h1>
+          <h1 class="post-title" itemprop="name headline">Wordpress多域名部署</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-20T10:12:30+08:00">
-                2018-09-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-08T10:12:30+08:00">
+                2018-10-08
               </time>
             
 
@@ -320,42 +320,12 @@
       
 
       
-        <p>xargs是linux的一个命令，它的作用是：</p>
-<ol>
-<li>命令组合：尤其是一些命令不支持管道输入，比如ls；</li>
-<li>避免参数过长：xargs可以通过-nx来将参数分组，避免参数过长。<a id="more"></a>
-<h2 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h2></li>
-</ol>
-<p>首先，创建测试文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch a.js b.js c.js</span><br></pre></td></tr></table></figure></p>
-<p>接着，运行如下命令<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls *.js | xargs ls -al</span><br></pre></td></tr></table></figure></p>
-<p>输出如下:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-rw-r--r--  1 a  wheel  0 12 18 16:18 a.js</span><br><span class="line">-rw-r--r--  1 a  wheel  0 12 18 16:18 b.js</span><br><span class="line">-rw-r--r--  1 a  wheel  0 12 18 16:18 c.js</span><br></pre></td></tr></table></figure></p>
-<p>命令解释:</p>
-<ol>
-<li>首先，ls *.js的输出为 “a.js b.js c.js” ;</li>
-<li>通过管道，将 “a.js b.js c.js” 作为 xargs 的入参;</li>
-<li>xargs 收到参数后，解析入参，以空格/换行作为分隔符，拆分成多个参数，这里变成 “a.js” 、”b.js” 、”c.js”;</li>
-<li>xargs 将拆分后的参数，传递给后续命令，作为后续命令的参数，也就是说，组成这样的命令 <font color="#FF0000">ls -al a.js b.js c.js</font></li>
-</ol>
-<p>可以加上 -t 参数，在执行命令前，先将命令打印出来。</p>
-<p>输出如下，可以看到多了一行内容<font color="#FF0000"> ls -al a.js b.js c.js</font> ，这就是实际运行的命令。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ls -al a.js b.js c.js</span><br><span class="line">-rw-r--r--  1 a  wheel  0 12 18 16:18 a.js</span><br><span class="line">-rw-r--r--  1 a  wheel  0 12 18 16:18 b.js</span><br><span class="line">-rw-r--r--  1 a  wheel  0 12 18 16:18 c.js</span><br></pre></td></tr></table></figure></p>
-<p>通过上面的例子，我们知道了xargs主要是用来将参数传递给下一个命令。下面我们再看几个应用场景：</p>
-<h2 id="参数替换"><a href="#参数替换" class="headerlink" title="参数替换"></a>参数替换</h2><p>xargs的一个选项 <font color="#FF0000">-I</font>，使用<font color="#FF0000"> -I</font> 指定一个替换字符串{}，这个字符串在xargs扩展时会被替换掉，当-I与xargs结合使用，每一个参数命令都会被执行一次。</p>
-<p>例子如下，将所有的.js结尾的文件，都加上.backup后缀。-I ‘{}’表示将后面命令行的{}替换成前面解析出来的参数<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls *.js | xargs -t -I '&#123;&#125;' mv &#123;&#125; &#123;&#125;.backup</span><br></pre></td></tr></table></figure></p>
-<p>实际执行的命令如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mv a.js a.js.backup</span><br><span class="line">mv b.js b.js.backup</span><br><span class="line">mv c.js c.js.backup</span><br></pre></td></tr></table></figure></p>
-<h2 id="参数分组"><a href="#参数分组" class="headerlink" title="参数分组"></a>参数分组</h2><p>命令行对参数最大长度有限制，xargs通过-nx对参数进行分组来解决这个问题。</p>
-<p>首先，创建4个文件用来做实验。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch a.js b.js c.js d.js</span><br></pre></td></tr></table></figure></p>
-<p>然后运行如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls *.js | xargs -t -n2 ls -al</span><br></pre></td></tr></table></figure></p>
-<p>输出如下，-n2表示，将参数以2个为一组，传给后面的命令<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ls -al a.js b.js </span><br><span class="line">-rw-r--r-- 1 root root 0 Dec 18 16:52 a.js</span><br><span class="line">-rw-r--r-- 1 root root 0 Dec 18 16:52 b.js</span><br><span class="line">ls -al c.js d.js </span><br><span class="line">-rw-r--r-- 1 root root 0 Dec 18 16:52 c.js</span><br><span class="line">-rw-r--r-- 1 root root 0 Dec 18 16:52 d.js</span><br></pre></td></tr></table></figure></p>
-<h2 id="特殊文件名"><a href="#特殊文件名" class="headerlink" title="特殊文件名"></a>特殊文件名</h2><p>有的时候，文件名可能存在特殊字符，比如下面的文件名中存在空格。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch 'hello 01.css' 'hello 02.css'</span><br></pre></td></tr></table></figure></p>
-<p>运行之前的命令会报错，因为xargs是以空格/换行作为分隔符，于是就会出现预期之外的行为。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 命令</span></span><br><span class="line">find . -name '*.css' | xargs -t ls -al</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">输出</span></span><br><span class="line">ls -al ./hello 01.css ./hello 02.css # 展开后的命令</span><br><span class="line">ls: cannot access ./hello: No such file or directory</span><br><span class="line">ls: cannot access 01.css: No such file or directory</span><br><span class="line">ls: cannot access ./hello: No such file or directory</span><br><span class="line">ls: cannot access 02.css: No such file or directory</span><br></pre></td></tr></table></figure>
-<p>xargs是这样解决这个问题的：</p>
-<ol>
-<li><font color="#FF0000">-print0</font>：告诉find命令，在输出文件名之后，跟上NULL字符，而不是换行符；</li>
-<li><font color="#FF0000">-0</font>：告诉xargs，以NULL作为参数分隔符；</li>
-</ol>
-<p>最后，执行如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name '*.css' -print0 | xargs -0 -t ls -al</span><br></pre></td></tr></table></figure></p>
-<h2 id="日志备份"><a href="#日志备份" class="headerlink" title="日志备份"></a>日志备份</h2><p>将7天前的日志备份到特定目录<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -mtime +7 | xargs -I '&#123;&#125;' mv &#123;&#125; /tmp/otc-svr-logs/</span><br></pre></td></tr></table></figure></p>
+        <p>事情起因：部门博客由于安全问题，需要把管理后台迁移到内网，也就是将wp-admin那一堆东西部署到内网域名上。</p>
+<p>最简单直接的方式就是申请另外一个域名然后解析到同一个服务器的同一个项目下，通过NG对外网域名访问后台的路由做rewrite。<br><a id="more"></a><br>举个很简单的例子，原本有一个Wordpress网站 <a href="http://a.example.com（后称对外网站A），管理后台站点http://b.example.com（后称后台网站B）。访问A的登录页面会跳转到B的登录页面，在外网情况下，自然登录页面无法打开，而在内网的情况下A和B都能打开。这样达到了外网屏蔽管理后台的作用。" target="_blank" rel="noopener">http://a.example.com（后称对外网站A），管理后台站点http://b.example.com（后称后台网站B）。访问A的登录页面会跳转到B的登录页面，在外网情况下，自然登录页面无法打开，而在内网的情况下A和B都能打开。这样达到了外网屏蔽管理后台的作用。</a></p>
+<h1 id="但是有个问题：如何同步登录态呢？"><a href="#但是有个问题：如何同步登录态呢？" class="headerlink" title="但是有个问题：如何同步登录态呢？"></a>但是有个问题：如何同步登录态呢？</h1><p>举个例子：在A上登录的时候会跳转到B的登录页面，B登录完之后需要保持A的登录态。</p>
+<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>幸好，wordpress在写入cookie方面已经做好了预留方案，我们只需要稍微改下配置即可：</p>
+<p>编辑wp-config.php，在任意位置添加如下内容：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">define(<span class="string">'COOKIE_DOMAIN'</span>, <span class="string">'example.com'</span>);</span><br><span class="line">define(<span class="string">'COOKIEPATH'</span>, <span class="string">'/'</span>);</span><br><span class="line">define( <span class="string">'COOKIEHASH'</span>, md5( <span class="string">'example.com'</span> ) );</span><br></pre></td></tr></table></figure></p>
+<p>这样修改之后即可，那我们来看看这个实现的原理是什么？其实很简单，就是把cookie写到顶级域名下，这样在二级域名下都可获取到cookie，从而实现登录态的同步。</p>
 
       
     </div>
@@ -373,7 +343,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/linux/" rel="tag"># linux</a>
+            <a href="/tags/wordpress/" rel="tag"># wordpress</a>
           
         </div>
       
@@ -386,8 +356,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/11/Font-face字体加载/" rel="next" title="Font-face字体加载">
-                <i class="fa fa-chevron-left"></i> Font-face字体加载
+              <a href="/2018/09/20/xargs的用法/" rel="next" title="xargs的用法">
+                <i class="fa fa-chevron-left"></i> xargs的用法
               </a>
             
           </div>
@@ -395,10 +365,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/08/wordpress支持多域名部署/" rel="prev" title="Wordpress多域名部署">
-                Wordpress多域名部署 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -539,7 +505,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#举个例子"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4E3E;&#x4E2A;&#x4F8B;&#x5B50;" class="headerlink" title="&#x4E3E;&#x4E2A;&#x4F8B;&#x5B50;"></a>&#x4E3E;&#x4E2A;&#x4F8B;&#x5B50;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数替换"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x53C2;&#x6570;&#x66FF;&#x6362;" class="headerlink" title="&#x53C2;&#x6570;&#x66FF;&#x6362;"></a>&#x53C2;&#x6570;&#x66FF;&#x6362;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数分组"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x53C2;&#x6570;&#x5206;&#x7EC4;" class="headerlink" title="&#x53C2;&#x6570;&#x5206;&#x7EC4;"></a>&#x53C2;&#x6570;&#x5206;&#x7EC4;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊文件名"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x7279;&#x6B8A;&#x6587;&#x4EF6;&#x540D;" class="headerlink" title="&#x7279;&#x6B8A;&#x6587;&#x4EF6;&#x540D;"></a>&#x7279;&#x6B8A;&#x6587;&#x4EF6;&#x540D;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志备份"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x65E5;&#x5FD7;&#x5907;&#x4EFD;" class="headerlink" title="&#x65E5;&#x5FD7;&#x5907;&#x4EFD;"></a>&#x65E5;&#x5FD7;&#x5907;&#x4EFD;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#但是有个问题：如何同步登录态呢？"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4F46;&#x662F;&#x6709;&#x4E2A;&#x95EE;&#x9898;&#xFF1A;&#x5982;&#x4F55;&#x540C;&#x6B65;&#x767B;&#x5F55;&#x6001;&#x5462;&#xFF1F;" class="headerlink" title="&#x4F46;&#x662F;&#x6709;&#x4E2A;&#x95EE;&#x9898;&#xFF1A;&#x5982;&#x4F55;&#x540C;&#x6B65;&#x767B;&#x5F55;&#x6001;&#x5462;&#xFF1F;"></a>&#x4F46;&#x662F;&#x6709;&#x4E2A;&#x95EE;&#x9898;&#xFF1A;&#x5982;&#x4F55;&#x540C;&#x6B65;&#x767B;&#x5F55;&#x6001;&#x5462;&#xFF1F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决方法"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x89E3;&#x51B3;&#x65B9;&#x6CD5;" class="headerlink" title="&#x89E3;&#x51B3;&#x65B9;&#x6CD5;"></a>&#x89E3;&#x51B3;&#x65B9;&#x6CD5;</span></a></li></ol></div>
             
 
           </div>
