@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="前端," />
+  <meta name="keywords" content="mysql," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="多语言web型应用即支持不同国家的用户使用时能够自动切换到local的语言，而不是访问时只能看到一种语言，比如我们常看到的一些英文网站，他们并不支持多语言。但也有少数做的非常精致的网站，或者说他们极度重视用户体验，是能够做到多语言的。">
-<meta name="keywords" content="前端">
+<meta name="description" content="近期，负责维护的一个问卷项目在发布的时候提示“数据库错误，无法创建调查表”。因为问卷的代码逻辑中确实会自动拼接sql然后创建表，我想应该是这个sql有问题。">
+<meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Accept-Language多语言web应用">
-<meta property="og:url" content="http://yoursite.com/2018/07/12/Accept-Language多语言web应用/index.html">
+<meta property="og:title" content="Mysql行宽的坑">
+<meta property="og:url" content="http://yoursite.com/2018/11/22/Mysql行宽的坑/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="多语言web型应用即支持不同国家的用户使用时能够自动切换到local的语言，而不是访问时只能看到一种语言，比如我们常看到的一些英文网站，他们并不支持多语言。但也有少数做的非常精致的网站，或者说他们极度重视用户体验，是能够做到多语言的。">
+<meta property="og:description" content="近期，负责维护的一个问卷项目在发布的时候提示“数据库错误，无法创建调查表”。因为问卷的代码逻辑中确实会自动拼接sql然后创建表，我想应该是这个sql有问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-17T13:42:32.000Z">
+<meta property="og:updated_time" content="2018-11-22T02:56:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Accept-Language多语言web应用">
-<meta name="twitter:description" content="多语言web型应用即支持不同国家的用户使用时能够自动切换到local的语言，而不是访问时只能看到一种语言，比如我们常看到的一些英文网站，他们并不支持多语言。但也有少数做的非常精致的网站，或者说他们极度重视用户体验，是能够做到多语言的。">
+<meta name="twitter:title" content="Mysql行宽的坑">
+<meta name="twitter:description" content="近期，负责维护的一个问卷项目在发布的时候提示“数据库错误，无法创建调查表”。因为问卷的代码逻辑中确实会自动拼接sql然后创建表，我想应该是这个sql有问题。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/12/Accept-Language多语言web应用/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/11/22/Mysql行宽的坑/"/>
 
 
 
 
 
-  <title>Accept-Language多语言web应用 | 勤勤恳恳</title>
+  <title>Mysql行宽的坑 | 勤勤恳恳</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/12/Accept-Language多语言web应用/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/22/Mysql行宽的坑/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jacoob Wang">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Accept-Language多语言web应用</h1>
+          <h1 class="post-title" itemprop="name headline">Mysql行宽的坑</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-12T15:12:30+08:00">
-                2018-07-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-22T11:12:30+08:00">
+                2018-11-22
               </time>
             
 
@@ -320,28 +320,15 @@
       
 
       
-        <p>多语言web型应用即支持不同国家的用户使用时能够自动切换到local的语言，而不是访问时只能看到一种语言，比如我们常看到的一些英文网站，他们并不支持多语言。但也有少数做的非常精致的网站，或者说他们极度重视用户体验，是能够做到多语言的。<br><a id="more"></a></p>
-<h2 id="什么是Accept-Language"><a href="#什么是Accept-Language" class="headerlink" title="什么是Accept-Language"></a>什么是Accept-Language</h2><p>Accept-Language请求头允许客户端声明它可以理解的自然语言，以及优先选择的区域方言。</p>
-<p>简而言之，就是浏览器在发起请求时会根据浏览器的版本(中文版|英文版)或浏览器语言设置等在header请求头中加上一个 <strong>Accept-Language</strong> 字段。server端取到这个字段后判断语言类型返回合适的内容。</p>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Accept-Language: &lt;language&gt;</span><br><span class="line">Accept-Language: &lt;locale&gt;</span><br><span class="line">Accept-Language: *</span><br><span class="line"></span><br><span class="line">// Multiple types, weighted with the quality value syntax:</span><br><span class="line">Accept-Language: fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5</span><br></pre></td></tr></table></figure>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,<em>/</em>;q=0.8</p>
-<p>accept-encoding: gzip, deflate, br</p>
-<font color="#FF0000"><strong>accept-language: zh-CN,zh;q=0.9,en;q=0.8</strong></font>
-
-<p>cache-control: no-cache</p>
-<p>上面的accept-language 指定了两种语言类型，zh-CN 和 en，代表中文和英文，且指定了语言权重，中文是0.9而英文是0.8。</p>
-<p>其中多种语言之间用,隔开，;的前面为该种语言的简称，后面为其权重（优先级）。</p>
-<h2 id="服务端处理"><a href="#服务端处理" class="headerlink" title="服务端处理"></a>服务端处理</h2><h3 id="langPackage-语言包"><a href="#langPackage-语言包" class="headerlink" title="langPackage/语言包"></a>langPackage/语言包</h3><p>一般支持多语言的网站，其服务器都存储了多种语言包。当客户端向其请求时，服务器会查看请求头看一看客户端所愿意支持的语言，然后在自己的语言包中进行查找。</p>
-<p>语言包示例</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> langPack = &#123;</span><br><span class="line">  <span class="string">"zh"</span>:&#123;</span><br><span class="line">    title:<span class="string">'哈啰 世界!'</span></span><br><span class="line">  &#125;</span><br><span class="line">  ,<span class="string">"en"</span>:&#123;</span><br><span class="line">    title:<span class="string">"hello world!"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="封装语言函数-getLang，解析Accept-Language"><a href="#封装语言函数-getLang，解析Accept-Language" class="headerlink" title="封装语言函数 getLang，解析Accept-Language"></a>封装语言函数 getLang，解析Accept-Language</h3><p>该方法能自动识别客户端愿意接收的语言类型，然后从服务器所储存的多种语言包中选择一种最合适的来返回数据。</p>
-<p>首先需要对accept-language进行解析，将其解析成一个个对象。每个对象代表一种语言，它有两个属性：</p>
-<ol>
-<li>langType:语言的类型</li>
-<li>q:语言的权重:帮助我们筛选出客户端相对较喜欢的那一种语言</li>
-</ol>
-<p>接着将每个对象放在一个数组中，按照权重从大到小排列。然后判断server端支持的语言类型，从权重从高到低去判断，返回服务端支持的优先级最高的结果。</p>
-<h3 id="根据-getLang-返回结果"><a href="#根据-getLang-返回结果" class="headerlink" title="根据 getLang 返回结果"></a>根据 getLang 返回结果</h3><p>当我们拿到语言类型后，只需要从对应的语言包中取到我们需要的变量翻译即可，然后输出到客户端。</p>
+        <p>近期，负责维护的一个问卷项目在发布的时候提示“数据库错误，无法创建调查表”。因为问卷的代码逻辑中确实会自动拼接sql然后创建表，我想应该是这个sql有问题。</p>
+<a id="more"></a>
+<p>因为应用部署了多个容器，发版需要老板审批，且没办法直接登录机器，然后应用log里面只提示了创建表失败，没有记录sql之类的。一时有点尴尬，我是要通过发版去打印sql了，还是怎么弄个开关去把sql打印到log了。</p>
+<p>费了九牛二虎之力，我拿到了运维账号登录了其中一台机器去做debug。打印出来的sql巨大无比，光字段就有好几千个，下面展示部分sql。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`&#123;&#123;survey_375637&#125;&#125;`</span> ( <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT PRIMARY <span class="keyword">KEY</span>, <span class="string">`token`</span> <span class="built_in">VARCHAR</span>(<span class="number">36</span>), <span class="string">`clientname`</span> <span class="built_in">VARCHAR</span>(<span class="number">30</span>) , <span class="string">`submitdate`</span> datetime, <span class="string">`lastpage`</span> <span class="built_in">int</span>(<span class="number">11</span>), <span class="string">`startlanguage`</span> <span class="built_in">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>, <span class="string">`startdate`</span> datetime <span class="keyword">NOT</span> <span class="literal">NULL</span>, <span class="string">`datestamp`</span> datetime <span class="keyword">NOT</span> <span class="literal">NULL</span>, <span class="string">`375637X6007X175222`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X175222other`</span> <span class="built_in">text</span>, <span class="string">`375637X6007X1752241`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752242`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752243`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752244`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752245`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752246`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752247`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752248`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752249`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X175224other`</span> <span class="built_in">text</span>, <span class="string">`375637X6007X1752261`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752262`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752263`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752264`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752265`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752266`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>),</span><br><span class="line">....</span><br></pre></td></tr></table></figure></p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>把sql给到了DBA，DBA说可能是表太宽了，什么意思呢？mysql 是限制了表的行宽最大限制为65535字节，在创建表的时候mysql会计算所有字段长度累加的和，text和blob除外，如果长度之和大于65535则无法创建。</p>
+<p>具体算法就是字段的长度 <em> 字段个数 </em> 3，为啥是乘以 3 了？因为我们定义的 varchar(5) 可以存放 5个汉字|数字|字母，而1个汉字在utf8中是3个字节。所以需按照最大长度来计算。</p>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>为了验证这个问题，我重新写了一个sql来验证这个问题是否能在本地复现：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">test</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">10</span>) <span class="keyword">unsigned</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`content`</span> <span class="built_in">varchar</span>(<span class="number">20000</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">20000</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">0</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8 <span class="keyword">COLLATE</span>=utf8_general_ci;</span><br></pre></td></tr></table></figure></p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>修改存储引擎为 MyISAM，我看官方文档MyISAM也有 row size的限制，但我在生产环境中改了存储引擎就可以用了，我猜可能是版本原因，或者是MyISAM的限制还是要更加弹性一点。</p>
+<p>关于行宽的限制，翻了下mysql的官方文档，这里也有最新的解释：<br><a href="https://dev.mysql.com/doc/refman/8.0/en/column-count-limit.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/8.0/en/column-count-limit.html</a></p>
 
       
     </div>
@@ -359,7 +346,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/前端/" rel="tag"># 前端</a>
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
           
         </div>
       
@@ -372,8 +359,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/28/Iterm2多窗口同时输入命令/" rel="next" title="Iterm2多窗口同时输入命令">
-                <i class="fa fa-chevron-left"></i> Iterm2多窗口同时输入命令
+              <a href="/2018/11/16/HTTPS防止流量劫持/" rel="next" title="HTTPS防止流量劫持">
+                <i class="fa fa-chevron-left"></i> HTTPS防止流量劫持
               </a>
             
           </div>
@@ -381,10 +368,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/29/利用Curl接口测速/" rel="prev" title="利用Curl接口测速">
-                利用Curl接口测速 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -525,7 +508,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Accept-Language"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;Accept-Language" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;Accept-Language"></a>&#x4EC0;&#x4E48;&#x662F;Accept-Language</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#&#x8BED;&#x6CD5;" class="headerlink" title="&#x8BED;&#x6CD5;"></a>&#x8BED;&#x6CD5;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#&#x793A;&#x4F8B;" class="headerlink" title="&#x793A;&#x4F8B;"></a>&#x793A;&#x4F8B;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端处理"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x670D;&#x52A1;&#x7AEF;&#x5904;&#x7406;" class="headerlink" title="&#x670D;&#x52A1;&#x7AEF;&#x5904;&#x7406;"></a>&#x670D;&#x52A1;&#x7AEF;&#x5904;&#x7406;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#langPackage-语言包"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#langPackage-&#x8BED;&#x8A00;&#x5305;" class="headerlink" title="langPackage/&#x8BED;&#x8A00;&#x5305;"></a>langPackage/&#x8BED;&#x8A00;&#x5305;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#封装语言函数-getLang，解析Accept-Language"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#&#x5C01;&#x88C5;&#x8BED;&#x8A00;&#x51FD;&#x6570;-getLang&#xFF0C;&#x89E3;&#x6790;Accept-Language" class="headerlink" title="&#x5C01;&#x88C5;&#x8BED;&#x8A00;&#x51FD;&#x6570; getLang&#xFF0C;&#x89E3;&#x6790;Accept-Language"></a>&#x5C01;&#x88C5;&#x8BED;&#x8A00;&#x51FD;&#x6570; getLang&#xFF0C;&#x89E3;&#x6790;Accept-Language</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据-getLang-返回结果"><span class="nav-number">2.3.</span> <span class="nav-text"><a href="#&#x6839;&#x636E;-getLang-&#x8FD4;&#x56DE;&#x7ED3;&#x679C;" class="headerlink" title="&#x6839;&#x636E; getLang &#x8FD4;&#x56DE;&#x7ED3;&#x679C;"></a>&#x6839;&#x636E; getLang &#x8FD4;&#x56DE;&#x7ED3;&#x679C;</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原因"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x539F;&#x56E0;" class="headerlink" title="&#x539F;&#x56E0;"></a>&#x539F;&#x56E0;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x9A8C;&#x8BC1;" class="headerlink" title="&#x9A8C;&#x8BC1;"></a>&#x9A8C;&#x8BC1;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x89E3;&#x51B3;" class="headerlink" title="&#x89E3;&#x51B3;"></a>&#x89E3;&#x51B3;</span></a></li></ol></div>
             
 
           </div>
