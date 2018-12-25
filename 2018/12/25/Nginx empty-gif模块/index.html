@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Nginx," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="业精于勤荒于嬉">
-<meta property="og:type" content="website">
-<meta property="og:title" content="勤勤恳恳">
-<meta property="og:url" content="http://yoursite.com/archives/2018/11/index.html">
+<meta name="description" content="empty-gif是nginx的一个模块，用来返回1 x 1 px的空白图片，他的使用场景在于我们做数据打点前端上报时候通常会把用户端的参数放到一个图片请求上去。而使用nginx的这个模块要比我们自己放一张图在服务器上更高效，nginx把空白图片放到内存里，比从硬盘读取图片肯定速度更快，少了IO操作。">
+<meta name="keywords" content="Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx empty-gif模块">
+<meta property="og:url" content="http://yoursite.com/2018/12/25/Nginx empty-gif模块/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="业精于勤荒于嬉">
+<meta property="og:description" content="empty-gif是nginx的一个模块，用来返回1 x 1 px的空白图片，他的使用场景在于我们做数据打点前端上报时候通常会把用户端的参数放到一个图片请求上去。而使用nginx的这个模块要比我们自己放一张图在服务器上更高效，nginx把空白图片放到内存里，比从硬盘读取图片肯定速度更快，少了IO操作。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-25T05:05:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="勤勤恳恳">
-<meta name="twitter:description" content="业精于勤荒于嬉">
+<meta name="twitter:title" content="Nginx empty-gif模块">
+<meta name="twitter:description" content="empty-gif是nginx的一个模块，用来返回1 x 1 px的空白图片，他的使用场景在于我们做数据打点前端上报时候通常会把用户端的参数放到一个图片请求上去。而使用nginx的这个模块要比我们自己放一张图在服务器上更高效，nginx把空白图片放到内存里，比从硬盘读取图片肯定速度更快，少了IO操作。">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2018/11/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/12/25/Nginx empty-gif模块/"/>
 
 
 
 
 
-  <title>归档 | 勤勤恳恳</title>
+  <title>Nginx empty-gif模块 | 勤勤恳恳</title>
   
 
 
@@ -143,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,147 +239,152 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
-        
-        
-         
-        
-        OK! 目前共计 48 篇日志。 继续努力。
-      </span>
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/25/Nginx empty-gif模块/">
 
-      
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
 
         
         
+          <h1 class="post-title" itemprop="name headline">Nginx empty-gif模块</h1>
         
 
-        
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-25T18:12:30+08:00">
+                2018-12-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
 
-        
+          
+            
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/22/Mysql行宽的坑/" itemprop="url">
-              
-                <span itemprop="name">Mysql行宽的坑</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-11-22T11:12:30+08:00"
-              content="2018-11-22" >
-          11-22
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+          
 
+        </div>
+      </header>
+    
 
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/16/HTTPS防止流量劫持/" itemprop="url">
-              
-                <span itemprop="name">HTTPS防止流量劫持</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-11-16T11:12:30+08:00"
-              content="2018-11-16" >
-          11-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/05/用Burp Suite对用户密码爆破/" itemprop="url">
-              
-                <span itemprop="name">用Burp suite爆破用户密码</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-11-05T11:12:30+08:00"
-              content="2018-11-05" >
-          11-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p>empty-gif是nginx的一个模块，用来返回1 x 1 px的空白图片，他的使用场景在于我们做数据打点前端上报时候通常会把用户端的参数放到一个图片请求上去。而使用nginx的这个模块要比我们自己放一张图在服务器上更高效，nginx把空白图片放到内存里，比从硬盘读取图片肯定速度更快，少了IO操作。<br><a id="more"></a></p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> = /_.gif &#123;</span><br><span class="line">  empty_gif;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="自定义配置"><a href="#自定义配置" class="headerlink" title="自定义配置"></a>自定义配置</h2><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">listen</span>       <span class="number">80</span>;</span><br><span class="line">  <span class="attribute">server_name</span>  www.jacoob.com;</span><br><span class="line">  <span class="attribute">root</span> /export/www/jacoob.com;</span><br><span class="line"></span><br><span class="line">  <span class="attribute">location</span> = /<span class="number">1</span>.gif &#123;</span><br><span class="line">    empty_gif;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.jacoob.com/1.gif?timestamp=1545714096907&amp;sid=jq3a9fjlb2s&amp;sy=3758&amp;action=stay&amp;device_id=897668e8-da66-40ac-b456-2a54f6defc13&amp;app_key=aotu-blog-aotu.io-011&amp;title=test&amp;tz=-480&amp;oragin=localstorage&amp;token=cj3xr6lv200000f65xvv97nwc" target="_blank" rel="noopener">https://www.jacoob.com/1.gif?timestamp=1545714096907&amp;sid=jq3a9fjlb2s&amp;sy=3758&amp;action=stay&amp;device_id=897668e8-da66-40ac-b456-2a54f6defc13&amp;app_key=aotu-blog-aotu.io-011&amp;title=test&amp;tz=-480&amp;oragin=localstorage&amp;token=cj3xr6lv200000f65xvv97nwc</a></p>
+<p>然后我们就可以使用类似上面的url来传递参数做前端上报了。</p>
+<p>关于更多： <a href="http://nginx.org/en/docs/http/ngx_http_empty_gif_module.html" target="_blank" rel="noopener">http://nginx.org/en/docs/http/ngx_http_empty_gif_module.html</a> </p>
 
       
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Nginx/" rel="tag"># Nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/22/Mysql行宽的坑/" rel="next" title="Mysql行宽的坑">
+                <i class="fa fa-chevron-left"></i> Mysql行宽的坑
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -385,6 +392,8 @@
 
 
           
+  
+
 
         </div>
         
@@ -405,8 +414,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -477,6 +495,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x914D;&#x7F6E;" class="headerlink" title="&#x914D;&#x7F6E;"></a>&#x914D;&#x7F6E;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义配置"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x81EA;&#x5B9A;&#x4E49;&#x914D;&#x7F6E;" class="headerlink" title="&#x81EA;&#x5B9A;&#x4E49;&#x914D;&#x7F6E;"></a>&#x81EA;&#x5B9A;&#x4E49;&#x914D;&#x7F6E;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -603,6 +637,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
