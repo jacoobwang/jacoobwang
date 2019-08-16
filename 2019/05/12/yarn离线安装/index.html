@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="mysql," />
+  <meta name="keywords" content="前端," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="近期，负责维护的一个问卷项目在发布的时候提示“数据库错误，无法创建调查表”。因为问卷的代码逻辑中确实会自动拼接sql然后创建表，我想应该是这个sql有问题。">
-<meta name="keywords" content="mysql">
+<meta name="description" content="Yarn是类似于npm的一款非常好用的依赖包管理工具，它的特点就是安装非常快，yarn会缓存它下载的每个包，无需重复下载，还能并行化操作以最大化利用资源利用率，安装速度非常快。除此之外它还有个特性非常叼就是离线安装！ 关于离线安装有一篇官方的文章，步骤已经写得非常详细，可以参考： https://yarnpkg.com/blog/2016/11/24/offline-mirror/">
+<meta name="keywords" content="前端">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mysql行宽的坑">
-<meta property="og:url" content="http://yoursite.com/2018/11/22/Mysql行宽的坑/index.html">
+<meta property="og:title" content="Yarn离线安装">
+<meta property="og:url" content="http://yoursite.com/2019/05/12/yarn离线安装/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="近期，负责维护的一个问卷项目在发布的时候提示“数据库错误，无法创建调查表”。因为问卷的代码逻辑中确实会自动拼接sql然后创建表，我想应该是这个sql有问题。">
+<meta property="og:description" content="Yarn是类似于npm的一款非常好用的依赖包管理工具，它的特点就是安装非常快，yarn会缓存它下载的每个包，无需重复下载，还能并行化操作以最大化利用资源利用率，安装速度非常快。除此之外它还有个特性非常叼就是离线安装！ 关于离线安装有一篇官方的文章，步骤已经写得非常详细，可以参考： https://yarnpkg.com/blog/2016/11/24/offline-mirror/">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-22T02:56:08.000Z">
+<meta property="og:updated_time" content="2019-08-16T03:32:57.637Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mysql行宽的坑">
-<meta name="twitter:description" content="近期，负责维护的一个问卷项目在发布的时候提示“数据库错误，无法创建调查表”。因为问卷的代码逻辑中确实会自动拼接sql然后创建表，我想应该是这个sql有问题。">
+<meta name="twitter:title" content="Yarn离线安装">
+<meta name="twitter:description" content="Yarn是类似于npm的一款非常好用的依赖包管理工具，它的特点就是安装非常快，yarn会缓存它下载的每个包，无需重复下载，还能并行化操作以最大化利用资源利用率，安装速度非常快。除此之外它还有个特性非常叼就是离线安装！ 关于离线安装有一篇官方的文章，步骤已经写得非常详细，可以参考： https://yarnpkg.com/blog/2016/11/24/offline-mirror/">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/11/22/Mysql行宽的坑/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/05/12/yarn离线安装/"/>
 
 
 
 
 
-  <title>Mysql行宽的坑 | 勤勤恳恳</title>
+  <title>Yarn离线安装 | 勤勤恳恳</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/22/Mysql行宽的坑/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/12/yarn离线安装/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jacoob Wang">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Mysql行宽的坑</h1>
+          <h1 class="post-title" itemprop="name headline">Yarn离线安装</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-22T11:12:30+08:00">
-                2018-11-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-12T15:12:30+08:00">
+                2019-05-12
               </time>
             
 
@@ -320,15 +320,28 @@
       
 
       
-        <p>近期，负责维护的一个问卷项目在发布的时候提示“数据库错误，无法创建调查表”。因为问卷的代码逻辑中确实会自动拼接sql然后创建表，我想应该是这个sql有问题。</p>
-<a id="more"></a>
-<p>因为应用部署了多个容器，发版需要老板审批，且没办法直接登录机器，然后应用log里面只提示了创建表失败，没有记录sql之类的。一时有点尴尬，我是要通过发版去打印sql了，还是怎么弄个开关去把sql打印到log了。</p>
-<p>费了九牛二虎之力，我拿到了运维账号登录了其中一台机器去做debug。打印出来的sql巨大无比，光字段就有好几千个，下面展示部分sql。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`&#123;&#123;survey_375637&#125;&#125;`</span> ( <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT PRIMARY <span class="keyword">KEY</span>, <span class="string">`token`</span> <span class="built_in">VARCHAR</span>(<span class="number">36</span>), <span class="string">`clientname`</span> <span class="built_in">VARCHAR</span>(<span class="number">30</span>) , <span class="string">`submitdate`</span> datetime, <span class="string">`lastpage`</span> <span class="built_in">int</span>(<span class="number">11</span>), <span class="string">`startlanguage`</span> <span class="built_in">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>, <span class="string">`startdate`</span> datetime <span class="keyword">NOT</span> <span class="literal">NULL</span>, <span class="string">`datestamp`</span> datetime <span class="keyword">NOT</span> <span class="literal">NULL</span>, <span class="string">`375637X6007X175222`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X175222other`</span> <span class="built_in">text</span>, <span class="string">`375637X6007X1752241`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752242`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752243`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752244`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752245`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752246`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752247`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752248`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752249`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X175224other`</span> <span class="built_in">text</span>, <span class="string">`375637X6007X1752261`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752262`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752263`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752264`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752265`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>), <span class="string">`375637X6007X1752266`</span> <span class="built_in">VARCHAR</span>(<span class="number">5</span>),</span><br><span class="line">....</span><br></pre></td></tr></table></figure></p>
-<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>把sql给到了DBA，DBA说可能是表太宽了，什么意思呢？mysql 是限制了表的行宽最大限制为65535字节，在创建表的时候mysql会计算所有字段长度累加的和，text和blob除外，如果长度之和大于65535则无法创建。</p>
-<p>具体算法就是字段的长度 <em> 字段个数 </em> 3，为啥是乘以 3 了？因为我们定义的 varchar(5) 可以存放 5个汉字|数字|字母，而1个汉字在utf8中是3个字节。所以需按照最大长度来计算。</p>
-<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>为了验证这个问题，我重新写了一个sql来验证这个问题是否能在本地复现：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">test</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">10</span>) <span class="keyword">unsigned</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`content`</span> <span class="built_in">varchar</span>(<span class="number">20000</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">20000</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">0</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8 <span class="keyword">COLLATE</span>=utf8_general_ci;</span><br></pre></td></tr></table></figure></p>
-<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>修改存储引擎为 MyISAM，我看官方文档MyISAM也有 row size的限制，但我在生产环境中改了存储引擎就可以用了，我猜可能是版本原因，或者是MyISAM的限制还是要更加弹性一点。</p>
-<p>关于行宽的限制，翻了下mysql的官方文档，这里也有最新的解释：<br><a href="https://dev.mysql.com/doc/refman/8.0/en/column-count-limit.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/8.0/en/column-count-limit.html</a></p>
+        <p>Yarn是类似于npm的一款非常好用的依赖包管理工具，它的特点就是安装非常快，yarn会缓存它下载的每个包，无需重复下载，还能并行化操作以最大化利用资源利用率，安装速度非常快。除此之外它还有个特性非常叼就是离线安装！</p>
+<p>关于离线安装有一篇官方的文章，步骤已经写得非常详细，可以参考： <a href="https://yarnpkg.com/blog/2016/11/24/offline-mirror/" target="_blank" rel="noopener">https://yarnpkg.com/blog/2016/11/24/offline-mirror/</a><br><a id="more"></a></p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><ol>
+<li><p>“离线镜像”存储目录</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn config set yarn-offline-mirror ./yarn-offline</span><br></pre></td></tr></table></figure>
+<p>之后会在当前项目路径生成一个yarn-offline 文件夹用来存放构建的.tgz离线文件</p>
+</li>
+<li><p>.yarnrc<br>离线文件夹并不会同步你删掉的包，可能会导致一些额外的问题，可以通过如下命令来实现每次yarn install 的时候清楚用不到的压缩包：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn config set yarn-offline-mirror-pruning <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>移动配置文件到项目路径,以便离线镜像仅用于此项目</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp ~<span class="regexp">/.yarnrc ./</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成离线文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rm -rf node_modules/ yarn.lock</span><br><span class="line">yarn install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>离线安装，关掉网络，删除node_modules执行下面命令：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn --offline</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li>报错 “yarn can’t make a request in offline mode”<br>如果碰到这个错误，需要在 .yanrc 中添加 “yarn-offline-mirror-pruning” true的配置！</li>
+</ol>
 
       
     </div>
@@ -346,7 +359,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/mysql/" rel="tag"># mysql</a>
+            <a href="/tags/前端/" rel="tag"># 前端</a>
           
         </div>
       
@@ -359,8 +372,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/16/HTTPS防止流量劫持/" rel="next" title="HTTPS防止流量劫持">
-                <i class="fa fa-chevron-left"></i> HTTPS防止流量劫持
+              <a href="/2018/12/25/Nginx empty-gif模块/" rel="next" title="Nginx empty-gif模块">
+                <i class="fa fa-chevron-left"></i> Nginx empty-gif模块
               </a>
             
           </div>
@@ -368,10 +381,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/25/Nginx empty-gif模块/" rel="prev" title="Nginx empty-gif模块">
-                Nginx empty-gif模块 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -512,7 +521,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原因"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x539F;&#x56E0;" class="headerlink" title="&#x539F;&#x56E0;"></a>&#x539F;&#x56E0;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x9A8C;&#x8BC1;" class="headerlink" title="&#x9A8C;&#x8BC1;"></a>&#x9A8C;&#x8BC1;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x89E3;&#x51B3;" class="headerlink" title="&#x89E3;&#x51B3;"></a>&#x89E3;&#x51B3;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x5982;&#x4F55;&#x4F7F;&#x7528;" class="headerlink" title="&#x5982;&#x4F55;&#x4F7F;&#x7528;"></a>&#x5982;&#x4F55;&#x4F7F;&#x7528;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x95EE;&#x9898;" class="headerlink" title="&#x95EE;&#x9898;"></a>&#x95EE;&#x9898;</span></a></li></ol></div>
             
 
           </div>
