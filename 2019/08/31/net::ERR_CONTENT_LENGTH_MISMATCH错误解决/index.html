@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Nginx," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="业精于勤荒于嬉">
-<meta property="og:type" content="website">
-<meta property="og:title" content="勤勤恳恳">
-<meta property="og:url" content="http://yoursite.com/archives/2018/05/index.html">
+<meta name="description" content="今天发现项目中的一个页面在加载js的时候报错：ERR_CONTENT_LENGTH_MISMATCH ！然后页面功能也不能使用。">
+<meta name="keywords" content="Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Net::ERR_CONTENT_LENGTH_MISMATCH错误解决">
+<meta property="og:url" content="http://yoursite.com/2019/08/31/net::ERR_CONTENT_LENGTH_MISMATCH错误解决/index.html">
 <meta property="og:site_name" content="勤勤恳恳">
-<meta property="og:description" content="业精于勤荒于嬉">
+<meta property="og:description" content="今天发现项目中的一个页面在加载js的时候报错：ERR_CONTENT_LENGTH_MISMATCH ！然后页面功能也不能使用。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-11T04:54:48.704Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="勤勤恳恳">
-<meta name="twitter:description" content="业精于勤荒于嬉">
+<meta name="twitter:title" content="Net::ERR_CONTENT_LENGTH_MISMATCH错误解决">
+<meta name="twitter:description" content="今天发现项目中的一个页面在加载js的时候报错：ERR_CONTENT_LENGTH_MISMATCH ！然后页面功能也不能使用。">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2018/05/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/08/31/net::ERR_CONTENT_LENGTH_MISMATCH错误解决/"/>
 
 
 
 
 
-  <title>归档 | 勤勤恳恳</title>
+  <title>Net::ERR_CONTENT_LENGTH_MISMATCH错误解决 | 勤勤恳恳</title>
   
 
 
@@ -143,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,73 +239,157 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
-
-      <span class="archive-page-counter">
-        
-        
-         
-          
-        好! 目前共计 51 篇日志。 继续努力。
-      </span>
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/31/net::ERR_CONTENT_LENGTH_MISMATCH错误解决/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacoob Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11434315">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="勤勤恳恳">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/05/29/Linux下搭建代理/" itemprop="url">
-              
-                <span itemprop="name">Linux下搭建代理</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Net::ERR_CONTENT_LENGTH_MISMATCH错误解决</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-05-29T20:12:30+08:00"
-              content="2018-05-29" >
-          05-29
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-31T12:12:30+08:00">
+                2019-08-31
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
 
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+      
 
+      
+        <p>今天发现项目中的一个页面在加载js的时候报错：ERR_CONTENT_LENGTH_MISMATCH ！然后页面功能也不能使用。<br><a id="more"></a></p>
+<h2 id="定位问题"><a href="#定位问题" class="headerlink" title="定位问题"></a>定位问题</h2><p>追查 nginx log 发现 error.log 里面出现了如下内容：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2019/08/11 11:15:22 [crit] 32464#0: *464 open() "/usr/local/var/run/nginx/proxy_temp/1/03/0000000031" failed (13: Permission denied) while reading upstream, </span><br><span class="line">client: <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>, <span class="attr">server</span>: ling-dev.jd.com, <span class="attr">request</span>: <span class="string">"GET /_next/static/development/pages/test/embed.js?ts=1568171722435 HTTP/1.1"</span>, </span><br><span class="line">upstream: <span class="string">"http://127.0.0.1:3000/_next/static/development/pages/test/embed.js?ts=1568171722435"</span>, </span><br><span class="line">host: <span class="string">"ling-dev.jd.com"</span>, <span class="attr">referrer</span>: <span class="string">"http://ling-dev.jd.com/test/embed?"</span></span><br></pre></td></tr></table></figure></p>
+<p>发现启动nginx 进程的用户对 proxy_temp 这个目录没有权限！</p>
+<h2 id="proxy-temp-做什么用"><a href="#proxy-temp-做什么用" class="headerlink" title="proxy_temp 做什么用"></a>proxy_temp 做什么用</h2><p>nginx 我们经常用来做反向代理，在反向代理配置中有这样一个参数：proxy_temp_file_write_size，当你的文件超过该参数设置的大小时，nginx会先将文件写入临时目录！</p>
+<p>因此，当我们加载一些比较大的文件，超出 proxy_temp_file_write_size 设置大小时，就会写入 proxy_temp 这个目录，如果这个目录又没有权限那就会出现上述的问题！</p>
+<h2 id="如何解决"><a href="#如何解决" class="headerlink" title="如何解决"></a>如何解决</h2><p>既然是权限问题，那我们有以下几种解决方法：</p>
+<ol>
+<li>修改目录的权限跟现有的nginx用户一致</li>
+<li>修改nginx.conf,把 user 变为更高权限的用户</li>
+<li>修改nginx.conf,设置 proxy_temp 的路径,不使用缺省路径</li>
+</ol>
+
+      
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Nginx/" rel="tag"># Nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/14/Maven搭建javaweb项目/" rel="next" title="Maven搭建javaweb项目">
+                <i class="fa fa-chevron-left"></i> Maven搭建javaweb项目
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -311,6 +397,8 @@
 
 
           
+  
+
 
         </div>
         
@@ -331,8 +419,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -403,6 +500,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#定位问题"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x5B9A;&#x4F4D;&#x95EE;&#x9898;" class="headerlink" title="&#x5B9A;&#x4F4D;&#x95EE;&#x9898;"></a>&#x5B9A;&#x4F4D;&#x95EE;&#x9898;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#proxy-temp-做什么用"><span class="nav-number">2.</span> <span class="nav-text"><a href="#proxy-temp-&#x505A;&#x4EC0;&#x4E48;&#x7528;" class="headerlink" title="proxy_temp &#x505A;&#x4EC0;&#x4E48;&#x7528;"></a>proxy_temp &#x505A;&#x4EC0;&#x4E48;&#x7528;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何解决"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x5982;&#x4F55;&#x89E3;&#x51B3;" class="headerlink" title="&#x5982;&#x4F55;&#x89E3;&#x51B3;"></a>&#x5982;&#x4F55;&#x89E3;&#x51B3;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -529,6 +642,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
